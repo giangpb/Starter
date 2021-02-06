@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="reset">0dp</dimen>
+    <dimen name="divider_size_small">1dp</dimen>
+    <dimen name="view_small">150dp</dimen>
+
+    <dimen name="splash_width">280dp</dimen>
+    <dimen name="splash_height">80dp</dimen>
+<!--    Toolbar-->
+    <dimen name="toolbar_height_size">50dp</dimen>
+
+<!--    view-->
+    <dimen name="margin_small">4dp</dimen>
+    <dimen name="margin_normal">8dp</dimen>
+    <dimen name="margin_stt3">12dp</dimen>
+    <dimen name="margin_large">16dp</dimen>
+    <dimen name="margin_large_completed">28dp</dimen>
+
+<!-- textView   -->
+    <dimen name="font_large">18dp</dimen>
+    <dimen name="font_normal">14dp</dimen>
+    <dimen name="font_normal_bottomSheet">15dp</dimen>
+    <dimen name="font_large_completed">28dp</dimen>
+
+<!--    card-->
+    <dimen name="card_item_restaurant_size">120dp</dimen>
+    <dimen name="card_update_restaurant_size">108dp</dimen>
+    <dimen name="card_radius">8dp</dimen>
+    <dimen name="card_order_elevation">4dp</dimen>
+
+<!--    item ImageView-->
+    <dimen name="item_res_image_type">64dp</dimen>
+    <dimen name="size_ic_statusbar">26dp</dimen>
+    <dimen name="size_ic_default">24dp</dimen>
+    <dimen name="size_image_order">44dp</dimen>
+
+<!--    Button-->
+    <dimen name="btn_setup_menu_size_height">45dp</dimen>
+
+    <dimen name="text_quantity">48dp</dimen>
+
+<!--    Spinner-->
+    <dimen name="size_height_spinner">40dp</dimen>
+
+    <dimen name="header_height_size">100dp</dimen>
+
+<!--    ImageView-->
+    <dimen name="size_image_category_item">32dp</dimen>
+</resources>

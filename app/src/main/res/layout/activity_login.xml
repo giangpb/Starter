@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:background="@drawable/bg_login"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.login.LoginActivity">
+
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_marginTop="@dimen/toolbar_height_size"
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_about_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"/>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/outlinedTextFieldPhone"
+        android:layout_below="@id/ivLogo"
+        android:layout_width="match_parent"
+        app:startIconDrawable="@drawable/ic_icon_user_login"
+        android:layout_height="wrap_content"
+        android:hint="@string/nhap_sdt"
+        app:endIconMode="clear_text"
+        style="@style/login_input">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:inputType="phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/outlinedTextFieldPassword"
+        app:startIconDrawable="@drawable/ic_icon_password"
+        android:layout_below="@id/outlinedTextFieldPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/nhap_mk"
+        app:endIconMode="clear_text"
+        style="@style/login_input">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tvQuenMK"
+        android:layout_width="wrap_content"
+        android:text="@string/quen_mk"
+        android:layout_below="@id/outlinedTextFieldPassword"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/margin_normal"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLogin"
+        android:layout_below="@id/tvQuenMK"
+        android:layout_margin="@dimen/margin_normal"
+        android:backgroundTint="@color/orange"
+        android:textColor="@color/white"
+        android:text="@string/login"
+        android:layout_width="match_parent"
+        style="@style/btn_order"
+        android:layout_height="@dimen/toolbar_height_size"/>
+
+    <ImageView
+        android:layout_width="@dimen/size_ic_default"
+        android:src="@drawable/ic_information"
+        android:layout_below="@id/btnLogin"
+        android:clickable="true"
+        android:background="?selectableItemBackgroundBorderless"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/margin_large"
+        android:layout_height="@dimen/size_ic_default"/>
+
+</RelativeLayout>

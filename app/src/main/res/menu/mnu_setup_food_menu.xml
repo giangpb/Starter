@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_setupGroupMenu"
+        android:icon="@drawable/ic_thietlap"
+        android:title="@string/mnu_setup_group_menu"/>
+    <item android:id="@+id/menu_change_all_price"
+        android:icon="@drawable/ic_coine"
+        android:title="@string/mnu_change_all_price"/>
+    <item android:id="@+id/menu_delete_all_food"
+        android:icon="@drawable/ic_xoa"
+        android:title="@string/mnu_delete_all_food"/>
+
+</menu>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:id="@+id/itemFood"
+    android:layout_height="@dimen/splash_height"
+    android:clickable="true"
+    android:background="?android:selectableItemBackground"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cadImage"
+        android:layout_width="@dimen/item_res_image_type"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:elevation="@dimen/reset"
+        android:layout_margin="@dimen/margin_normal"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_height="@dimen/item_res_image_type">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/ivFoodImage"
+                android:layout_width="match_parent"
+                android:src="@color/purple_500"
+                android:scaleType="centerCrop"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/tvFoodName"
+        android:text="@string/text_item_food"
+        android:layout_alignTop="@+id/cadImage"
+        android:layout_toRightOf="@id/cadImage"
+        style="@style/text_normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tvFoodPrice"
+        android:text="@string/text_item_food_price"
+        android:layout_below="@id/tvFoodName"
+
+        android:layout_toRightOf="@id/cadImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:id="@+id/ivDeleteItem"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_cancel_18"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="@dimen/margin_large"
+        android:layout_height="wrap_content"/>
+
+
+    <View
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/dividerVertical" />
+</RelativeLayout>

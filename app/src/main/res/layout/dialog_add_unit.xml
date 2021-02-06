@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:background="@drawable/custom_dialog_bg"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="@string/text_add_unit"
+        style="@style/text_large"
+        android:textColor="@color/black"
+        android:layout_marginBottom="@dimen/margin_large"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:text="@string/text_name_unit"
+        style="@style/text_normal"
+        android:layout_height="wrap_content"/>
+    <EditText
+        android:id="@+id/etUnitName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_toLeftOf="@id/btnAddUnit"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            style="@style/btn_dialog"
+            android:textColor="@color/pink"
+            android:text="@string/text_btn_cancel_add_unit"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddUnit"
+            android:layout_width="wrap_content"
+            android:layout_alignParentEnd="true"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            style="@style/btn_dialog"
+            android:text="@string/text_btn_add_unit"
+
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+</LinearLayout>

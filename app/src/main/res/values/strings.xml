@@ -1,0 +1,78 @@
+<resources>
+    <string name="app_name">Starter2</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_select_restaurant">Bước 1: Chọn loại hình nhà hàng</string>
+    <string name="text_setup_menu_restaurant">Bước 2: Thiết lập thực đơn</string>
+    <string name="text_finish_setup">Bước 3: Hoàn thành</string>
+    <string name="text_add_food">Thêm món</string>
+    <string name="text_edit_food">Sửa món</string>
+
+
+    <!--  text  template-->
+    <string name="text_item_restaurant">Quán cafe</string>
+    <string name="text_setup_completed">THIẾT LẬP THÀNH CÔNG</string>
+    <string name="text_setup_completed_notification">Bạn vừa thiết lập ban đầu thành công, giờ đây bạn có thể bán hàng ngay.</string>
+    <string name="text_sample">This answer solved a problem with a GridLayout containing buttons</string>
+
+    <string name="text_unit_food">Đơn vị tính (*)</string>
+    <string name="text_group_food">Nhóm thực đơn</string>
+    <string name="text_item_food">Sinh tố xoài</string>
+    <string name="text_item_food_price">65k</string>
+    <string name="text_item_category">Sinh tố</string>
+
+    <string name="text_so_thich_phuc_vu">Sở thích phục vụ</string>
+    <string name="text_khong_duong">Không đường</string>
+    <string name="text_khuyen_mai">Khuyến mại</string>
+    <string name="text_ghi_chu">Ghi chú...</string>
+
+    <string name="text_add_unit">THÊM ĐƠN VỊ TÍNH</string>
+    <string name="text_name_unit">Tên đơn vị</string>
+    <string name="text_ds_order">Danh sách Order</string>
+    <string name="text_select_food">Chọn món</string>
+    <string name="text_con_phai_thu">Còn phải thu:</string>
+    <string name="text_con_phai_thu_tien">62.000</string>
+
+
+    <!--    Text Button template-->
+    <string name="text_btn_continue">TIẾP TỤC</string>
+    <string name="text_btn_completed_setup">BẮT ĐẦU SỬ DỤNG</string>
+    <string name="text_btn_save_food">LƯU LẠI</string>
+    <string name="text_btn_add_unit">ĐỒNG Ý</string>
+    <string name="text_btn_cancel_add_unit">HUỶ</string>
+    <string name="text_btn_huy_bo">HUỶ BỎ</string>
+    <string name="text_btn_thu_tien">THU TIỀN</string>
+
+    <!--    Popup menu-->
+
+    <string name="mnu_setup_group_menu">Thiết lập nhóm thực đơn</string>
+    <string name="mnu_change_all_price">Đổi toàn bộ giá món</string>
+    <string name="mnu_delete_all_food">Xoá toàn bộ món</string>
+
+    <!--    Hint EditText-->
+    <string name="hint_food_name">Tên món (*)</string>
+    <string name="text_default_food_price">0</string>
+
+    <!--    Drawable navigation-->
+    <string name="ds_hoa_don">Danh sách hoá đơn</string>
+    <string name="ds_thuc_don">Danh sách Thực đơn</string>
+    <string name="so_thich_phuc_vu">Sở thích phục vụ</string>
+    <string name="bao_cao">Báo cáo</string>
+    <string name="thiet_lap">Thiết lập</string>
+    <string name="dong_bo_data">Đồng bộ dữ liệu</string>
+    <string name="chinh_sach_bao_mat">Chính sách bảo mật</string>
+    <string name="gioi_thieu_ban_be">Giới thiệu cho bạn bè</string>
+    <string name="danh_gia_ung_dung">Đánh giá ứng dụng</string>
+    <string name="gui_thong_bao_loi">Gửi thông báo lỗi</string>
+    <string name="thong_tin_ung_dung">Thông tin ứng dụng</string>
+    <string name="dang_xuat">Đăng xuất</string>
+
+    <string name="open_draw">Open Drawer Layout</string>
+    <string name="close_draw">Close Drawer Layout</string>
+
+
+    <string name="nhap_sdt">Nhập số điện thoại</string>
+    <string name="nhap_mk">Nhập mật khẩu</string>
+    <string name="quen_mk">Quên mật khẩu?</string>
+    <string name="login">ĐĂNG NHẬP</string>
+</resources>

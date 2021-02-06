@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_alignParentStart="true"
+        android:layout_width="match_parent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        android:layout_height="@dimen/toolbar_height_size">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/ivArrowBackHome"
+                android:layout_width="@dimen/size_ic_statusbar"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="@dimen/margin_large"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"                android:src="@drawable/ic_icon_back"
+                android:layout_height="@dimen/size_ic_statusbar"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
+                style="@style/text_large"
+                android:text="@string/text_setup_menu_restaurant"
+                android:layout_height="wrap_content"/>
+            <ImageView
+                android:id="@+id/ivOptionMenu"
+                android:layout_width="wrap_content"
+                android:src="@drawable/ic_menu_dot_20"
+                android:layout_alignParentEnd="true"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/margin_large"
+                android:layout_height="wrap_content"/>
+            <View
+                android:layout_width="50dp"
+                android:id="@+id/viewShowPopup"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_height="0.1dp"/>
+        </RelativeLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:id="@+id/llProgress"
+        android:layout_below="@id/appBarLayout"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:layout_height="2dp">
+        <View
+            android:layout_width="fill_parent"
+            android:layout_weight="1"
+            android:background="@color/progress"
+            android:layout_height="match_parent"/>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_weight="2"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_below="@id/llProgress"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+        app:tabMode="scrollable"
+        android:layout_height="?android:actionBarSize"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_below="@id/tabLayout"
+        android:layout_above="@id/btnContinueSelectMenu"
+        android:layout_height="match_parent">
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPagerListFoodMenu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAddFood"
+            android:layout_gravity="bottom|right|center_vertical|center_horizontal|center|end"
+            android:layout_width="wrap_content"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_alignParentEnd="true"
+            app:backgroundTint="@color/purple_500"
+            android:src="@drawable/ic_baseline_add_24"
+            app:tint="@color/white"
+            android:layout_margin="@dimen/margin_normal"
+            android:layout_height="wrap_content"/>
+
+    </FrameLayout>
+
+
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnContinueSelectMenu"
+        android:layout_alignParentBottom="true"
+        android:text="@string/text_btn_continue"
+        android:background="@drawable/custom_btn_continue_setup_menu"
+        android:foreground="?android:selectableItemBackground"
+        android:letterSpacing="0"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/btn_setup_menu_size_height"/>
+</RelativeLayout>

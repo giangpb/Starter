@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/nav_top" android:checkableBehavior="single">
+        <item android:id="@+id/mnu_danh_sach_hoa_don"
+            android:icon="@drawable/ic_nav_list_invoice"
+            android:title="@string/ds_hoa_don"
+            />
+        <item
+            android:icon="@drawable/ic_menu_food_32"
+            android:title="@string/ds_thuc_don"/>
+        <item
+            android:icon="@drawable/ic_like_food_32"
+            android:title="@string/so_thich_phuc_vu"/>
+    </group>
+    <group android:id="@+id/nav_center" android:checkableBehavior="none">
+        <item
+            android:icon="@drawable/ic_pie_chart_32"
+            android:title="@string/bao_cao"/>
+        <item android:title="@string/thiet_lap"
+            android:icon="@drawable/ic_nav_setting"/>
+        <item
+            android:icon="@drawable/ic_nav_syn"
+            android:title="@string/dong_bo_data"/>
+    </group>
+    <group android:id="@+id/nv_bottom">
+        <item
+            android:icon="@drawable/ic_nav_privacy_policy"
+            android:title="@string/chinh_sach_bao_mat"/>
+        <item
+            android:icon="@drawable/ic_nav_share_32"
+            android:title="@string/gioi_thieu_ban_be"/>
+        <item
+            android:icon="@drawable/ic_nav_star"
+            android:title="@string/danh_gia_ung_dung"/>
+    </group>
+    <group android:id="@+id/nv_bottom_help">
+        <item
+            android:icon="@drawable/ic_nav_send_err_32"
+            android:title="@string/gui_thong_bao_loi"/>
+        <item
+            android:icon="@drawable/ic_nav_infomation"
+            android:title="@string/thong_tin_ung_dung"/>
+        <item xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:iconTint="@color/pink"
+            android:icon="@drawable/ic__nav_logout_32"
+            android:title="@string/dang_xuat"/>
+    </group>
+</menu>

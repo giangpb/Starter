@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    android:id="@+id/cadItemTypeRestaurant"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/card_item_restaurant_size"
+    android:layout_margin="@dimen/margin_normal"
+    android:clickable="true"
+    android:focusable="true"
+    android:checkable="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@color/white"
+    android:layout_height="@dimen/card_item_restaurant_size">
+    <RelativeLayout
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/ivRestaurantImage"
+                android:layout_width="@dimen/item_res_image_type"
+                android:src="@drawable/ic_res_type_banhmi"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_height="@dimen/item_res_image_type"/>
+            <TextView
+                android:id="@+id/tvRestaurantName"
+                style="@style/text_normal"
+                android:layout_width="wrap_content"
+                android:text="@string/text_item_restaurant"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>

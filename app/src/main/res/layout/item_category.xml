@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/rlItemCategory"
+    android:clickable="true"
+    android:background="?android:selectableItemBackground"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/ivCategoryImage"
+        android:layout_width="@dimen/size_image_category_item"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_do_dong_chai"
+        android:layout_height="@dimen/size_image_category_item"/>
+    <TextView
+        android:id="@+id/tvCategoryCount"
+        android:layout_width="@dimen/font_large"
+        android:text="11"
+        android:layout_toRightOf="@id/ivCategoryImage"
+        android:layout_marginLeft="@dimen/margin_stt3"
+        android:visibility="visible"
+        style="@style/text_bridge_small"
+        android:background="@drawable/custom_text_bridge"
+        android:layout_height="@dimen/font_large"/>
+<TextView
+    android:id="@+id/tvCategoryName"
+    android:layout_below="@id/ivCategoryImage"
+    android:layout_width="wrap_content"
+    android:text="@string/text_item_category"
+    android:layout_centerHorizontal="true"
+    android:paddingLeft="@dimen/margin_large"
+    android:paddingRight="@dimen/margin_large"
+    android:paddingBottom="@dimen/margin_small"
+    style="@style/text_normal.item"
+    android:layout_height="wrap_content"/>
+</RelativeLayout>

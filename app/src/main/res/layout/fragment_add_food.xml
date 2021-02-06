@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.updateitem.UpdateItemActivity">
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_alignParentStart="true"
+            android:layout_width="match_parent"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark"
+            android:layout_height="@dimen/toolbar_height_size">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/ivArrowBackSetupMenu"
+                    android:layout_width="@dimen/size_ic_statusbar"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="@dimen/margin_large"
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_icon_back"
+                    android:layout_height="@dimen/size_ic_statusbar"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_centerInParent="true"
+                    style="@style/text_large"
+                    android:text="@string/text_add_food"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlChooseImage"
+            android:layout_below="@id/appBarLayout"
+            android:layout_width="match_parent"
+
+            android:layout_height="@dimen/view_small">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="@dimen/card_update_restaurant_size"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                app:cardCornerRadius="@dimen/card_radius"
+                app:cardElevation="@dimen/reset"
+                android:layout_centerInParent="true"
+                android:layout_height="@dimen/card_update_restaurant_size">
+                <ImageView
+                    android:id="@+id/ivItemImage"
+                    android:src="@drawable/ic_picture_holder_108"
+                    android:layout_width="match_parent"
+                    android:scaleType="centerCrop"
+                    android:layout_height="match_parent"/>
+            </com.google.android.material.card.MaterialCardView>
+
+
+        </RelativeLayout>
+        <View android:id="@+id/divider_chooseImage"
+            android:layout_below="@id/rlChooseImage"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_size_small"
+            android:background="?android:attr/dividerVertical" />
+        <LinearLayout
+            android:layout_below="@id/divider_chooseImage"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_margin="@dimen/margin_normal"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginBottom="@dimen/margin_large"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_height="wrap_content"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tvFoodName"
+                    android:layout_width="match_parent"
+                    style="@style/et_normal"
+                    android:hint="@string/hint_food_name"
+                    android:layout_height="wrap_content"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:text="Giá bán"
+                style="@style/text_normal"
+                android:layout_height="wrap_content"/>
+            <com.google.android.material.textfield.TextInputLayout
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_marginBottom="@dimen/margin_large"
+                android:layout_width="match_parent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_height="wrap_content"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tvFoodPrice"
+                    android:layout_width="match_parent"
+                    style="@style/et_normal"
+                    android:text="@string/text_default_food_price"
+                    android:layout_height="wrap_content"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/text_unit_food"
+                style="@style/text_normal"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:weightSum="8"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+                <Spinner
+                    android:id="@+id/spinnerUnit"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_height_spinner"/>
+                <ImageView
+                    android:id="@+id/ivAddUnit"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="7"
+                    android:clickable="true"
+                    android:background="?android:selectableItemBackgroundBorderless"
+                    android:layout_width="match_parent"
+                    android:src="@drawable/ic_add_24"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <View
+                android:layout_below="@id/rlChooseImage"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_size_small"
+                android:layout_marginBottom="@dimen/margin_large"
+                android:background="?android:attr/dividerVertical" />
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/text_group_food"
+                style="@style/text_normal"
+                android:layout_height="wrap_content"/>
+
+            <Spinner
+                android:id="@+id/spinnerCategory"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_height_spinner"/>
+            <View
+                android:layout_below="@id/rlChooseImage"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_size_small"
+                android:layout_marginBottom="@dimen/margin_large"
+                android:background="?android:attr/dividerVertical" />
+
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddItemFood"
+            android:layout_alignParentBottom="true"
+            android:foreground="?android:selectableItemBackground"
+            android:background="@drawable/custom_btn_completed_setup"
+            android:layout_margin="@dimen/margin_normal"
+            android:text="@string/text_btn_save_food"
+            android:letterSpacing="0"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/btn_setup_menu_size_height"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

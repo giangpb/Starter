@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_order"
+    app:startDestination="@id/listOrderFragment">
+
+    <fragment
+        android:id="@+id/listOrderFragment"
+        android:name="vn.com.misa.starter2.ui.listorder.ListOrderFragment"
+        android:label="fragment_list_order"
+        tools:layout="@layout/fragment_list_order" >
+        <action
+            android:id="@+id/action_listOrderFragment_to_addOrderFragment"
+            app:destination="@id/addOrderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addOrderFragment"
+        android:name="vn.com.misa.starter2.ui.order_add.AddOrderFragment"
+        android:label="fragment_add_order"
+        tools:layout="@layout/fragment_add_order" >
+        <action
+            android:id="@+id/action_addOrderFragment_to_listOrderFragment"
+            app:destination="@id/listOrderFragment" />
+    </fragment>
+</navigation>
