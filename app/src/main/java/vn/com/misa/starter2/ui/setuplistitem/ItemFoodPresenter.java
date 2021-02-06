@@ -88,11 +88,6 @@ public class ItemFoodPresenter implements IAddItemModel {
     public void addItemFalse() {
     }
 
-    public void receiverOrderDetails(ArrayList<OrderDetail> orderDetails){
-        itemFoodModel.updateItemInOrderDetail(orderDetails);
-    }
-
-
     /**
      * Hàm tính tiền hoá đơn chi tiết
      * @param data danh sách thực đơn chọn
@@ -113,6 +108,18 @@ public class ItemFoodPresenter implements IAddItemModel {
      */
     public int tongSoLuongSanPham(ArrayList<Item> data){
         return itemFoodModel.tongSoLuongSanPham(data);
+    }
+
+
+    /**
+     * Hàm lấy thông tin chi tiết hoá đơn
+     * @param orderID mã hoá đơn
+     * @return danh sách sản phẩm theo hoá đơn
+     * @author giangpb
+     * @date 06/02/2021
+     */
+    public ArrayList<Item> getItemInOrderDetail(String orderID){
+        return itemFoodModel.getItemInOrderDetail(orderID);
     }
 
 //    public void reset

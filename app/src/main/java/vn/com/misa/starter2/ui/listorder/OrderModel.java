@@ -71,6 +71,8 @@ public class OrderModel extends DatabaseHelper {
      * Hàm lưu order
      * @param order order
      * @return kết quả
+     * @author giangpb
+     * @date 06/02/2021
      */
     public boolean storeOrder(Order order){
         try {
@@ -87,6 +89,51 @@ public class OrderModel extends DatabaseHelper {
         }
         catch (Exception ex){
             Log.d(TAG, "storeOrder: "+ex.getMessage());
+        }
+        return false;
+    }
+
+    /**
+     * Hàm cập nhật order
+     * @param order order
+     * @return kết quả
+     * @author giangpb
+     * @date 06/02/2021
+     */
+    public boolean updateOrder(Order order){
+        try {
+            connectSQLite();
+            ContentValues values = new ContentValues();
+            values.put("OrderDate", order.getOrderDate());
+            values.put("OrderStatus", order.getOrderStatus());
+            values.put("Amount", order.getAmount());
+            values.put("TotalAmount", order.getTotalAmount());
+            values.put("ItemNames", order.getItemNames());
+            sqLiteDatabase.update("Order1", values,"OrderID = ?", new String[]{order.getOrderID()});
+            return true;
+        }
+        catch (Exception ex){
+            Log.d(TAG, "storeOrder: "+ex.getMessage());
+        }
+        return false;
+    }
+
+
+    /**
+     * Hàm xoá order theo mã
+     * @param orderID mã truyền vào
+     * @return kết quả đúng hoặc sai
+     * author giangpb
+     * @date 6/2/2021
+     */
+    public boolean deleteOrder(String orderID){
+        try{
+            connectSQLite();
+            sqLiteDatabase.delete("Order1", "OrderID = ?", new String[]{orderID});
+            return true;
+        }
+        catch (Exception ex){
+            Log.d(TAG, "deleteOrder: "+ex.getMessage());
         }
         return false;
     }

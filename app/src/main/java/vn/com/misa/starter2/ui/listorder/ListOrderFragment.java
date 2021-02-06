@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -43,48 +44,6 @@ public class ListOrderFragment extends Fragment implements IOrderListener{
     private RecyclerView rcvListOrder;
     private OrderAdapter orderAdapter;
 
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ListOrderFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ListOrderFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ListOrderFragment newInstance(String param1, String param2) {
-        ListOrderFragment fragment = new ListOrderFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
-    }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -100,20 +59,25 @@ public class ListOrderFragment extends Fragment implements IOrderListener{
         // khởi tạo các điều khiển
         ivOpenDrawerNavigation = view.findViewById(R.id.ivOpenDrawerNavigation);
         fabAddOrder = view.findViewById(R.id.fabAddOrder);
+        rcvListOrder= view.findViewById(R.id.rcvListOrder);
 
         orderPresenter = new OrderPresenter(getContext());
-
-        rcvListOrder= view.findViewById(R.id.rcvListOrder);
-        orderAdapter = new OrderAdapter(getContext(), this);
-        rcvListOrder.setAdapter(orderAdapter);
-        rcvListOrder.setHasFixedSize(true);
-        rcvListOrder.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        orderAdapter.addData(orderPresenter.getAllOrder());
 
         // tạo các sự kiện
         addEvents();
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        orderAdapter = new OrderAdapter(getContext(), this,orderPresenter.getAllOrder());
+        rcvListOrder.setAdapter(orderAdapter);
+        rcvListOrder.setHasFixedSize(true);
+        rcvListOrder.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+
     }
 
     /**
@@ -158,5 +122,14 @@ public class ListOrderFragment extends Fragment implements IOrderListener{
         Bundle bundle = new Bundle();
         bundle.putSerializable("order", order);
         navController.navigate(R.id.action_listOrderFragment_to_addOrderFragment, bundle, null);
+    }
+
+    @Override
+    public void onDeleteOrderClickListener(Order order, int pos) {
+        // hỏi trước khi xoá... thêm sau
+        // xoá trong csdl
+        orderPresenter.deleteOrder(order.getOrderID());
+        // cập nhật lại giao diện
+        orderAdapter.removeItem(order, pos);
     }
 }

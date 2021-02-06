@@ -28,4 +28,28 @@ public class OrderPresenter {
     public boolean addOrder(Order order){
         return orderModel.storeOrder(order);
     }
+
+
+    /**
+     * Hàm cập nhật order
+     * @param order order
+     * @return kết quả
+     * @author giangpb
+     * @date 06/02/2021
+     */
+    public boolean updateOrder(Order order){
+        return orderModel.updateOrder(order);
+    }
+
+
+    /**
+     * Hàm xoá order theo mã
+     * @param orderID mã truyền vào
+     * @return kết quả đúng hoặc sai
+     * author giangpb
+     * @date 6/2/2021
+     */
+    public boolean deleteOrder(String orderID){
+        return orderModel.deleteOrder(orderID);
+    }
 }

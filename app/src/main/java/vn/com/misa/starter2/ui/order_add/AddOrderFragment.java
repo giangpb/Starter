@@ -96,10 +96,19 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
     //
     private int itemQuantitySelected;
 
+    // order
+    private OrderPresenter orderPresenter;
+    boolean checkAddFirst=false;
+    private Order mOrder =null;
+
     // điều khiển
     MaterialButton btnLuuLai;
+    MaterialButton btnThuTien;
 
     private NavController navController;
+    private OrderDetailPresenter orderDetailPresenter;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -114,6 +123,9 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         lstItem = new ArrayList<>();
         lstItem = itemFoodPresenter.getAllItem();
 
+        // order
+        orderPresenter = new OrderPresenter(getActivity());
+
         // khởi tạo điều khiển
         ivBack = view.findViewById(R.id.ivBack);
         cadOrder = view.findViewById(R.id.cadOrder);
@@ -124,6 +136,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         tvGiaPhaiThu  =view.findViewById(R.id.tvGiaPhaiThu);
         tvItemCount = view.findViewById(R.id.tvItemQuantity);
         btnLuuLai =view.findViewById(R.id.btnLuuLai);
+        btnThuTien = view.findViewById(R.id.btnThuTien);
 
 
         // khởi tạo danh sách danh mục
@@ -135,26 +148,28 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
 
         //
         additionPresenter = new AdditionPresenter(getActivity());
-
+        orderDetailPresenter  = new OrderDetailPresenter(getActivity());
 
         // lấy bundle order
         Bundle bundle = getArguments();
         if(bundle !=null){
-            Order order = (Order) bundle.getSerializable("order");
+            mOrder = (Order) bundle.getSerializable("order");
+            lstItemSelected = itemFoodPresenter.getItemInOrderDetail(mOrder.getOrderID());
+            checkAddFirst=true;
             // kiểm tra đang xem order hay tạo mới
-            mOrderDetailPresenter = new OrderDetailPresenter(getActivity());
-            mOrderDetails = mOrderDetailPresenter.getOrderDetail(order.getOrderID());
 
+            mOrderDetailPresenter = new OrderDetailPresenter(getActivity());
+            mOrderDetails = mOrderDetailPresenter.getOrderDetail(mOrder.getOrderID());
+
+            Log.d(TAG, "onCreateView: "+mOrderDetails.toString());
 //            lstItemSelected = m
 
             for(int i=0; i<lstItem.size(); i++){
                 Item item = lstItem.get(i);
                 for(OrderDetail orderDetail :mOrderDetails){
-                    if(orderDetail.getOrderDetailType() ==1){
-                        if (orderDetail.getItemName().equalsIgnoreCase(item.getItemName())){ // fix sau
-                            item.setQuantity(orderDetail.getQuantity());
-                            lstItem.set(i,item);
-                        }
+                    if (orderDetail.getItemID().equalsIgnoreCase(item.getItemID())){ // fix sau
+                        item.setQuantity(orderDetail.getQuantity());
+                        lstItem.set(i,item);
                     }
                 }
             }
@@ -164,12 +179,19 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
             }
             tvGiaPhaiThu.setText(decimalFormat.format(priceItemSelected));
 
+            if(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)>0){
+                tvItemCount.setVisibility(View.VISIBLE);
+                tvItemCount.setText(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)+"");
+            }
+
         }
         else{
             // khởi tạo danh sách mới chứa item order mới
             lstItemSelected = new ArrayList<>();
         }
+//        tvGiaPhaiThu.setText(decimalFormat.format(itemFoodPresenter.tinhTienHoaDon(lstItemSelected)));
 
+        Log.d(TAG, "onCreateView: "+lstItemSelected.toString());
         // khởi tạo danh sách sản phẩm
         rcvListItemOfCategory = view.findViewById(R.id.rcvListItemOfCategory);
         swipeItemAdapter = new SwipeItemAdapter(getActivity(), this);
@@ -183,7 +205,6 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                 swipeItemAdapter.addItem(item);
             }
         }
-//        swipeItemAdapter.addListItem(itemFoodPresenter.getListItemFood(categoryPresenter.getListCategory().get(0).getCategoryID()));
 
         rcvListItemOfCategory.setHasFixedSize(true);
         rcvListItemOfCategory.setAdapter(swipeItemAdapter);
@@ -198,12 +219,6 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        itemFoodPresenter.receiverOrderDetails(mOrderDetails);
     }
 
     /**
@@ -261,23 +276,88 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
             @Override
             public void onClick(View v) {
                 try{
-                    Order order =new Order();
-                    long timeMillis = System.currentTimeMillis();
-                    order.setOrderID(timeMillis+"");
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-                    String currentDateandTime = sdf.format(new Date());
-                    order.setDateCrate(currentDateandTime);
-                    order.setOrderStatus(1);
-                    order.setAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
-                    order.setItemNames(lstItemSelected.toString());
-                    order.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
+                    // kiểm tra order đã tồn tại trước đó hay chưa, nếu chưa thì thêm mới, có rồi thì cập nhật lại
+                    if(mOrder ==null){
+                        Order order =new Order();
+                        long timeMillis = System.currentTimeMillis();
+                        order.setOrderID(timeMillis+"");
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
+                        String currentDateandTime = sdf.format(new Date());
+                        order.setDateCrate(currentDateandTime);
+                        order.setOrderStatus(1);
+                        order.setAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
+                        order.setItemNames(lstItemSelected.toString());
+                        order.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
 
-                    //
-                    OrderPresenter orderPresenter = new OrderPresenter(getActivity());
-                    orderPresenter.addOrder(order);
+                        // thêm vào order
+                        orderPresenter.addOrder(order);
+
+                        // thêm danh sách vào hoá đơn
+                        for(Item item :lstItemSelected){
+                            if(item.getQuantity()>0){
+                                OrderDetail orderDetail = new OrderDetail();
+                                long idOrder = System.currentTimeMillis();
+                                orderDetail.setOrderDetailID("s"+idOrder);
+                                orderDetail.setOrderID(timeMillis+"");
+                                orderDetail.setItemID(item.getItemID());
+                                orderDetail.setItemName(item.getItemName());
+                                orderDetail.setUnitID(item.getUnitID());
+                                orderDetail.setUnitPrice(item.getPrice());
+                                orderDetail.setQuantity(item.getQuantity());
+                                orderDetail.setAmount(item.getQuantity()*item.getPrice());
+                                orderDetail.setDateCreate(currentDateandTime);
+                                orderDetailPresenter.themOrderDetail(orderDetail);
+                            }
+                        }
+                    }
+                    else{
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
+                        String currentDateandTime = sdf.format(new Date());
+
+                        mOrder.setOrderDate(currentDateandTime);
+                        mOrder.setAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
+                        mOrder.setItemNames(lstItemSelected.toString());
+                        mOrder.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
+
+                        // cập nhật hoá đơn
+                        orderPresenter.updateOrder(mOrder);
+                        // cập nhật chi tiết hoá đơn
+                        orderDetailPresenter.deleteOrderDetail(mOrder.getOrderID());
+
+                        // thêm danh sách vào hoá đơn
+                        for(Item item :lstItemSelected){
+                            if(item.getQuantity()>0){
+                                OrderDetail orderDetail = new OrderDetail();
+                                long idOrder = System.currentTimeMillis();
+                                orderDetail.setOrderDetailID("s"+idOrder);
+                                orderDetail.setOrderID(mOrder.getOrderID());
+                                orderDetail.setItemID(item.getItemID());
+                                orderDetail.setItemName(item.getItemName());
+                                orderDetail.setUnitID(item.getUnitID());
+                                orderDetail.setUnitPrice(item.getPrice());
+                                orderDetail.setQuantity(item.getQuantity());
+                                orderDetail.setAmount(item.getQuantity()*item.getPrice());
+                                orderDetail.setDateCreate(currentDateandTime);
+                                orderDetailPresenter.themOrderDetail(orderDetail);
+                            }
+                        }
+
+                    }
 
                     NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.listOrderFragment, false).build();
                     navController.navigate(R.id.action_addOrderFragment_to_listOrderFragment, null, navOptions);
+
+                }
+                catch (Exception ex){
+                    Log.d(TAG, "onClick: "+ex.getMessage());
+                }
+            }
+        });
+
+        btnThuTien.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
 
                 }
                 catch (Exception ex){
@@ -300,7 +380,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
     }
 
 
-    boolean checkAddFirst=false;
+
     @Override
     public void onClickItemSwipe(Item item) {
 
@@ -430,7 +510,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                             tvItemCount.setText(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)+"");
                         }
 
-
+                        Log.d(TAG, "onClickItemSwipe: "+lstItemSelected.toString());
                     }
                     catch (Exception ex){
                         Log.d(TAG, "onClick: "+ex.getMessage());
@@ -464,5 +544,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
             tvItemCount.setVisibility(View.VISIBLE);
             tvItemCount.setText(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)+"");
         }
+
+        Log.d(TAG, "onClickItemSwipe: "+lstItemSelected.toString());
     }
 }

@@ -102,25 +102,6 @@ public class ItemFoodModel extends DatabaseHelper {
         sqLiteDatabase.update("InventoryItem",values,null, null);
     }
 
-    public void updateItemInOrderDetail(ArrayList<OrderDetail> orderDetails){
-        connectSQLite();
-
-        ContentValues values = new ContentValues();
-        values.put("InventoryItemName", "Twwèo");
-        int kq = sqLiteDatabase.update("InventoryItem",values, "InventoryItemID=?", new String[]{"\\bd6c09f5-5d54-4990-8fb9-65e39291bf9b"});
-        Log.d(TAG, "updateItemInOrderDetail: "+kq);
-
-
-//        for (OrderDetail orderDetail :orderDetails){
-//            if(orderDetail.getOrderDetailType() ==1){
-//                ContentValues values = new ContentValues();
-//                values.put("Quantity", 22);
-//                int kq = sqLiteDatabase.update("InventoryItem",values,"InventoryItemID = ?", new String[]{"508ac889-5d54-4990-8fb9-65e39291bf9b"});
-//                Log.d(TAG, "updateItemInOrderDetail: "+kq);
-//            }
-//        }
-    }
-
 
     /**
      * Hàm xoá item theo danh mục
@@ -194,6 +175,51 @@ public class ItemFoodModel extends DatabaseHelper {
         }
 
         return tien;
+    }
+
+    /**
+     * Hàm lấy thông tin chi tiết hoá đơn
+     * @param orderID mã hoá đơn
+     * @return danh sách sản phẩm theo hoá đơn
+     * @author giangpb
+     * @date 06/02/2021
+     */
+    public ArrayList<Item> getItemInOrderDetail(String orderID){
+        try{
+            ArrayList<Item> lstItemInOrder = new ArrayList<>();
+            connectSQLite();
+            String sql = "SELECT InventoryItem.InventoryItemID, InventoryItem.InventoryItemCategoryID,InventoryItem.InventoryItemName, InventoryItem.Price,\n" +
+                    "InventoryItem.UnitID, InventoryItem.Position, OrderDetail.Quantity from OrderDetail INNER JOIN InventoryItem ON OrderDetail.ItemID = InventoryItem.InventoryItemID INNER JOIN Order1 on order1.OrderID = \n" +
+                    " OrderDetail.OrderID where order1.OrderID = ?";
+            Cursor cursor  =sqLiteDatabase.rawQuery(sql,new String[]{orderID});
+            while (cursor.moveToNext()){
+                Item item = new Item();
+
+                String itemID = cursor.getString(0);
+                String categoryID = cursor.getString(1);
+                String itemName = cursor.getString(2);
+                int price = cursor.getInt(3);
+                String unitID = cursor.getString(4);
+                int position = cursor.getInt(5);
+                int quantity = cursor.getInt(6);// sửa
+
+                item.setItemID(itemID);
+                item.setCategoryID(categoryID);
+                item.setItemName(itemName);
+                item.setPrice(price);
+                item.setUnitID(unitID);
+                item.setPosition(position);
+                item.setQuantity(quantity);
+
+                lstItemInOrder.add(item);
+            }
+            cursor.close();
+            return lstItemInOrder;
+        }
+        catch (Exception ex){
+            Log.d(TAG, "getItemInOrderDetail: "+ex.getMessage());
+        }
+        return null;
     }
 
     /**

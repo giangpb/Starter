@@ -33,4 +33,38 @@ public class OrderDetailPresenter {
     public ArrayList<OrderDetail> getOrderDetail(String orderID){
         return orderDetailModel.getOrderDetail(orderID);
     }
+
+    /**
+     * Hàm thêm chi tiết hoá đơn vào sqlite
+     * @param orderDetail chi tiết hoá đơn
+     * @return đúng hoặc sai
+     * @author giangpb
+     * @date 06/02/2021
+     */
+    public boolean themOrderDetail(OrderDetail orderDetail){
+        return orderDetailModel.themOrderDetail(orderDetail);
+    }
+
+
+    /**
+     * Hàm cập nhật chi tiết hoá đơn vào sqlite
+     * @param orderDetail chi tiết hoá đơn
+     * @return đúng hoặc sai
+     * author giangpb
+     * @date 07/02/2021
+     */
+    public boolean updateOrderDetail(OrderDetail orderDetail){
+        return orderDetailModel.updateOrderDetail(orderDetail);
+    }
+
+    /**
+     * Hàm xoá order detail theo mã order
+     * @param oderID mã order
+     * @return kết quả đúng hoặc sai
+     * @author giangpb
+     * @date 06/02/2020
+     */
+    public boolean deleteOrderDetail(String oderID){
+        return orderDetailModel.deleteOrderDetail(oderID);
+    }
 }

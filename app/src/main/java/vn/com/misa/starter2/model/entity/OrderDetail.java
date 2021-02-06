@@ -1,5 +1,7 @@
 package vn.com.misa.starter2.model.entity;
 
+import androidx.annotation.NonNull;
+
 /**
  * ‐ lớp order detail (chi tiết hoá đơn)
  * 1 - hoá đơn có nhiều chi tiết hoá đơn
@@ -137,5 +139,11 @@ public class OrderDetail {
 
     public void setDateCreate(String dateCreate) {
         this.dateCreate = dateCreate;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return this.getOrderDetailID() + " - "+this.getQuantity();
     }
 }

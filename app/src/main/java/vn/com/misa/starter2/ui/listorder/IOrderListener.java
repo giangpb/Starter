@@ -9,4 +9,6 @@ import vn.com.misa.starter2.model.entity.Order;
 public interface IOrderListener {
 
     void onOrderClickListener(Order order);
+
+    void onDeleteOrderClickListener(Order order, int pos);
 }

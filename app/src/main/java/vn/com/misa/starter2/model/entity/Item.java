@@ -121,7 +121,7 @@ public class Item implements Serializable {
 
     @Override
     public String toString() {
-        return this.quantity +" "+this.getItemName()+",";
+        return this.quantity +" "+this.getItemName();
     }
 
     @Override

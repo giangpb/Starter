@@ -35,9 +35,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyHolder> {
     private ArrayList<Order> mData;
     private Context mContext;
 
-    public OrderAdapter(Context context, IOrderListener iOrderListener){
+    public OrderAdapter(Context context, IOrderListener iOrderListener, ArrayList<Order> data){
         this.mIOrderListener = iOrderListener;
         this.mContext = context;
+        this.mData = data;
     }
 
     /**
@@ -49,6 +50,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyHolder> {
     public void addData(ArrayList<Order> data){
         if(mData ==null)
             mData = new ArrayList<>();
+        mData.clear();
         this.mData = data;
         notifyDataSetChanged();
     }
@@ -73,6 +75,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyHolder> {
         if(mData==null)
             return 0;
         return mData.size();
+    }
+
+    public void removeItem(Order order, int pos){
+        mData.remove(order);
+        notifyItemRemoved(pos);
     }
 
     public class MyHolder extends RecyclerView.ViewHolder {
@@ -101,6 +108,19 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyHolder> {
                 public void onClick(View v) {
                     try{
                         mIOrderListener.onOrderClickListener(mData.get(getAdapterPosition()));
+                    }
+                    catch (Exception ex){
+                        Log.d(TAG, "onClick: "+ex.getMessage());
+                    }
+                }
+            });
+
+            // sự kiện huỷ order
+            btnHuy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try{
+                        mIOrderListener.onDeleteOrderClickListener(mData.get(getAdapterPosition()), getAdapterPosition());
                     }
                     catch (Exception ex){
                         Log.d(TAG, "onClick: "+ex.getMessage());
