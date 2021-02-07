@@ -27,6 +27,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.honorato.multistatetogglebutton.MultiStateToggleButton;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -358,7 +360,13 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
             @Override
             public void onClick(View v) {
                 try{
-
+                    // kiểm tra xem danh sách order có sản phẩm
+                    if(lstItemSelected.size() >0){
+                        navController.navigate(R.id.action_addOrderFragment_to_collectMoneyFragment);
+                    }
+                    else{
+                        return;
+                    }
                 }
                 catch (Exception ex){
                     Log.d(TAG, "onClick: "+ex.getMessage());
@@ -430,6 +438,12 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
             FloatingActionButton fabMinusQuantityBottomSheet = viewDialogBottomSheet.findViewById(R.id.fabMinusQuantityBottomSheet);
             FloatingActionButton fabAddQuantityBottomSheet = viewDialogBottomSheet.findViewById(R.id.fabAddQuantityBottomSheet);
             MaterialButton btnDongY = viewDialogBottomSheet.findViewById(R.id.btnDongY);
+
+            // khởi tạo mul toggle button
+            MultiStateToggleButton buttonToggle = (MultiStateToggleButton) viewDialogBottomSheet.findViewById(R.id.mstb_multi_id);
+            // gán giá trị mặc định
+            buttonToggle.setValue(0);
+
 
             AdditionAdapter additionAdapter = new AdditionAdapter();
             additionAdapter.addItemAddition(mAdditionCategories);

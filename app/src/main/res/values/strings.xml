@@ -32,6 +32,10 @@
     <string name="text_select_food">Chọn món</string>
     <string name="text_con_phai_thu">Còn phải thu:</string>
     <string name="text_con_phai_thu_tien">62.000</string>
+    <string name="text_thu_tien">Thu tiền</string>
+    <string name="text_tong_tien">Tổng tiền</string>
+    <string name="text_khach_dua">Khách đưa</string>
+    <string name="text_tra_lai">Trả lại</string>
 
 
     <!--    Text Button template-->
@@ -42,6 +46,7 @@
     <string name="text_btn_cancel_add_unit">HUỶ</string>
     <string name="text_btn_huy_bo">HUỶ BỎ</string>
     <string name="text_btn_thu_tien">THU TIỀN</string>
+    <string name="text_btn_hoan_thanh">HOÀN THÀNH</string>
 
     <!--    Popup menu-->
 
@@ -75,4 +80,22 @@
     <string name="nhap_mk">Nhập mật khẩu</string>
     <string name="quen_mk">Quên mật khẩu?</string>
     <string name="login">ĐĂNG NHẬP</string>
+
+    <string-array name="khuyen_mai_arr">
+        <item>%</item>
+        <item>VND</item>
+    </string-array>
+
+    <string-array name="thu_tien_arr">
+        <item>Tiền mặt</item>
+        <item>Thẻ ngân hàng</item>
+    </string-array>
+    <integer-array name="tien_vnd_arr">
+        <item>20000</item>
+        <item>50000</item>
+        <item>100000</item>
+        <item>200000</item>
+        <item>500000</item>
+    </integer-array>
+
 </resources>

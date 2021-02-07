@@ -101,4 +101,12 @@
         <item name="android:layout_margin">@dimen/margin_normal</item>
     </style>
 
+<!--     toggle button-->
+    <style name="card_toggle_btn" parent="Widget.MaterialComponents.CardView">
+        <item name="strokeColor">@color/grey_separate</item>
+        <item name="cardElevation">@dimen/reset</item>
+        <item name="strokeWidth">@dimen/divider_size_small</item>
+    </style>
+
+
 </resources>

@@ -22,5 +22,12 @@
         <action
             android:id="@+id/action_addOrderFragment_to_listOrderFragment"
             app:destination="@id/listOrderFragment" />
+        <action
+            android:id="@+id/action_addOrderFragment_to_collectMoneyFragment"
+            app:destination="@id/collectMoneyFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/collectMoneyFragment"
+        android:name="vn.com.misa.starter2.ui.collectmoney.CollectMoneyFragment"
+        android:label="CollectMoneyFragment" />
 </navigation>
