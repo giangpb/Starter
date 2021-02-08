@@ -33,7 +33,7 @@ public class MoneyRequirementAdapter extends RecyclerView.Adapter<MoneyRequireme
     public MoneyRequirementAdapter(Context context){
         mContext = context;
         mLstMoney = mContext.getResources().getIntArray(R.array.tien_vnd_arr);
-        decimalFormat = new DecimalFormat("#.###");
+        decimalFormat = new DecimalFormat("#,###");
     }
 
 

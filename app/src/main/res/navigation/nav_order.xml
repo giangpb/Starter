@@ -29,5 +29,11 @@
     <fragment
         android:id="@+id/collectMoneyFragment"
         android:name="vn.com.misa.starter2.ui.collectmoney.CollectMoneyFragment"
-        android:label="CollectMoneyFragment" />
+        android:label="CollectMoneyFragment" >
+        <action
+            android:id="@+id/action_collectMoneyFragment_to_addOrderFragment"
+            app:destination="@id/addOrderFragment"
+            app:launchSingleTop="false"
+            app:popUpToInclusive="false" />
+    </fragment>
 </navigation>
