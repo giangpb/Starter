@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.chauthai.swipereveallayout.SwipeRevealLayout
+    android:id="@+id/swipeRevealLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:mode="same_level"
+    app:dragEdge="right">
+
+    <!-- Your secondary layout here -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/btnRemoveItem"
+            android:layout_width="@dimen/splash_height"
+            android:background="@color/pink"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="@dimen/size_image_icon_swipe"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_trash_24"
+                android:layout_height="@dimen/size_image_icon_swipe"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <!-- Your main layout here -->
+    <RelativeLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:paddingTop="@dimen/margin_normal"
+        android:background="?android:selectableItemBackground"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <View
+            android:layout_below="@+id/fabMinusQuantityBottomSheet"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/dividerVertical" />
+        <TextView
+            android:layout_alignParentStart="true"
+            android:id="@+id/tvNameFoodLst"
+            android:layout_width="wrap_content"
+            android:text="Chanh muối"
+            style="@style/text_small"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tvFoodPriceLst"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_below="@id/tvNameFoodLst"
+            android:text="@string/text_con_phai_thu_tien"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabMinusQuantityBottomSheet"
+            android:layout_width="wrap_content"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:fabSize="mini"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@id/tvQuantityBottomSheetLst"
+            app:tint="@color/purple_500"
+            app:backgroundTint="@color/purple_500"
+            app:elevation="@dimen/reset"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_munus_24"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvQuantityBottomSheetLst"
+            android:background="@drawable/text_quantity"
+            android:text="1"
+            style="@style/text_normal"
+            android:layout_toLeftOf="@id/fabAddQuantityBottomSheetLst"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_width="@dimen/text_quantity"
+            android:layout_height="@dimen/size_image_category_item"/>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAddQuantityBottomSheetLst"
+            android:layout_width="wrap_content"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:fabSize="mini"
+            android:layout_alignParentTop="true"
+            app:tint="@color/purple_500"
+            android:backgroundTint="@color/white"
+            app:backgroundTint="@color/purple_500"
+            android:src="@drawable/ic_add_24"
+            app:elevation="@dimen/reset"
+            android:layout_marginRight="@dimen/margin_normal"
+            android:layout_alignParentEnd="true"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+</com.chauthai.swipereveallayout.SwipeRevealLayout>

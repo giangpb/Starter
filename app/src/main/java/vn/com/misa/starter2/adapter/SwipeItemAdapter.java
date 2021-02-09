@@ -48,6 +48,11 @@ public class SwipeItemAdapter extends RecyclerView.Adapter<SwipeItemAdapter.MySw
         this.mIFoodListener = iFoodListener;
     }
 
+    /**
+     * Hàm xoá hết dữ liệu trước khi thêm và thông báo cập nhật
+     * @author giangpb
+     * @date 27/01/2021
+     */
     public void clearAllItem(){
         if (mData==null)
             mData = new ArrayList<>();
@@ -56,6 +61,12 @@ public class SwipeItemAdapter extends RecyclerView.Adapter<SwipeItemAdapter.MySw
     }
 
 
+    /**
+     * Hàm thêm danh sách data
+     * @param data danh sách data
+     * @author giangpb
+     * @date 27/01/2021
+     */
     public void addListItem(ArrayList<Item> data){
         if(mData==null)
             mData = new ArrayList<>();
@@ -63,6 +74,12 @@ public class SwipeItemAdapter extends RecyclerView.Adapter<SwipeItemAdapter.MySw
         notifyDataSetChanged();
     }
 
+    /**
+     * Hàm thêm từng item sản phẩm và thông báo cập nhật tại vị trí của sản phẩm
+     * @param item sản phẩm
+     * @author giangpb
+     * @date 27/01/2021
+     */
     public void addItem(Item item){
         if(mData ==null)
             mData = new ArrayList<>();
@@ -104,14 +121,9 @@ public class SwipeItemAdapter extends RecyclerView.Adapter<SwipeItemAdapter.MySw
         return mData.size();
     }
 
-    public void upDateItem(int pos, Item item){
-        mData.set(pos, item);
-        notifyItemChanged(pos);
-    }
-
     public class MySwipeHolder extends RecyclerView.ViewHolder {
-        private MaterialButton btnEdit;
-        private MaterialButton btnUnit;
+        private RelativeLayout btnEdit;
+        private RelativeLayout btnUnit;
 
         private TextView tvItemName;
 

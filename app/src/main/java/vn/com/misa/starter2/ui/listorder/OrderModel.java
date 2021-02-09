@@ -137,4 +137,26 @@ public class OrderModel extends DatabaseHelper {
         }
         return false;
     }
+
+    /**
+     * Hàm thanh toán oreder thành công!
+     * @param orderID mã order
+     * @return kết quả
+     * @author giangpb
+     * @date 08/02/2021
+     */
+    public boolean paymentDone(String orderID){
+        try{
+
+            connectSQLite();
+            ContentValues values = new ContentValues();
+            values.put("OrderStatus", 2);
+            sqLiteDatabase.update("Order1", values,"OrderID = ?", new String[]{orderID});
+            return true;
+        }
+        catch (Exception ex){
+            Log.d(TAG, "paymentDone: "+ex.getMessage());
+        }
+        return false;
+    }
 }

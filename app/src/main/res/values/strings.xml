@@ -57,6 +57,7 @@
     <!--    Hint EditText-->
     <string name="hint_food_name">Tên món (*)</string>
     <string name="text_default_food_price">0</string>
+    <string name="text_so_luong">SL:</string>
 
     <!--    Drawable navigation-->
     <string name="ds_hoa_don">Danh sách hoá đơn</string>

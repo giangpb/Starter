@@ -47,4 +47,7 @@
 
 <!--    ImageView-->
     <dimen name="size_image_category_item">32dp</dimen>
+    <dimen name="size_image_icon_swipe">22dp</dimen>
+
+    <dimen name="margin_bottomSheet">55dp</dimen>
 </resources>

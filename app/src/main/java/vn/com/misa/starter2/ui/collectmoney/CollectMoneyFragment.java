@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
+
 import org.honorato.multistatetogglebutton.MultiStateToggleButton;
 
 import java.text.DecimalFormat;
@@ -26,6 +28,7 @@ import java.text.DecimalFormat;
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.adapter.MoneyRequirementAdapter;
 import vn.com.misa.starter2.model.entity.Order;
+import vn.com.misa.starter2.ui.listorder.OrderPresenter;
 import vn.com.misa.starter2.ui.order_add.AddOrderFragment;
 
 /**
@@ -33,10 +36,14 @@ import vn.com.misa.starter2.ui.order_add.AddOrderFragment;
  * @author GIANG PHAN
  * @date 07/02/2021
  */
-public class CollectMoneyFragment extends Fragment {
+public class CollectMoneyFragment extends Fragment implements IMoneyClickListener {
     private static final String TAG = "CollectMoneyFragment";
 
-    //
+    // presenter
+    OrderPresenter orderPresenter;
+
+
+    // order
     private Order mOrder;
 
     private DecimalFormat decimalFormat;
@@ -51,6 +58,8 @@ public class CollectMoneyFragment extends Fragment {
     private TextView tvTongTien;
     private TextView tvKhachDua;
     private TextView tvTraLai;
+
+    private MaterialButton btnHoanThanh;
 
     private RecyclerView rcvLstMoneyRequirement;
     private MoneyRequirementAdapter moneyRequirementAdapter;
@@ -68,19 +77,21 @@ public class CollectMoneyFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_collect_money, container, false);
 
         // khởi tạo điều khiển
+        orderPresenter = new OrderPresenter(getContext());
 
         decimalFormat = new DecimalFormat("#,###");
         ivBack = view.findViewById(R.id.ivBack);
         tvTongTien = view.findViewById(R.id.tvTongTien);
         tvKhachDua = view.findViewById(R.id.tvKhachDua);
         tvTraLai = view.findViewById(R.id.tvTraLai);
+        btnHoanThanh = view.findViewById(R.id.btnHoanThanh);
 
         toggleButton = (MultiStateToggleButton) view.findViewById(R.id.mstb_multi_id);
         toggleButton.setValue(0);
 
         // khởi tạo lst
         rcvLstMoneyRequirement = view.findViewById(R.id.rcvLstMoneyRequirement);
-        moneyRequirementAdapter = new MoneyRequirementAdapter(getContext());
+        moneyRequirementAdapter = new MoneyRequirementAdapter(getContext(), this);
         rcvLstMoneyRequirement.setAdapter(moneyRequirementAdapter);
         rcvLstMoneyRequirement.setHasFixedSize(true);
         rcvLstMoneyRequirement.setLayoutManager(new GridLayoutManager(getContext(), 3));
@@ -119,5 +130,27 @@ public class CollectMoneyFragment extends Fragment {
                 }
             }
         });
+
+        // xử lý sự kiện hoàn thành
+        btnHoanThanh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    orderPresenter.paymentDone(mOrder.getOrderID());
+
+
+                }
+                catch (Exception ex){
+                    Log.d(TAG, "onClick: "+ex.getMessage());
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onListMoneyClick(int money) {
+        tvKhachDua.setText(decimalFormat.format(money));
+        int moneyChange = money - mOrder.getAmount();
+        tvTraLai.setText(decimalFormat.format(moneyChange));
     }
 }

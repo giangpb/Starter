@@ -1,15 +1,21 @@
 package vn.com.misa.starter2.ui.order;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 
 import vn.com.misa.starter2.R;
+import vn.com.misa.starter2.model.entity.Order;
+import vn.com.misa.starter2.ui.finishsetup.FinishSetupFragment;
+import vn.com.misa.starter2.ui.login.LoginActivity;
 
 public class OrderActivity extends AppCompatActivity {
 
@@ -18,13 +24,15 @@ public class OrderActivity extends AppCompatActivity {
     private NavigationView navigationView;
     public static ActionBarDrawerToggle drawerToggle;
 
+    private SharedPreferences sharedPreferences;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
-
+        sharedPreferences = getSharedPreferences(FinishSetupFragment.SHARE_PRE_FINISH_SETUP, MODE_PRIVATE);
         addControls();
 
     }
@@ -42,6 +50,9 @@ public class OrderActivity extends AppCompatActivity {
         navigationView=findViewById(R.id.nav_view);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // khởi tạo sự kiện
+        addEvents();
+
 
     }
 
@@ -51,6 +62,30 @@ public class OrderActivity extends AppCompatActivity {
             return true;
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Hàm khởi tạo sự kiện
+     * @author giangpb
+     * @date 08/02/2021
+     */
+    private void addEvents(){
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.mnuLogout:
+                        Intent intent = new Intent(OrderActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.clear();
+                        editor.commit();
+                        finish();
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 
 

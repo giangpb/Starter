@@ -13,6 +13,16 @@
     </style>
 
 <!--    Custom TextView-->
+    <style name="text_bottomSheet_normal" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">@font/font_intel_bold</item>
+        <item name="android:textColor">@color/greyDark200</item>
+    </style>
+
+    <style name="text_small" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">@font/font_intel</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="text_large" parent="Widget.AppCompat.TextView">
         <item name="fontFamily">@font/font_intel_bold</item>
         <item name="android:textSize">@dimen/font_large</item>

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.DecimalFormat;
 
 import vn.com.misa.starter2.R;
+import vn.com.misa.starter2.ui.collectmoney.IMoneyClickListener;
 
 /**
  * ‐ Hiển thị danh sách tiền gợi ý
@@ -21,6 +22,8 @@ import vn.com.misa.starter2.R;
  */
 public class MoneyRequirementAdapter extends RecyclerView.Adapter<MoneyRequirementAdapter.MyHolder> {
     private static final String TAG = "MoneyRequirementAdapter";
+
+    private IMoneyClickListener mIMoneyClickListener;
 
     private Context mContext;
 
@@ -30,7 +33,8 @@ public class MoneyRequirementAdapter extends RecyclerView.Adapter<MoneyRequireme
 
     private TextView tvSelected =null;
 
-    public MoneyRequirementAdapter(Context context){
+    public MoneyRequirementAdapter(Context context, IMoneyClickListener moneyClickListener){
+        this.mIMoneyClickListener = moneyClickListener;
         mContext = context;
         mLstMoney = mContext.getResources().getIntArray(R.array.tien_vnd_arr);
         decimalFormat = new DecimalFormat("#,###");
@@ -69,6 +73,7 @@ public class MoneyRequirementAdapter extends RecyclerView.Adapter<MoneyRequireme
                 @Override
                 public void onClick(View v) {
                     try{
+                        mIMoneyClickListener.onListMoneyClick(mLstMoney[getAdapterPosition()]);
                         if(tvSelected!=null){
                             tvSelected.setBackground(mContext.getResources().getDrawable(R.drawable.bg_money_requirement));
                             tvSelected.setTextColor(mContext.getResources().getColor(R.color.green));

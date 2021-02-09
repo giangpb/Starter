@@ -52,4 +52,15 @@ public class OrderPresenter {
     public boolean deleteOrder(String orderID){
         return orderModel.deleteOrder(orderID);
     }
+
+    /**
+     * Hàm thanh toán oreder thành công!
+     * @param orderID mã order
+     * @return kết quả
+     * @author giangpb
+     * @date 08/02/2021
+     */
+    public boolean paymentDone(String orderID){
+        return orderModel.paymentDone(orderID);
+    }
 }
