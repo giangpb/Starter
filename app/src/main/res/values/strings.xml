@@ -93,10 +93,40 @@
     </string-array>
     <integer-array name="tien_vnd_arr">
         <item>20000</item>
+        <item>25000</item>
+        <item>30000</item>
+        <item>35000</item>
+        <item>40000</item>
+        <item>45000</item>
         <item>50000</item>
+        <item>55000</item>
+        <item>60000</item>
+        <item>65000</item>
+        <item>70000</item>
+        <item>75000</item>
         <item>100000</item>
+        <item>120000</item>
+        <item>125000</item>
+        <item>150000</item>
         <item>200000</item>
+        <item>250000</item>
+        <item>300000</item>
+        <item>350000</item>
+        <item>400000</item>
+        <item>450000</item>
         <item>500000</item>
+        <item>550000</item>
+        <item>600000</item>
+        <item>650000</item>
+        <item>700000</item>
+        <item>750000</item>
+        <item>800000</item>
+        <item>850000</item>
+        <item>900000</item>
+        <item>950000</item>
+        <item>1000000</item>
+        <item>1050000</item>
+        <item>1100000</item>
     </integer-array>
 
 </resources>

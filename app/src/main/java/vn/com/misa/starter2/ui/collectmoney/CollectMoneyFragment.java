@@ -24,11 +24,17 @@ import com.google.android.material.button.MaterialButton;
 import org.honorato.multistatetogglebutton.MultiStateToggleButton;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.adapter.MoneyRequirementAdapter;
 import vn.com.misa.starter2.model.entity.Order;
+import vn.com.misa.starter2.model.entity.Payment;
 import vn.com.misa.starter2.ui.listorder.OrderPresenter;
+import vn.com.misa.starter2.ui.order.AutoIDPresenter;
 import vn.com.misa.starter2.ui.order_add.AddOrderFragment;
 
 /**
@@ -39,8 +45,13 @@ import vn.com.misa.starter2.ui.order_add.AddOrderFragment;
 public class CollectMoneyFragment extends Fragment implements IMoneyClickListener {
     private static final String TAG = "CollectMoneyFragment";
 
+
+    // autoID
+    AutoIDPresenter autoIDPresenter;
+
     // presenter
-    OrderPresenter orderPresenter;
+    private OrderPresenter orderPresenter;
+    private PaymentPresenter paymentPresenter;
 
 
     // order
@@ -59,10 +70,15 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
     private TextView tvKhachDua;
     private TextView tvTraLai;
 
+    private int moneyReceive = 0;
+
     private MaterialButton btnHoanThanh;
+
+    private int []dataMoney;
 
     private RecyclerView rcvLstMoneyRequirement;
     private MoneyRequirementAdapter moneyRequirementAdapter;
+    private ArrayList<Integer> lstMoney;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -76,8 +92,19 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_collect_money, container, false);
 
+        autoIDPresenter = new AutoIDPresenter(getContext());
+
+        Bundle bundle = getArguments();
+        mOrder = (Order)  bundle.getSerializable("order");
+
+        moneyReceive = mOrder.getAmount();
         // khởi tạo điều khiển
         orderPresenter = new OrderPresenter(getContext());
+        paymentPresenter = new PaymentPresenter(getContext());
+
+        // nạp danh sách tiền từ file string xml
+        dataMoney = getResources().getIntArray(R.array.tien_vnd_arr);
+        lstMoney = new ArrayList<>();
 
         decimalFormat = new DecimalFormat("#,###");
         ivBack = view.findViewById(R.id.ivBack);
@@ -86,20 +113,26 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
         tvTraLai = view.findViewById(R.id.tvTraLai);
         btnHoanThanh = view.findViewById(R.id.btnHoanThanh);
 
-        toggleButton = (MultiStateToggleButton) view.findViewById(R.id.mstb_multi_id);
+        toggleButton = view.findViewById(R.id.mstb_multi_id);
         toggleButton.setValue(0);
 
         // khởi tạo lst
         rcvLstMoneyRequirement = view.findViewById(R.id.rcvLstMoneyRequirement);
-        moneyRequirementAdapter = new MoneyRequirementAdapter(getContext(), this);
+        // nạp danh sách gợi ý tiền
+        for(int i=0; i<dataMoney.length; i++){
+            if(dataMoney[i]>=mOrder.getAmount()){
+                lstMoney.add(dataMoney[i]);
+            }
+        }
+        moneyRequirementAdapter = new MoneyRequirementAdapter(getContext(),lstMoney, this);
         rcvLstMoneyRequirement.setAdapter(moneyRequirementAdapter);
         rcvLstMoneyRequirement.setHasFixedSize(true);
         rcvLstMoneyRequirement.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
         // khởi tạo sự kiện
 
-        Bundle bundle = getArguments();
-        mOrder = (Order)  bundle.getSerializable("order");
+        Log.d(TAG, "onCreateView: "+AddOrderFragment.lstItemSelected.toString());
+
         // gán thông tin
         tvTongTien.setText(decimalFormat.format(mOrder.getAmount()));
         tvKhachDua.setText(decimalFormat.format(mOrder.getAmount()));
@@ -136,7 +169,44 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
             @Override
             public void onClick(View v) {
                 try{
+                    // thêm dialog progress
+
                     orderPresenter.paymentDone(mOrder.getOrderID());
+                    autoIDPresenter.addAutoID(mOrder.getOrderID());
+                    int type = autoIDPresenter.getIDAuto(mOrder.getOrderID());
+                    String refNo = String.format("%08d", type);
+
+                    long timeMillis = System.currentTimeMillis();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
+                    String currentDateAndTime = sdf.format(new Date());
+
+                    Payment payment = new Payment();
+                    payment.setRefID("ref"+timeMillis);
+                    //
+                    payment.setRefType(550);
+                    payment.setRefNO(refNo);
+                    payment.setRefDate(currentDateAndTime);
+                    payment.setAmount(mOrder.getAmount());
+
+                    // updating...
+                    // khuyến mãi theo từng sản phẩm
+                    payment.setPromotionItemsAmount(0);
+                    // sau khi khuyến mãi ...
+                    payment.setTotalAmount(mOrder.getAmount());
+                    payment.setPromotionRate(0);
+                    payment.setPromotionAmount(0);
+                    payment.setDiscountAmount(0);
+                    payment.setPreTaxAmount(mOrder.getAmount());
+
+                    payment.setTotalAmount(mOrder.getAmount());
+                    payment.setReturnAmount(moneyReceive - mOrder.getAmount());
+                    payment.setPaymentStatus(3);
+                    payment.setOrderID(mOrder.getOrderID());
+                    payment.setOrderType(1);
+                    payment.setTableName("null");
+                    payment.setCreatedDate(currentDateAndTime);
+                    paymentPresenter.addPayment(payment);
+
 
 
                 }
@@ -149,6 +219,7 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
 
     @Override
     public void onListMoneyClick(int money) {
+        moneyReceive = money;
         tvKhachDua.setText(decimalFormat.format(money));
         int moneyChange = money - mOrder.getAmount();
         tvTraLai.setText(decimalFormat.format(moneyChange));

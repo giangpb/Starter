@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.ui.collectmoney.IMoneyClickListener;
@@ -27,16 +28,16 @@ public class MoneyRequirementAdapter extends RecyclerView.Adapter<MoneyRequireme
 
     private Context mContext;
 
-    private int[] mLstMoney;
+    private ArrayList<Integer> mLstMoney;
 
     private DecimalFormat decimalFormat;
 
     private TextView tvSelected =null;
 
-    public MoneyRequirementAdapter(Context context, IMoneyClickListener moneyClickListener){
+    public MoneyRequirementAdapter(Context context,ArrayList<Integer> lstMoney, IMoneyClickListener moneyClickListener){
         this.mIMoneyClickListener = moneyClickListener;
         mContext = context;
-        mLstMoney = mContext.getResources().getIntArray(R.array.tien_vnd_arr);
+        this.mLstMoney = lstMoney;
         decimalFormat = new DecimalFormat("#,###");
     }
 
@@ -50,12 +51,15 @@ public class MoneyRequirementAdapter extends RecyclerView.Adapter<MoneyRequireme
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
-        holder.tvMoney.setText(decimalFormat.format(mLstMoney[position]));
+        holder.tvMoney.setText(decimalFormat.format(mLstMoney.get(position)));
     }
 
     @Override
     public int getItemCount() {
-        return mLstMoney.length;
+        if(mLstMoney.size()<6)
+            return mLstMoney.size();
+        else
+            return 6;
     }
 
     public class MyHolder extends RecyclerView.ViewHolder {
@@ -73,7 +77,7 @@ public class MoneyRequirementAdapter extends RecyclerView.Adapter<MoneyRequireme
                 @Override
                 public void onClick(View v) {
                     try{
-                        mIMoneyClickListener.onListMoneyClick(mLstMoney[getAdapterPosition()]);
+                        mIMoneyClickListener.onListMoneyClick(mLstMoney.get(getAdapterPosition()));
                         if(tvSelected!=null){
                             tvSelected.setBackground(mContext.getResources().getDrawable(R.drawable.bg_money_requirement));
                             tvSelected.setTextColor(mContext.getResources().getColor(R.color.green));

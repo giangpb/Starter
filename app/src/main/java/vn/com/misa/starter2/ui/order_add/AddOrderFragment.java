@@ -67,7 +67,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
     private OrderDetailPresenter mOrderDetailPresenter;
     private ArrayList<OrderDetail> mOrderDetails;
     //
-    private ArrayList<Item> lstItemSelected=null;
+    public static ArrayList<Item> lstItemSelected=null;
 
     // setup bottom sheet
     private MaterialCardView cadOrder;
@@ -105,6 +105,9 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
     private OrderPresenter orderPresenter;
     boolean checkAddFirst=false;
     private Order mOrder =null;
+
+    // check payment
+    private boolean checkPayment= false;
 
     // điều khiển
     MaterialButton btnLuuLai;
@@ -175,6 +178,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         Bundle bundle = getArguments();
         if(bundle !=null){
             mOrder = (Order) bundle.getSerializable("order");
+            checkPayment = bundle.getBoolean("check");
             lstItemSelected = itemFoodPresenter.getItemInOrderDetail(mOrder.getOrderID());
             // gán cho danh sách order bottomsheet
             orderBottomSheetAdapter.addData(lstItemSelected);
@@ -246,6 +250,15 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         navController = Navigation.findNavController(view);
     }
 
+    //check payment
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(checkPayment){
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
+    }
+
     /**
      * hàm tạo các sự kiện onclick
      * @author giangpb
@@ -308,8 +321,8 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                         long timeMillis = System.currentTimeMillis();
                         order.setOrderID(timeMillis+"");
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
-                        String currentDateandTime = sdf.format(new Date());
-                        order.setDateCrate(currentDateandTime);
+                        String currentDateAndTime = sdf.format(new Date());
+                        order.setDateCrate(currentDateAndTime);
                         order.setOrderStatus(1);
                         order.setAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
                         order.setItemNames(lstItemSelected.toString());
@@ -331,7 +344,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                                 orderDetail.setUnitPrice(item.getPrice());
                                 orderDetail.setQuantity(item.getQuantity());
                                 orderDetail.setAmount(item.getQuantity()*item.getPrice());
-                                orderDetail.setDateCreate(currentDateandTime);
+                                orderDetail.setDateCreate(currentDateAndTime);
                                 orderDetailPresenter.themOrderDetail(orderDetail);
                             }
                         }

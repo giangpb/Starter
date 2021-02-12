@@ -132,4 +132,13 @@ public class ListOrderFragment extends Fragment implements IOrderListener{
         // cập nhật lại giao diện
         orderAdapter.removeItem(order, pos);
     }
+
+    @Override
+    public void onPaymentOrderClickListener(Order order) {
+        // cập nhật order
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("order", order);
+        bundle.putBoolean("check", true);
+        navController.navigate(R.id.action_listOrderFragment_to_addOrderFragment, bundle, null);
+    }
 }

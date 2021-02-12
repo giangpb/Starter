@@ -8,7 +8,15 @@ import vn.com.misa.starter2.model.entity.Order;
  */
 public interface IOrderListener {
 
+    /**
+     * Sự kiện click vào item order
+     * @param order oder
+     * @author giangpb
+     * @date 27/01/2021
+     */
     void onOrderClickListener(Order order);
 
     void onDeleteOrderClickListener(Order order, int pos);
+
+    void onPaymentOrderClickListener(Order order);
 }

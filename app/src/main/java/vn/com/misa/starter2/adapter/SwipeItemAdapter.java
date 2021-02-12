@@ -18,6 +18,7 @@ import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.google.android.material.button.MaterialButton;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import vn.com.misa.starter2.R;
@@ -33,6 +34,8 @@ public class SwipeItemAdapter extends RecyclerView.Adapter<SwipeItemAdapter.MySw
     private Context mContext;
     private ArrayList<Item> mData;
 
+    private DecimalFormat decimalFormat;
+
 
     private IFoodListener mIFoodListener;
 
@@ -46,6 +49,7 @@ public class SwipeItemAdapter extends RecyclerView.Adapter<SwipeItemAdapter.MySw
     public SwipeItemAdapter(Context context, IFoodListener iFoodListener){
         this.mContext =context;
         this.mIFoodListener = iFoodListener;
+        decimalFormat = new DecimalFormat("#,###");
     }
 
     /**
@@ -107,7 +111,7 @@ public class SwipeItemAdapter extends RecyclerView.Adapter<SwipeItemAdapter.MySw
         Item item = mData.get(position);
 
         holder.tvItemName.setText(item.getItemName());
-        holder.tvItemPrice.setText(item.getPrice()+"");
+        holder.tvItemPrice.setText(decimalFormat.format(item.getPrice()));
         Glide.with(mContext).load(item.getImage()).into(holder.ivFoodImage);
 
         if(item.getQuantity()>0)
