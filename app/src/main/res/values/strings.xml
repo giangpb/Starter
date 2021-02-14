@@ -7,9 +7,11 @@
     <string name="text_finish_setup">Bước 3: Hoàn thành</string>
     <string name="text_add_food">Thêm món</string>
     <string name="text_edit_food">Sửa món</string>
+    <string name="text_payment_no">Sửa món</string>
 
 
     <!--  text  template-->
+    <string name="day_example">12/02/2021</string>
     <string name="text_item_restaurant">Quán cafe</string>
     <string name="text_setup_completed">THIẾT LẬP THÀNH CÔNG</string>
     <string name="text_setup_completed_notification">Bạn vừa thiết lập ban đầu thành công, giờ đây bạn có thể bán hàng ngay.</string>
@@ -20,6 +22,7 @@
     <string name="text_item_food">Sinh tố xoài</string>
     <string name="text_item_food_price">65k</string>
     <string name="text_item_category">Sinh tố</string>
+    <string name="text_payment_no_data">Không có dữ liệu.</string>
 
     <string name="text_so_thich_phuc_vu">Sở thích phục vụ</string>
     <string name="text_khong_duong">Không đường</string>
@@ -36,6 +39,7 @@
     <string name="text_tong_tien">Tổng tiền</string>
     <string name="text_khach_dua">Khách đưa</string>
     <string name="text_tra_lai">Trả lại</string>
+    <string name="text_hoa_don">Hoá đơn</string>
 
 
     <!--    Text Button template-->
@@ -128,5 +132,14 @@
         <item>1050000</item>
         <item>1100000</item>
     </integer-array>
+
+    <string-array name="choose_day">
+        <item>Hôm nay</item>
+        <item>Hôm qua</item>
+        <item>Tuần này</item>
+        <item>Tuần trước</item>
+        <item>Tháng này</item>
+        <item>Khác</item>
+    </string-array>
 
 </resources>

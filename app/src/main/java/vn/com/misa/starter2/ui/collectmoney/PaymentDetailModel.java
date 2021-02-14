@@ -27,6 +27,7 @@ public class PaymentDetailModel extends DatabaseHelper {
      */
     public boolean addPaymentDetail(PaymentDetail paymentDetail){
         try{
+            connectSQLite();
             ContentValues values = new ContentValues();
             values.put("RefDetailID", paymentDetail.getPaymentDetailID());
             values.put("RefID", paymentDetail.getPaymentID());

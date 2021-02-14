@@ -5,9 +5,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
@@ -16,6 +18,7 @@ import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.model.entity.Order;
 import vn.com.misa.starter2.ui.finishsetup.FinishSetupFragment;
 import vn.com.misa.starter2.ui.login.LoginActivity;
+import vn.com.misa.starter2.ui.payment.PaymentActivity;
 
 public class OrderActivity extends AppCompatActivity {
 
@@ -48,7 +51,6 @@ public class OrderActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
         navigationView=findViewById(R.id.nav_view);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // khởi tạo sự kiện
         addEvents();
@@ -71,9 +73,15 @@ public class OrderActivity extends AppCompatActivity {
      */
     private void addEvents(){
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @SuppressLint("WrongConstant")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
+                    case R.id.mnu_danh_sach_hoa_don:
+                        drawerLayout.closeDrawer(Gravity.START);
+                        Intent intentPayment = new Intent(OrderActivity.this, PaymentActivity.class);
+                        startActivity(intentPayment);
+                        return true;
                     case R.id.mnuLogout:
                         Intent intent = new Intent(OrderActivity.this, LoginActivity.class);
                         startActivity(intent);

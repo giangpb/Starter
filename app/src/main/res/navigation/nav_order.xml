@@ -35,5 +35,8 @@
             app:destination="@id/addOrderFragment"
             app:launchSingleTop="false"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_collectMoneyFragment_to_listOrderFragment"
+            app:destination="@id/listOrderFragment" />
     </fragment>
 </navigation>

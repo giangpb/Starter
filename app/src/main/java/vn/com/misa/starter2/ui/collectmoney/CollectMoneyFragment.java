@@ -31,8 +31,10 @@ import java.util.Locale;
 
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.adapter.MoneyRequirementAdapter;
+import vn.com.misa.starter2.model.entity.Item;
 import vn.com.misa.starter2.model.entity.Order;
 import vn.com.misa.starter2.model.entity.Payment;
+import vn.com.misa.starter2.model.entity.PaymentDetail;
 import vn.com.misa.starter2.ui.listorder.OrderPresenter;
 import vn.com.misa.starter2.ui.order.AutoIDPresenter;
 import vn.com.misa.starter2.ui.order_add.AddOrderFragment;
@@ -52,6 +54,7 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
     // presenter
     private OrderPresenter orderPresenter;
     private PaymentPresenter paymentPresenter;
+    private PaymentDetailPresenter paymentDetailPresenter;
 
 
     // order
@@ -101,6 +104,7 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
         // khởi tạo điều khiển
         orderPresenter = new OrderPresenter(getContext());
         paymentPresenter = new PaymentPresenter(getContext());
+        paymentDetailPresenter = new PaymentDetailPresenter(getContext());
 
         // nạp danh sách tiền từ file string xml
         dataMoney = getResources().getIntArray(R.array.tien_vnd_arr);
@@ -174,7 +178,7 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
                     orderPresenter.paymentDone(mOrder.getOrderID());
                     autoIDPresenter.addAutoID(mOrder.getOrderID());
                     int type = autoIDPresenter.getIDAuto(mOrder.getOrderID());
-                    String refNo = String.format("%08d", type);
+                    String refNo = String.format("%07d", type);
 
                     long timeMillis = System.currentTimeMillis();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
@@ -199,6 +203,7 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
                     payment.setPreTaxAmount(mOrder.getAmount());
 
                     payment.setTotalAmount(mOrder.getAmount());
+                    payment.setReceiveAmount(moneyReceive);
                     payment.setReturnAmount(moneyReceive - mOrder.getAmount());
                     payment.setPaymentStatus(3);
                     payment.setOrderID(mOrder.getOrderID());
@@ -207,8 +212,39 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
                     payment.setCreatedDate(currentDateAndTime);
                     paymentPresenter.addPayment(payment);
 
+                    // add payment detail
+                    for(int i=0; i<AddOrderFragment.lstItemSelected.size(); i++){
+                        Item item = AddOrderFragment.lstItemSelected.get(i);
 
+                        long time = System.currentTimeMillis();
+                        PaymentDetail paymentDetail = new PaymentDetail();
+                        paymentDetail.setPaymentDetailID("de"+time);
+                        paymentDetail.setPaymentID(payment.getRefID());
+                        //
+//                        paymentDetail.setParentID("");
+//
+                        paymentDetail.setItemID(item.getItemID());
+                        paymentDetail.setItemName(item.getItemName());
+//                        //
+                        paymentDetail.setRefDetailType(1);
+//
+                        paymentDetail.setUnitID(item.getUnitID());
+                        paymentDetail.setUnitPrice(item.getPrice());
+                        paymentDetail.setQuantity(item.getQuantity());
+//                        //
+                        paymentDetail.setPromotionRate(0);
+                        paymentDetail.setPromotionAmount(0);
+                        paymentDetail.setDiscountAmount(0);
+                        paymentDetail.setAmount(item.getPrice());
+//
+                        paymentDetail.setSortOrder(i);
 
+                        String currentDateAndTime2 = sdf.format(new Date());
+                        paymentDetail.setCreatedDate(currentDateAndTime2);
+                        paymentDetailPresenter.addPaymentDetail(paymentDetail);
+                    }
+                    NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.listOrderFragment,false).build();
+                    navController.navigate(R.id.action_collectMoneyFragment_to_listOrderFragment,null, navOptions);
                 }
                 catch (Exception ex){
                     Log.d(TAG, "onClick: "+ex.getMessage());

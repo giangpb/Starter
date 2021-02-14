@@ -2,6 +2,7 @@ package vn.com.misa.starter2.ui.collectmoney;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -63,7 +64,58 @@ public class PaymentModel extends DatabaseHelper {
         return false;
     }
 
-//    public ArrayList<Payment> getAllPayment(){
-//
-//    }
+    /**
+     * Hàm lấy toàn bộ danh sách payment
+     * @return danh sách
+     * @author giangpb
+     * @date 12/02/2021
+     */
+    public ArrayList<Payment> getAllPayment(){
+        try{
+            connectSQLite();
+            ArrayList<Payment> lstPayment = new ArrayList<>();
+            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM SAInvoice", null);
+            while (cursor.moveToNext()){
+                Payment payment = new Payment();
+                payment.setRefID(cursor.getString(0));
+                payment.setRefNO(cursor.getString(2));
+                payment.setAmount(cursor.getInt(4));
+                lstPayment.add(payment);
+            }
+            cursor.close();
+            return lstPayment;
+        }
+        catch (Exception ex){
+            Log.d(TAG, "getAllPayment: "+ex.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Hàm lấy toàn bộ danh sách payment theo ngày
+     * @param date ngày hiện tại
+     * @return danh sách
+     * @author giangpb
+     * @date 14/02/2021
+     */
+    public ArrayList<Payment> getAllPayment(String date){
+        try{
+            connectSQLite();
+            ArrayList<Payment> lstPayment = new ArrayList<>();
+            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM SAInvoice WHERE CreatedDate like ?", new String[]{date});
+            while (cursor.moveToNext()){
+                Payment payment = new Payment();
+                payment.setRefID(cursor.getString(0));
+                payment.setRefNO(cursor.getString(2));
+                payment.setAmount(cursor.getInt(4));
+                lstPayment.add(payment);
+            }
+            cursor.close();
+            return lstPayment;
+        }
+        catch (Exception ex){
+            Log.d(TAG, "getAllPayment: "+ex.getMessage());
+        }
+        return null;
+    }
 }
