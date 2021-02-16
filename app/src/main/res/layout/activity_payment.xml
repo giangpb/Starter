@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/rlPaymentActivity"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/dividerVertical"
+    android:background="@color/divider"
     tools:context=".ui.payment.PaymentActivity">
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -113,7 +114,7 @@
             android:layout_width="match_parent"
             tools:itemCount="4"
             tools:listitem="@layout/item_payment"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
     <LinearLayout
@@ -126,6 +127,7 @@
         android:layout_height="wrap_content">
         <ImageView
             android:layout_width="wrap_content"
+            android:background="@color/white"
             android:src="@drawable/ic_report_nodata"
             android:layout_height="wrap_content"/>
         <TextView

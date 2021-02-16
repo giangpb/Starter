@@ -80,6 +80,8 @@ public class PaymentModel extends DatabaseHelper {
                 payment.setRefID(cursor.getString(0));
                 payment.setRefNO(cursor.getString(2));
                 payment.setAmount(cursor.getInt(4));
+                payment.setReceiveAmount(cursor.getInt(12));
+                payment.setOrderID(cursor.getString(15));
                 lstPayment.add(payment);
             }
             cursor.close();
@@ -107,7 +109,11 @@ public class PaymentModel extends DatabaseHelper {
                 Payment payment = new Payment();
                 payment.setRefID(cursor.getString(0));
                 payment.setRefNO(cursor.getString(2));
+                payment.setRefDate(cursor.getString(3));
                 payment.setAmount(cursor.getInt(4));
+                payment.setReceiveAmount(cursor.getInt(12));
+                payment.setReturnAmount(cursor.getInt(13));
+                payment.setOrderID(cursor.getString(15));
                 lstPayment.add(payment);
             }
             cursor.close();

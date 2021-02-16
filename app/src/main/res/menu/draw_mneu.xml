@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:id="@+id/nav_top" android:checkableBehavior="single">
+    <group android:id="@+id/nav_top" android:checkableBehavior="none">
         <item android:id="@+id/mnu_danh_sach_hoa_don"
             android:icon="@drawable/ic_nav_list_invoice"
             android:title="@string/ds_hoa_don"
@@ -17,14 +17,14 @@
             android:icon="@drawable/ic_pie_chart_32"
             android:title="@string/bao_cao"/>
         <item android:title="@string/thiet_lap"
-            android:icon="@drawable/ic_nav_setting"/>
+            android:icon="@drawable/ic_settings_32"/>
         <item
-            android:icon="@drawable/ic_nav_syn"
+            android:icon="@drawable/ic_synchronize_32"
             android:title="@string/dong_bo_data"/>
     </group>
     <group android:id="@+id/nv_bottom">
         <item
-            android:icon="@drawable/ic_nav_privacy_policy"
+            android:icon="@drawable/ic_security_on_32"
             android:title="@string/chinh_sach_bao_mat"/>
         <item
             android:icon="@drawable/ic_nav_share_32"
@@ -38,11 +38,10 @@
             android:icon="@drawable/ic_nav_send_err_32"
             android:title="@string/gui_thong_bao_loi"/>
         <item
-            android:icon="@drawable/ic_nav_infomation"
+            android:icon="@drawable/ic_information_32"
             android:title="@string/thong_tin_ung_dung"/>
         <item xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/mnuLogout"
-            app:iconTint="@color/pink"
             android:icon="@drawable/ic__nav_logout_32"
             android:title="@string/dang_xuat"/>
     </group>

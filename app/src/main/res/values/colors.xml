@@ -14,6 +14,7 @@
     <color name="green">#08ae50</color>
 
     <color name="bg_gray">#F5F5F5</color>
+    <color name="bg_payment_detail">#ECEFF1</color>
     <color name="divider">#E0E0E0</color>
 
     <color name="colorPrimary">@color/blue</color>

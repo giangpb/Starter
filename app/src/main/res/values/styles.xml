@@ -35,6 +35,18 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="text_normal.bold" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">@font/font_intel_bold</item>
+        <item name="android:textSize">@dimen/font_normal</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="text_normal.bold_num" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">@font/font_intel_bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+
     <style name="text_normal.item" parent="Widget.AppCompat.TextView">
         <item name="fontFamily">@font/font_intel</item>
         <item name="android:textSize">@dimen/font_normal</item>

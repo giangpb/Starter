@@ -8,6 +8,7 @@
     <string name="text_add_food">Thêm món</string>
     <string name="text_edit_food">Sửa món</string>
     <string name="text_payment_no">Sửa món</string>
+    <string name="text_chi_tiet_hoa_don">Chi tiết hoá đơn</string>
 
 
     <!--  text  template-->
@@ -23,6 +24,14 @@
     <string name="text_item_food_price">65k</string>
     <string name="text_item_category">Sinh tố</string>
     <string name="text_payment_no_data">Không có dữ liệu.</string>
+    <string name="text_tra_lipton">Trà lipton</string>
+    <string name="text_hoa_don_up">HOÁ ĐƠN</string>
+    <string name="text_so_">Số: </string>
+    <string name="text_ten_mon">Tên món</string>
+    <string name="text_sl">SL</string>
+    <string name="text_thanh_tien">Thành tiền</string>
+    <string name="text_order">Order:</string>
+    <string name="text_ngay">Ngày:</string>
 
     <string name="text_so_thich_phuc_vu">Sở thích phục vụ</string>
     <string name="text_khong_duong">Không đường</string>

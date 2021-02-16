@@ -1,10 +1,12 @@
 package vn.com.misa.starter2.model.entity;
 
+import java.io.Serializable;
+
 /**
  * ‐ Lớp thanh toán
  * ‐ @created_by giangpb on 2/9/2021
  */
-public class Payment {
+public class Payment implements Serializable {
     private String refID;
 
     private int refType;

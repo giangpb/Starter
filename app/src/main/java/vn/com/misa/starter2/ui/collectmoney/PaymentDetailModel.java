@@ -2,7 +2,10 @@ package vn.com.misa.starter2.ui.collectmoney;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
+
+import java.util.ArrayList;
 
 import vn.com.misa.starter2.datautils.DatabaseHelper;
 import vn.com.misa.starter2.model.entity.PaymentDetail;
@@ -52,5 +55,49 @@ public class PaymentDetailModel extends DatabaseHelper {
             Log.d(TAG, "addPaymentDetail: "+ex.getMessage());
         }
         return false;
+    }
+
+    /**
+     * Hàm lấy thông tin danh sách chi tiết payment
+     * @param paymentID mã payment
+     * @return danh sách
+     * @author giangpb
+     * @date 15/02/2021
+     */
+    public ArrayList<PaymentDetail> getAllPaymentDetail(String paymentID){
+        try{
+            ArrayList<PaymentDetail> data = new ArrayList<>();
+            connectSQLite();
+            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM SAInvoiceDetail WHERE RefID = ?", new String[]{paymentID});
+            while (cursor.moveToNext()){
+                PaymentDetail paymentDetail = new PaymentDetail();
+                paymentDetail.setItemName(cursor.getString(4));
+                paymentDetail.setQuantity(cursor.getInt(8));
+                paymentDetail.setUnitPrice(cursor.getInt(12));
+
+                data.add(paymentDetail);
+            }
+            cursor.close();
+            return data;
+        }
+        catch (Exception ex){
+            Log.d(TAG, "getAllPaymentDetail: "+ex.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Hàm tính tổng số lượng danh sách payment
+     * @param paymentDetails danh sách
+     * @return số lượng
+     * @author giangpb
+     * @date 15/02/2021
+     */
+    public int quantityCount(ArrayList<PaymentDetail> paymentDetails){
+        int sum = 0;
+        for(PaymentDetail paymentDetail : paymentDetails){
+            sum += paymentDetail.getQuantity();
+        }
+        return sum;
     }
 }

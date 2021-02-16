@@ -3,6 +3,8 @@ package vn.com.misa.starter2.ui.collectmoney;
 
 import android.content.Context;
 
+import java.util.ArrayList;
+
 import vn.com.misa.starter2.model.entity.PaymentDetail;
 
 /**
@@ -26,5 +28,27 @@ public class PaymentDetailPresenter {
      */
     public boolean addPaymentDetail(PaymentDetail paymentDetail){
         return paymentDetailModel.addPaymentDetail(paymentDetail);
+    }
+
+    /**
+     * Hàm lấy thông tin danh sách chi tiết payment
+     * @param paymentID mã payment
+     * @return danh sách
+     * @author giangpb
+     * @date 15/02/2021
+     */
+    public ArrayList<PaymentDetail> getAllPaymentDetail(String paymentID){
+        return paymentDetailModel.getAllPaymentDetail(paymentID);
+    }
+
+    /**
+     * Hàm tính tổng số lượng danh sách payment
+     * @param paymentDetails danh sách
+     * @return số lượng
+     * @author giangpb
+     * @date 15/02/2021
+     */
+    public int quantityCount(ArrayList<PaymentDetail> paymentDetails){
+        return paymentDetailModel.quantityCount(paymentDetails);
     }
 }

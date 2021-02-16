@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +36,7 @@ import vn.com.misa.starter2.adapter.PaymentAdapter;
 import vn.com.misa.starter2.adapter.SelectDaySpinner;
 import vn.com.misa.starter2.model.entity.Payment;
 import vn.com.misa.starter2.ui.collectmoney.PaymentPresenter;
+import vn.com.misa.starter2.ui.paymentdetail.PaymentDetailActivity;
 
 public class PaymentActivity extends AppCompatActivity implements IPaymentClickListener {
     private static final String TAG = "PaymentActivity";
@@ -58,6 +61,7 @@ public class PaymentActivity extends AppCompatActivity implements IPaymentClickL
     // parent view
     LinearLayout llMaiPayment;
     LinearLayout llNoData;
+    RelativeLayout rlPaymentActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +82,14 @@ public class PaymentActivity extends AppCompatActivity implements IPaymentClickL
         tvDaySelected = findViewById(R.id.tvDaySelected);
         tvDateFill = findViewById(R.id.tvDateFill);
         tvPriceFill = findViewById(R.id.tvPriceFill);
+        rlPaymentActivity = findViewById(R.id.rlPaymentActivity);
+
 
         llMaiPayment = findViewById(R.id.llMaiPayment);
         llNoData = findViewById(R.id.llNoData);
         llMaiPayment.setVisibility(View.VISIBLE);
         llNoData.setVisibility(View.GONE);
+
 
         decimalFormat = new DecimalFormat("#,###");
 
@@ -136,6 +143,7 @@ public class PaymentActivity extends AppCompatActivity implements IPaymentClickL
                 DateTimeFormatter DATE_TIME_FORMATTER_SHOW_FILL = DateTimeFormatter.ofPattern("dd/MM/yyyy")
                         .withZone(ZoneId.systemDefault());
                 ArrayList<Payment> data = null;
+
                 if(position ==0){
                     data = paymentPresenter.getAllPayment(DATE_TIME_FORMATTER.format(now)+"%");
                     tvDaySelected.setText(DATE_TIME_FORMATTER_SHOW.format(now));
@@ -149,17 +157,17 @@ public class PaymentActivity extends AppCompatActivity implements IPaymentClickL
                     tvDateFill.setText(DATE_TIME_FORMATTER_SHOW_FILL.format(yesterday));
                     tvPriceFill.setText(decimalFormat.format(paymentPresenter.totalPrice(data)));
                 }
-                else if(position ==2){
 
-                }
                 // xử lý show
                 if(data !=null){
                     llMaiPayment.setVisibility(View.VISIBLE);
                     llNoData.setVisibility(View.GONE);
+                    rlPaymentActivity.setBackgroundColor(getResources().getColor(R.color.divider));
                 }
                 else{
                     llMaiPayment.setVisibility(View.GONE);
                     llNoData.setVisibility(View.VISIBLE);
+                    rlPaymentActivity.setBackgroundColor(getResources().getColor(R.color.white));
                 }
                 paymentAdapter.addData(data);
             }
@@ -173,6 +181,8 @@ public class PaymentActivity extends AppCompatActivity implements IPaymentClickL
 
     @Override
     public void onPaymentClick(Payment payment) {
-
+        Intent intent = new Intent(PaymentActivity.this, PaymentDetailActivity.class);
+        intent.putExtra("payment", payment);
+        startActivity(intent);
     }
 }
