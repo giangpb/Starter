@@ -49,4 +49,7 @@ dependencies {
     // circle imageview
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
+    // multi toggle
+    implementation 'org.honorato.multistatetogglebutton:multistatetogglebutton:0.2.2'
+
 }

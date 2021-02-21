@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     android:id="@+id/bottom_sheet_layout"
-    android:background="@color/white"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginTop="@dimen/toolbar_height_size"
     app:behavior_hideable="true"
     app:behavior_peekHeight="0dp"
     android:paddingBottom="@dimen/toolbar_height_size"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
     <RelativeLayout
+        android:clickable="true"
         android:id="@+id/llViewTop"
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/toolbar_height_size"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
@@ -30,14 +31,14 @@
             android:layout_height="wrap_content"/>
         <ImageView
             android:id="@+id/ivCloseBottomSheet"
-            android:layout_width="@dimen/size_ic_default"
+            android:layout_width="32dp"
             android:layout_centerVertical="true"
             android:clickable="true"
             android:background="?android:selectableItemBackgroundBorderless"
             android:layout_margin="@dimen/margin_normal"
             android:layout_alignParentEnd="true"
             android:src="@drawable/ic_delete_red"
-            android:layout_height="@dimen/size_ic_default"/>
+            android:layout_height="32dp"/>
         <View
             android:layout_alignParentBottom="true"
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -47,12 +48,17 @@
         </View>
     </RelativeLayout>
     <androidx.recyclerview.widget.RecyclerView
+        android:background="@color/white"
+        android:id="@+id/rcvOrderBottomSheet"
         android:layout_below="@id/llViewTop"
+        tools:itemCount="4"
+        tools:listitem="@layout/item_bottomsheet_order"
         android:layout_above="@id/llViewBottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <RelativeLayout
         android:id="@+id/llViewBottom"
+        android:background="@color/white"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="?android:actionBarSize">
@@ -66,17 +72,39 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:text="SL"
+            android:text="@string/text_so_luong"
             android:layout_margin="@dimen/margin_normal"
+            style="@style/text_bottomSheet_normal"
             android:layout_centerVertical="true"
             android:layout_height="wrap_content"/>
         <TextView
+            android:id="@+id/tvConPhaiThu"
+            android:layout_width="wrap_content"
+            android:text="@string/text_con_phai_thu"
+            style="@style/text_bottomSheet_normal"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tvItemCountLst"
             android:layout_width="wrap_content"
             android:text="0"
+            style="@style/text_large"
+            android:textColor="@color/green"
+            android:layout_marginRight="@dimen/margin_bottomSheet"
+            android:layout_toLeftOf="@id/tvConPhaiThu"
             android:layout_centerVertical="true"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvGiaPhaiThuLst"
             android:layout_alignParentEnd="true"
-            android:layout_margin="@dimen/margin_normal"
+            android:layout_centerVertical="true"
+            style="@style/text_large"
+            android:text="0"
+            android:textColor="@color/green"
+            android:layout_marginRight="@dimen/margin_normal"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </RelativeLayout>
-
 </RelativeLayout>

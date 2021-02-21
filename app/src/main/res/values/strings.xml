@@ -7,9 +7,12 @@
     <string name="text_finish_setup">Bước 3: Hoàn thành</string>
     <string name="text_add_food">Thêm món</string>
     <string name="text_edit_food">Sửa món</string>
+    <string name="text_payment_no">Sửa món</string>
+    <string name="text_chi_tiet_hoa_don">Chi tiết hoá đơn</string>
 
 
     <!--  text  template-->
+    <string name="day_example">12/02/2021</string>
     <string name="text_item_restaurant">Quán cafe</string>
     <string name="text_setup_completed">THIẾT LẬP THÀNH CÔNG</string>
     <string name="text_setup_completed_notification">Bạn vừa thiết lập ban đầu thành công, giờ đây bạn có thể bán hàng ngay.</string>
@@ -20,6 +23,15 @@
     <string name="text_item_food">Sinh tố xoài</string>
     <string name="text_item_food_price">65k</string>
     <string name="text_item_category">Sinh tố</string>
+    <string name="text_payment_no_data">Không có dữ liệu.</string>
+    <string name="text_tra_lipton">Trà lipton</string>
+    <string name="text_hoa_don_up">HOÁ ĐƠN</string>
+    <string name="text_so_">Số: </string>
+    <string name="text_ten_mon">Tên món</string>
+    <string name="text_sl">SL</string>
+    <string name="text_thanh_tien">Thành tiền</string>
+    <string name="text_order">Order:</string>
+    <string name="text_ngay">Ngày:</string>
 
     <string name="text_so_thich_phuc_vu">Sở thích phục vụ</string>
     <string name="text_khong_duong">Không đường</string>
@@ -32,6 +44,11 @@
     <string name="text_select_food">Chọn món</string>
     <string name="text_con_phai_thu">Còn phải thu:</string>
     <string name="text_con_phai_thu_tien">62.000</string>
+    <string name="text_thu_tien">Thu tiền</string>
+    <string name="text_tong_tien">Tổng tiền</string>
+    <string name="text_khach_dua">Khách đưa</string>
+    <string name="text_tra_lai">Trả lại</string>
+    <string name="text_hoa_don">Hoá đơn</string>
 
 
     <!--    Text Button template-->
@@ -42,6 +59,7 @@
     <string name="text_btn_cancel_add_unit">HUỶ</string>
     <string name="text_btn_huy_bo">HUỶ BỎ</string>
     <string name="text_btn_thu_tien">THU TIỀN</string>
+    <string name="text_btn_hoan_thanh">HOÀN THÀNH</string>
 
     <!--    Popup menu-->
 
@@ -52,6 +70,7 @@
     <!--    Hint EditText-->
     <string name="hint_food_name">Tên món (*)</string>
     <string name="text_default_food_price">0</string>
+    <string name="text_so_luong">SL:</string>
 
     <!--    Drawable navigation-->
     <string name="ds_hoa_don">Danh sách hoá đơn</string>
@@ -75,4 +94,61 @@
     <string name="nhap_mk">Nhập mật khẩu</string>
     <string name="quen_mk">Quên mật khẩu?</string>
     <string name="login">ĐĂNG NHẬP</string>
+
+    <string-array name="khuyen_mai_arr">
+        <item>%</item>
+        <item>VND</item>
+    </string-array>
+
+    <string-array name="thu_tien_arr">
+        <item>Tiền mặt</item>
+        <item>Thẻ ngân hàng</item>
+    </string-array>
+    <integer-array name="tien_vnd_arr">
+        <item>20000</item>
+        <item>25000</item>
+        <item>30000</item>
+        <item>35000</item>
+        <item>40000</item>
+        <item>45000</item>
+        <item>50000</item>
+        <item>55000</item>
+        <item>60000</item>
+        <item>65000</item>
+        <item>70000</item>
+        <item>75000</item>
+        <item>100000</item>
+        <item>120000</item>
+        <item>125000</item>
+        <item>150000</item>
+        <item>200000</item>
+        <item>250000</item>
+        <item>300000</item>
+        <item>350000</item>
+        <item>400000</item>
+        <item>450000</item>
+        <item>500000</item>
+        <item>550000</item>
+        <item>600000</item>
+        <item>650000</item>
+        <item>700000</item>
+        <item>750000</item>
+        <item>800000</item>
+        <item>850000</item>
+        <item>900000</item>
+        <item>950000</item>
+        <item>1000000</item>
+        <item>1050000</item>
+        <item>1100000</item>
+    </integer-array>
+
+    <string-array name="choose_day">
+        <item>Hôm nay</item>
+        <item>Hôm qua</item>
+        <item>Tuần này</item>
+        <item>Tuần trước</item>
+        <item>Tháng này</item>
+        <item>Khác</item>
+    </string-array>
+
 </resources>

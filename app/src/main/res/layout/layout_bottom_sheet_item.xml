@@ -113,9 +113,31 @@
                 android:layout_height="wrap_content"/>
             <EditText
                 android:layout_width="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:text="@string/text_default_food_price"
-                android:layout_height="wrap_content"/>
+                android:layout_toLeftOf="@id/cadToggle"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/margin_normal"
+                android:background="@android:color/transparent"
+                android:layout_height="@dimen/toolbar_height_size"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cadToggle"
+                android:layout_width="@dimen/header_height_size"
+                style="@style/card_toggle_btn"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                app:cardCornerRadius="@dimen/card_radius"
+                android:layout_height="@dimen/size_height_spinner">
+                <org.honorato.multistatetogglebutton.MultiStateToggleButton
+                    android:id="@+id/mstb_multi_id"
+                    xmlns:mstb="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    mstb:values="@array/khuyen_mai_arr"
+                    mstb:mstbPrimaryColor="@color/purple_500"
+                    mstb:mstbSecondaryColor="@color/white"/>
+            </com.google.android.material.card.MaterialCardView>
+
         </RelativeLayout>
         <View
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -129,7 +151,7 @@
             android:background="@android:color/transparent"
             android:layout_width="match_parent"
             android:hint="@string/text_ghi_chu"
-            android:layout_height="@dimen/size_height_spinner"/>
+            android:layout_height="@dimen/toolbar_height_size"/>
     </LinearLayout>
 
     <LinearLayout

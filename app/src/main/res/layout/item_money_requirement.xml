@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/itemMoneyRequirement"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_gravity="center"
+    android:clickable="true"
+    android:background="?android:selectableItemBackground"
+    android:layout_margin="@dimen/margin_normal"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tvMoney"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:text="@string/text_con_phai_thu_tien"
+        android:paddingLeft="@dimen/margin_large"
+        android:paddingRight="@dimen/margin_large"
+        android:paddingTop="@dimen/margin_normal"
+        android:background="@drawable/bg_money_requirement"
+        android:textColor="@color/green"
+        android:paddingBottom="@dimen/margin_normal"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

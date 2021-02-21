@@ -127,6 +127,19 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyHolder> {
                     }
                 }
             });
+
+            // sự kiện thu tiền
+            btnThuTien.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try{
+                        mIOrderListener.onPaymentOrderClickListener(mData.get(getAdapterPosition()));
+                    }
+                    catch (Exception ex){
+                        Log.d(TAG, "onClick: "+ex.getMessage());
+                    }
+                }
+            });
         }
     }
 
