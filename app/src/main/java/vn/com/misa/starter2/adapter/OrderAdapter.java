@@ -65,9 +65,26 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
         Order order = mData.get(position);
-        holder.tvFoodItemsName.setText(order.getItemNames());
+        //holder.tvFoodItemsName.setText(order.getItemNames());
+        holder.tvFoodItemsName.setText(convertStringType(order.getItemNames()));
         DecimalFormat decimalFormat = new DecimalFormat("#,###");
         holder.tvTotalAmount.setText(decimalFormat.format(order.getTotalAmount()));
+    }
+
+    /**
+     * Hàm bỏ 2 dấu [] 2 đầu chuỗin
+     * @param name chuỗi truyền vào
+     * @return chuỗi sau khi chuyển đổi
+     * @author giangpb
+     * @date 19/02/2021
+     */
+    public StringBuilder convertStringType(String name){
+        StringBuilder s = new StringBuilder();
+        String []arr = name.split("");
+        for(int i =2; i<arr.length-1; i++){
+            s = s.append(arr[i]);
+        }
+        return s;
     }
 
     @Override

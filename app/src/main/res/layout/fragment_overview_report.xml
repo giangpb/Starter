@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_alignParentStart="true"
+        android:layout_width="match_parent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        android:layout_height="@dimen/toolbar_height_size">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="@dimen/size_ic_statusbar"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="@dimen/margin_large"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"                android:src="@drawable/ic_icon_back"
+                android:layout_height="@dimen/size_ic_statusbar"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
+                style="@style/text_large"
+                android:text="@string/text_doanh_thu_tong_quan"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+</RelativeLayout>

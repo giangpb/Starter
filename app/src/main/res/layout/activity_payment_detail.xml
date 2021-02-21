@@ -150,6 +150,7 @@
                     android:layout_height="1dp"/>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcvPaymentDetail"
+                    android:overScrollMode="never"
                     android:layout_width="match_parent"
                     tools:itemCount="4"
                     tools:listitem="@layout/item_payment_detail"

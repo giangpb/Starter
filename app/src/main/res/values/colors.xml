@@ -124,4 +124,8 @@
     <color name="tooltip_background_light">#e6ffffff</color>
     <color name="violet">#8b39f6</color>
     <color name="whiteSelected">#e0e0e0</color>
+
+    <color name="c1">#0099fc</color>
+    <color name="c2">#fc7a7a</color>
+    <color name="c3">#07d42d</color>
 </resources>

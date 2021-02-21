@@ -96,7 +96,7 @@ public class PaymentActivity extends AppCompatActivity implements IPaymentClickL
         String [] lstDay = getResources().getStringArray(R.array.choose_day);
         spSelectDay = findViewById(R.id.spSelectDay);
 
-        selectDaySpinner = new SelectDaySpinner(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item , lstDay);
+        selectDaySpinner = new SelectDaySpinner(getApplicationContext(), R.layout.item_selected_spinner_date, lstDay);
         spSelectDay.setAdapter(selectDaySpinner);
 
         paymentPresenter = new PaymentPresenter(getApplicationContext());
@@ -150,11 +150,18 @@ public class PaymentActivity extends AppCompatActivity implements IPaymentClickL
                     tvDateFill.setText(DATE_TIME_FORMATTER_SHOW_FILL.format(now));
                     tvPriceFill.setText(decimalFormat.format(paymentPresenter.totalPrice(data)));
                 }
-                else if(position ==1){
+                else if(position ==1){ // minus 1 day
                     Instant yesterday = now.minus(1, ChronoUnit.DAYS);
                     data = paymentPresenter.getAllPayment(DATE_TIME_FORMATTER.format(yesterday)+"%");
                     tvDaySelected.setText(DATE_TIME_FORMATTER_SHOW.format(yesterday));
                     tvDateFill.setText(DATE_TIME_FORMATTER_SHOW_FILL.format(yesterday));
+                    tvPriceFill.setText(decimalFormat.format(paymentPresenter.totalPrice(data)));
+                }
+                else if(position ==2){ // minus 7 days
+                    Instant day7Ago = now.minus(7, ChronoUnit.DAYS);
+                    data = paymentPresenter.getAllPayment(DATE_TIME_FORMATTER.format(day7Ago)+"%",DATE_TIME_FORMATTER.format(now)+"%");
+                    tvDaySelected.setText(DATE_TIME_FORMATTER_SHOW.format(now));
+                    tvDateFill.setText(DATE_TIME_FORMATTER_SHOW_FILL.format(day7Ago)+" - "+DATE_TIME_FORMATTER_SHOW_FILL.format(now));
                     tvPriceFill.setText(decimalFormat.format(paymentPresenter.totalPrice(data)));
                 }
 
@@ -168,6 +175,7 @@ public class PaymentActivity extends AppCompatActivity implements IPaymentClickL
                     llMaiPayment.setVisibility(View.GONE);
                     llNoData.setVisibility(View.VISIBLE);
                     rlPaymentActivity.setBackgroundColor(getResources().getColor(R.color.white));
+                    tvDaySelected.setText(DATE_TIME_FORMATTER_SHOW.format(now));
                 }
                 paymentAdapter.addData(data);
             }

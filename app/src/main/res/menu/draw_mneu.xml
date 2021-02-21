@@ -6,14 +6,17 @@
             android:title="@string/ds_hoa_don"
             />
         <item
+            android:id="@+id/mnuDanhSachThucDon"
             android:icon="@drawable/ic_menu_food_32"
             android:title="@string/ds_thuc_don"/>
         <item
+            android:id="@+id/mnuSoThichPhucVu"
             android:icon="@drawable/ic_like_food_32"
             android:title="@string/so_thich_phuc_vu"/>
     </group>
     <group android:id="@+id/nav_center" android:checkableBehavior="none">
         <item
+            android:id="@+id/mnuBaoCao"
             android:icon="@drawable/ic_pie_chart_32"
             android:title="@string/bao_cao"/>
         <item android:title="@string/thiet_lap"

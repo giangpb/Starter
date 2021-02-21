@@ -5,7 +5,7 @@
     android:focusable="true"
     android:checkable="true"
 
-    android:layout_height="160dp"
+    android:layout_height="@dimen/size_order"
     android:layout_marginLeft="@dimen/margin_normal"
     android:layout_marginRight="@dimen/margin_normal"
     android:layout_marginTop="@dimen/margin_normal"

@@ -52,4 +52,10 @@ dependencies {
     // multi toggle
     implementation 'org.honorato.multistatetogglebutton:multistatetogglebutton:0.2.2'
 
+    // chart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    // toast
+    implementation 'com.muddzdev:styleabletoast:2.2.4'
+
 }

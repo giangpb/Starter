@@ -3,9 +3,11 @@
 
     <dimen name="reset">0dp</dimen>
     <dimen name="divider_size_small">1dp</dimen>
+    <dimen name="divider_size_normal">6dp</dimen>
 
     <dimen name="divider_dot">5dp</dimen>
 
+    <dimen name="size_order">140dp</dimen>
     <dimen name="view_small">150dp</dimen>
 
     <dimen name="splash_width">280dp</dimen>
@@ -48,10 +50,15 @@
     <dimen name="size_height_spinner">40dp</dimen>
 
     <dimen name="header_height_size">100dp</dimen>
+    <dimen name="img_order_empty">150dp</dimen>
+
+    <dimen name="size_report_title">64dp</dimen>
 
 <!--    ImageView-->
     <dimen name="size_image_category_item">32dp</dimen>
     <dimen name="size_image_icon_swipe">22dp</dimen>
 
     <dimen name="margin_bottomSheet">55dp</dimen>
+
+    <dimen name="size_pie_chart">340dp</dimen>
 </resources>

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import vn.com.misa.starter2.datautils.DatabaseHelper;
 import vn.com.misa.starter2.model.dto.AdditionCategory;
+import vn.com.misa.starter2.model.entity.Addition;
 
 /**
  * ‐ addition lấy dữ liệu từ model
@@ -44,6 +45,32 @@ public class AdditionModel extends DatabaseHelper {
         }
         catch (Exception ex){
             Log.d(TAG, "getListAddition: "+ex.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Hàm lấy toàn bộ danh mục bổ sung
+     * @return danh sách
+     * @author giangpb
+     * @date 20/02/2021
+     */
+    public ArrayList<Addition> getAllAddition(){
+        try{
+            ArrayList<Addition> data = new ArrayList<>();
+            connectSQLite();
+            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM InventoryItemAddition", null);
+            while (cursor.moveToNext()){
+                Addition addition = new Addition();
+                addition.setAdditionID(cursor.getString(0));
+                addition.setDescription(cursor.getString(1));
+                data.add(addition);
+            }
+            cursor.close();
+            return data;
+        }
+        catch (Exception ex){
+            Log.d(TAG, "getAllAddition: "+ex.getMessage());
         }
         return null;
     }

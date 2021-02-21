@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
+import com.muddzdev.styleabletoast.StyleableToast;
 
 import org.honorato.multistatetogglebutton.MultiStateToggleButton;
 
@@ -235,7 +236,7 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
                         paymentDetail.setPromotionRate(0);
                         paymentDetail.setPromotionAmount(0);
                         paymentDetail.setDiscountAmount(0);
-                        paymentDetail.setAmount(item.getPrice());
+                        paymentDetail.setAmount(item.getPrice()*item.getQuantity());
 //
                         paymentDetail.setSortOrder(i);
 
@@ -245,6 +246,9 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
                     }
                     NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.listOrderFragment,false).build();
                     navController.navigate(R.id.action_collectMoneyFragment_to_listOrderFragment,null, navOptions);
+
+                    // show thông báo
+                    StyleableToast.makeText(getActivity(), "Thu tiền thành công", Toast.LENGTH_LONG, R.style.mytoast).show();
                 }
                 catch (Exception ex){
                     Log.d(TAG, "onClick: "+ex.getMessage());

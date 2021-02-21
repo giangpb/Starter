@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_report"
+    app:startDestination="@id/reportFragment2">
+
+    <fragment
+        android:id="@+id/reportFragment2"
+        android:name="vn.com.misa.starter2.ui.report.ReportFragment"
+        android:label="fragment_report"
+        tools:layout="@layout/fragment_report" >
+        <action
+            android:id="@+id/action_reportFragment2_to_overviewReportFragment2"
+            app:destination="@id/overviewReportFragment2" />
+        <action
+            android:id="@+id/action_reportFragment2_to_itemsReportFragment"
+            app:destination="@id/itemsReportFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/overviewReportFragment2"
+        android:name="vn.com.misa.starter2.ui.report.overview.OverviewReportFragment"
+        android:label="fragment_overview_report"
+        tools:layout="@layout/fragment_overview_report" />
+    <fragment
+        android:id="@+id/itemsReportFragment"
+        android:name="vn.com.misa.starter2.ui.report.items.ItemsReportFragment"
+        android:label="fragment_items_report"
+        tools:layout="@layout/fragment_items_report" />
+</navigation>

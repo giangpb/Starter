@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -64,10 +65,21 @@ public class OrderBottomSheetAdapter extends RecyclerView.Adapter<OrderBottomShe
         viewBinderHelper.bind(holder.swipeRevealLayout,mData.get(position).getItemID());
         viewBinderHelper.closeLayout(mData.get(position).getItemID());
 
+        //holder.fabMinusQuantityBottomSheet.setEnabled(true);
+
 
         holder.tvItemName.setText(mData.get(position).getItemName());
         holder.tvItemPrice.setText(decimalFormat.format(mData.get(position).getPrice()));
         holder.tvQuantityBottomSheetLst.setText(mData.get(position).getQuantity()+"");
+
+        if(mData.get(position).getQuantity()>1){
+            holder.fabMinusQuantityBottomSheet.setEnabled(true);
+            holder.fabMinusQuantityBottomSheet.setColorFilter(mContext.getResources().getColor(R.color.purple_500));
+        }
+        else{
+            holder.fabMinusQuantityBottomSheet.setEnabled(false);
+            holder.fabMinusQuantityBottomSheet.setColorFilter(mContext.getResources().getColor(R.color.greyDark200));
+        }
     }
 
     @Override
@@ -78,10 +90,30 @@ public class OrderBottomSheetAdapter extends RecyclerView.Adapter<OrderBottomShe
             return mData.size();
     }
 
+    /**
+     * Hàm xoá item oder bottom sheet và thông báo cập nhật
+     * @param item item
+     * @param pos vị trí
+     * @author giangpb
+     * @date 27/01/2021
+     */
     public void deleteItem(Item item, int pos){
         mData.remove(item);
         notifyItemRemoved(pos);
     }
+
+    /**
+     * Hàm cập nhật item order và thông báo cập nhật lại danh sách
+     * @param item item
+     * @param pos vị trí
+     * @author giangpb
+     * @date 16/02/2021
+     */
+    public void updateItem(Item item, int pos){
+        mData.set(pos, item);
+        notifyItemChanged(pos);
+    }
+
 
     public class MyHolder extends RecyclerView.ViewHolder {
         private TextView tvItemName;
@@ -91,6 +123,9 @@ public class OrderBottomSheetAdapter extends RecyclerView.Adapter<OrderBottomShe
 
         private RelativeLayout btnRemoveItem;
 
+        private FloatingActionButton fabAddQuantityBottomSheetLst;
+        private FloatingActionButton fabMinusQuantityBottomSheet;
+
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);
@@ -99,7 +134,8 @@ public class OrderBottomSheetAdapter extends RecyclerView.Adapter<OrderBottomShe
             tvItemPrice = itemView.findViewById(R.id.tvFoodPriceLst);
             tvQuantityBottomSheetLst = itemView.findViewById(R.id.tvQuantityBottomSheetLst);
             btnRemoveItem = itemView.findViewById(R.id.btnRemoveItem);
-
+            fabAddQuantityBottomSheetLst = itemView.findViewById(R.id.fabAddQuantityBottomSheetLst);
+            fabMinusQuantityBottomSheet = itemView.findViewById(R.id.fabMinusQuantityBottomSheet);
 
             // xử lý sự kiện
             btnRemoveItem.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +143,33 @@ public class OrderBottomSheetAdapter extends RecyclerView.Adapter<OrderBottomShe
                 public void onClick(View v) {
                     try{
                         mIFoodListener.onItemBottomSheetRemove(mData.get(getAdapterPosition()),getAdapterPosition());
+                    }
+                    catch (Exception ex){
+                        Log.d(TAG, "onClick: "+ex.getMessage());
+                    }
+                }
+            });
+
+            // sự kiện tăng số lượng
+            fabAddQuantityBottomSheetLst.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try{
+                        mIFoodListener.onItemPlusQuantity(mData.get(getAdapterPosition()),getAdapterPosition());
+                        //fabMinusQuantityBottomSheet.setEnabled(true);
+                    }
+                    catch (Exception ex){
+                        Log.d(TAG, "onClick: "+ex.getMessage());
+                    }
+                }
+            });
+
+            // sự kiện giảm số lượng
+            fabMinusQuantityBottomSheet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try{
+                        mIFoodListener.onItemMinusQuantity(mData.get(getAdapterPosition()),getAdapterPosition());
                     }
                     catch (Exception ex){
                         Log.d(TAG, "onClick: "+ex.getMessage());

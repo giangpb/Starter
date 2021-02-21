@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/llItemSelected"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="1dp"
+    android:layout_width="match_parent"
+    android:gravity="center_vertical"
+    android:layout_height="@dimen/btn_setup_menu_size_height">
+    <TextView
+        android:id="@+id/tvDay"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:text="Hôm nay"
+        android:textColor="@color/black"
+        android:fontFamily="@font/font_intel_bold"
+        android:layout_marginRight="@dimen/header_height_size"
+        android:layout_marginLeft="@dimen/margin_normal"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

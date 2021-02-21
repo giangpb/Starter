@@ -104,7 +104,40 @@ public class PaymentModel extends DatabaseHelper {
         try{
             connectSQLite();
             ArrayList<Payment> lstPayment = new ArrayList<>();
-            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM SAInvoice WHERE CreatedDate like ?", new String[]{date});
+            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM SAInvoice WHERE CreatedDate like ? ORDER BY RefNo DESC", new String[]{date});
+            while (cursor.moveToNext()){
+                Payment payment = new Payment();
+                payment.setRefID(cursor.getString(0));
+                payment.setRefNO(cursor.getString(2));
+                payment.setRefDate(cursor.getString(3));
+                payment.setAmount(cursor.getInt(4));
+                payment.setReceiveAmount(cursor.getInt(12));
+                payment.setReturnAmount(cursor.getInt(13));
+                payment.setOrderID(cursor.getString(15));
+                lstPayment.add(payment);
+            }
+            cursor.close();
+            return lstPayment;
+        }
+        catch (Exception ex){
+            Log.d(TAG, "getAllPayment: "+ex.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Hàm lấy toàn bộ danh sách payment 1 tuần
+     * @param date1 ngày tuần trước
+     * @param date2 ngày hiện tại
+     * @return danh sách
+     * @author giangpb
+     * @date 18/02/2021
+     */
+    public ArrayList<Payment> getAllPayment(String date1, String date2){
+        try{
+            connectSQLite();
+            ArrayList<Payment> lstPayment = new ArrayList<>();
+            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM SAInvoice WHERE CreatedDate BETWEEN ? AND ? ORDER BY RefNo DESC", new String[]{date1, date2});
             while (cursor.moveToNext()){
                 Payment payment = new Payment();
                 payment.setRefID(cursor.getString(0));

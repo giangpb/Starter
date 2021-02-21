@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -44,6 +45,9 @@ public class ListOrderFragment extends Fragment implements IOrderListener{
     private RecyclerView rcvListOrder;
     private OrderAdapter orderAdapter;
 
+    // order empty
+    LinearLayout llOrderEmpty;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -60,6 +64,9 @@ public class ListOrderFragment extends Fragment implements IOrderListener{
         ivOpenDrawerNavigation = view.findViewById(R.id.ivOpenDrawerNavigation);
         fabAddOrder = view.findViewById(R.id.fabAddOrder);
         rcvListOrder= view.findViewById(R.id.rcvListOrder);
+        llOrderEmpty = view.findViewById(R.id.llOrderEmpty);
+
+
 
         orderPresenter = new OrderPresenter(getContext());
 
@@ -72,11 +79,18 @@ public class ListOrderFragment extends Fragment implements IOrderListener{
     @Override
     public void onStart() {
         super.onStart();
-
-        orderAdapter = new OrderAdapter(getContext(), this,orderPresenter.getAllOrder());
-        rcvListOrder.setAdapter(orderAdapter);
-        rcvListOrder.setHasFixedSize(true);
-        rcvListOrder.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        if(orderPresenter.getAllOrder().size()>0){
+            llOrderEmpty.setVisibility(View.GONE);
+            rcvListOrder.setVisibility(View.VISIBLE);
+            orderAdapter = new OrderAdapter(getContext(), this,orderPresenter.getAllOrder());
+            rcvListOrder.setAdapter(orderAdapter);
+            rcvListOrder.setHasFixedSize(true);
+            rcvListOrder.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        }
+        else{
+            llOrderEmpty.setVisibility(View.VISIBLE);
+            rcvListOrder.setVisibility(View.GONE);
+        }
 
     }
 
@@ -114,6 +128,19 @@ public class ListOrderFragment extends Fragment implements IOrderListener{
                 }
             }
         });
+
+        // chuyển sang màn thêm món
+        llOrderEmpty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    navController.navigate(R.id.action_listOrderFragment_to_addOrderFragment);
+                }
+                catch (Exception ex){
+                    Log.d(TAG, "onClick: "+ex.getMessage());
+                }
+            }
+        });
     }
 
     @Override
@@ -131,6 +158,17 @@ public class ListOrderFragment extends Fragment implements IOrderListener{
         orderPresenter.deleteOrder(order.getOrderID());
         // cập nhật lại giao diện
         orderAdapter.removeItem(order, pos);
+
+        //Log.d(TAG, "onDeleteOrderClickListener: "+orderPresenter.getAllOrder().size());
+
+        if(orderPresenter.getAllOrder().size()>0){
+            llOrderEmpty.setVisibility(View.GONE);
+            rcvListOrder.setVisibility(View.VISIBLE);
+        }
+        else{
+            llOrderEmpty.setVisibility(View.VISIBLE);
+            rcvListOrder.setVisibility(View.GONE);
+        }
     }
 
     @Override
