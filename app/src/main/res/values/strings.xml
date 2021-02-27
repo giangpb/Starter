@@ -78,6 +78,10 @@
     <string name="hint_food_name">Tên món (*)</string>
     <string name="text_default_food_price">0</string>
     <string name="text_so_luong">SL:</string>
+    <string name="text_tong_tien_thu_duoc">Tổng số tiền thu được</string>
+    <string name="text_tien_mat">Tiền mặt</string>
+    <string name="text_thanh_toan_khac">Thanh toán khác</string>
+    <string name="text_doanh_thu_tb_theo_gio">DOANH THU TRUNG BÌNH THEO GIỜ</string>
 
     <!--    Drawable navigation-->
     <string name="ds_hoa_don">Danh sách hoá đơn</string>
@@ -92,6 +96,7 @@
     <string name="gui_thong_bao_loi">Gửi thông báo lỗi</string>
     <string name="thong_tin_ung_dung">Thông tin ứng dụng</string>
     <string name="dang_xuat">Đăng xuất</string>
+    <string name="text_doanh_thu">Doanh thu</string>
 
     <string name="open_draw">Open Drawer Layout</string>
     <string name="close_draw">Close Drawer Layout</string>

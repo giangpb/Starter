@@ -61,4 +61,6 @@
     <dimen name="margin_bottomSheet">55dp</dimen>
 
     <dimen name="size_pie_chart">340dp</dimen>
+
+    <dimen name="font_vnd">20dp</dimen>
 </resources>

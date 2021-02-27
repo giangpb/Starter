@@ -182,7 +182,7 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
                     String refNo = String.format("%07d", type);
 
                     long timeMillis = System.currentTimeMillis();
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     String currentDateAndTime = sdf.format(new Date());
 
                     Payment payment = new Payment();

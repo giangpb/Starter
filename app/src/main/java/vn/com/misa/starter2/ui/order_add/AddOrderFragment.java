@@ -351,7 +351,8 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
             @Override
             public void onClick(View v) {
                 try{
-                    // kiểm tra order đã tồn tại trước đó hay chưa, nếu chưa thì thêm mới, có rồi thì cập nhật lại
+                    if(lstItemSelected.size()>0){
+                        // kiểm tra order đã tồn tại trước đó hay chưa, nếu chưa thì thêm mới, có rồi thì cập nhật lại
                     if(mOrder ==null){
                         Order order =new Order();
                         long timeMillis = System.currentTimeMillis();
@@ -421,6 +422,9 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
 
                     NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.listOrderFragment, false).build();
                     navController.navigate(R.id.action_addOrderFragment_to_listOrderFragment, null, navOptions);
+                    }
+                    else
+                        return;
 
                 }
                 catch (Exception ex){

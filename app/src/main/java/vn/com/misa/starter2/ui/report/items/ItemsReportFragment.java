@@ -24,7 +24,6 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.text.DecimalFormat;
@@ -36,7 +35,8 @@ import java.util.List;
 
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.adapter.ItemReportAdapter;
-import vn.com.misa.starter2.adapter.SelectDaySpinner;
+import vn.com.misa.starter2.adapter.spinn.SelectDaySpinner;
+import vn.com.misa.starter2.adapter.spinn.SelectedDayReportItemsSpinner;
 import vn.com.misa.starter2.ui.report.items.dto.ItemReport;
 
 /**
@@ -51,7 +51,7 @@ public class ItemsReportFragment extends Fragment {
 
     // vị trí chọn của spinner mặc định ban đầu
     public static int posOfItemSpinnerSelected = -1;
-    private SelectDaySpinner selectDaySpinner;
+    private SelectedDayReportItemsSpinner selectDaySpinner;
     private Spinner spSelectDay;
 
     //
@@ -83,8 +83,7 @@ public class ItemsReportFragment extends Fragment {
         decimalFormat = new DecimalFormat("#,###");
         // khởi tạo các điều khiển
         spSelectDay = view.findViewById(R.id.spSelectDay);
-        String [] lstDay = getResources().getStringArray(R.array.choose_day);
-        selectDaySpinner = new SelectDaySpinner(getContext(), android.R.layout.simple_spinner_dropdown_item , lstDay);
+        selectDaySpinner = new SelectedDayReportItemsSpinner(getContext(), R.layout.item_selected_spinner_date);
         spSelectDay.setAdapter(selectDaySpinner);
         itemsReportPresenter = new ItemsReportPresenter(getContext());
         rcvLstItemReport = view.findViewById(R.id.rcvLstItemReport);

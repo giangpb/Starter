@@ -6,34 +6,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.adapter.PaymentAdapter;
-import vn.com.misa.starter2.adapter.SelectDaySpinner;
+import vn.com.misa.starter2.adapter.spinn.SelectDaySpinner;
 import vn.com.misa.starter2.model.entity.Payment;
 import vn.com.misa.starter2.ui.collectmoney.PaymentPresenter;
 import vn.com.misa.starter2.ui.paymentdetail.PaymentDetailActivity;

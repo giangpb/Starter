@@ -1,4 +1,4 @@
-package vn.com.misa.starter2.adapter;
+package vn.com.misa.starter2.adapter.spinn;
 
 import android.content.Context;
 import android.graphics.Color;

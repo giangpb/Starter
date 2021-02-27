@@ -80,6 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_weight="1"
                 style="@style/btn_order"
+                android:textColor="@color/green"
                 android:text="@string/text_btn_thu_tien"
                 android:layout_height="wrap_content"/>
         </LinearLayout>

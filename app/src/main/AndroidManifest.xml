@@ -9,9 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Starter2">
-        <activity android:name=".ui.addition.AdditionSetupActivity"></activity>
-        <activity android:name=".ui.category.CategorySetupActivity"/>
-        <activity android:name=".ui.report.ReportActivity" />
+        <activity android:name=".ui.addition.AdditionSetupActivity"  android:screenOrientation="portrait"></activity>
+        <activity android:name=".ui.category.CategorySetupActivity"  android:screenOrientation="portrait"/>
+        <activity android:name=".ui.report.ReportActivity"  android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.paymentdetail.PaymentDetailActivity"
             android:screenOrientation="portrait" />
