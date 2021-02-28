@@ -90,6 +90,7 @@
             android:paddingLeft="@dimen/margin_normal"
             tools:itemCount="4"
             app:spanCount="2"
+            android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             tools:listitem="@layout/item_addition"
             android:layout_width="match_parent"

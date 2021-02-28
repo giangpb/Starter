@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -30,6 +32,7 @@ import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +61,7 @@ public class ItemsReportFragment extends Fragment {
     private TextView tvDaySelected;
     private TextView tvTongSoLuong;
     private TextView tvTongTienDoanhThu;
+    private TextView tvTienKM;
 
     // dinh dang tien
     private DecimalFormat decimalFormat;
@@ -69,16 +73,24 @@ public class ItemsReportFragment extends Fragment {
     private RecyclerView rcvLstItemReport;
     ItemReportAdapter itemReportAdapter;
 
+    // view
+    private NestedScrollView nvViewMain;
+    private LinearLayout llNoData;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_items_report, container, false);
 
+        nvViewMain = view.findViewById(R.id.nvViewMain);
+        llNoData = view.findViewById(R.id.llNoData);
+
         ivBack = view.findViewById(R.id.ivBack);
         tvTongSoLuong = view.findViewById(R.id.tvTongSoLuong);
         tvDaySelected = view.findViewById(R.id.tvDaySelected);
         tvTongTienDoanhThu = view.findViewById(R.id.tvTongTienDoanhThu);
+        tvTienKM = view.findViewById(R.id.tvTienKM);
         //
         decimalFormat = new DecimalFormat("#,###");
         // khởi tạo các điều khiển
@@ -128,12 +140,21 @@ public class ItemsReportFragment extends Fragment {
         pieChart.setDrawEntryLabels(true);
     }
 
-    private void addDataSet(String date) {
+    /**
+     *  hàm đổ dữ liệu lên piechart lọc theo ngày
+     * @param data dữ liệu
+     * @author giangpb
+     * @date 21/02/2021
+     */
+    private void addDataSet(ArrayList<ItemReport> data) {
+        pieChart.removeAllViews();
         ArrayList<PieEntry> yEntrys = new ArrayList<>();
-        ArrayList<ItemReport> data = itemsReportPresenter.getData(date);
-
         for(int i=0 ; i<data.size(); i++){
             yEntrys.add(new PieEntry(data.get(i).getItemPrice(),data.get(i).getItemName()));
+
+            // chỉ đổ tối đa 6 loại
+            if (i==6)
+                break;
         }
         showPieChartData(yEntrys);
     }
@@ -216,28 +237,76 @@ public class ItemsReportFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                posOfItemSpinnerSelected=position;
+                try{
 
-                ArrayList<ItemReport> data = null;
+                    posOfItemSpinnerSelected=position;
 
-                // format for querry
-                Instant now = Instant.now();
-                DateTimeFormatter DATE_TIME_FORMATTER_SHOW = DateTimeFormatter.ofPattern("EEEE - dd/MM/yyyy")
-                        .withZone(ZoneId.systemDefault());
+                    //
+                    String daySelected = null;
+                    int tongSoLuong = 0;
+                    ArrayList<ItemReport> data = null;
 
-                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                        .withZone(ZoneId.systemDefault());
+                    // format for querry
+                    Instant now = Instant.now();
+                    DateTimeFormatter DATE_TIME_FORMATTER_SHOW = DateTimeFormatter.ofPattern("EEEE - dd/MM/yyyy")
+                            .withZone(ZoneId.systemDefault());
 
-                if(position ==0){
-                    tvDaySelected.setText(DATE_TIME_FORMATTER_SHOW.format(now));
-                    // bind data
-                    addDataSet(DATE_TIME_FORMATTER.format(now)+"%");
-                    data = itemsReportPresenter.getData(DATE_TIME_FORMATTER.format(now));
-                    tvTongSoLuong.setText(itemsReportPresenter.countQuantityItem(data)+"");
-                    tvTongTienDoanhThu.setText(decimalFormat.format(itemsReportPresenter.countPriceItem(data)));
+                    DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                            .withZone(ZoneId.systemDefault());
+
+                    DateTimeFormatter DATE_TIME_FORMATTER_VN = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                            .withZone(ZoneId.systemDefault());
+
+                    if(position ==0){ // fill theo today
+                        daySelected = DATE_TIME_FORMATTER_SHOW.format(now);
+                        data = itemsReportPresenter.getData(DATE_TIME_FORMATTER.format(now));
+                        tongSoLuong = itemsReportPresenter.countQuantityItem(data);
+                        // bind data
+                        //addDataSet(DATE_TIME_FORMATTER.format(now)+"%");
+
+                    }
+                    if(position ==1){ // fill theo yesterday
+                        Instant yesterday = now.minus(1, ChronoUnit.DAYS);
+
+                        daySelected = DATE_TIME_FORMATTER_SHOW.format(yesterday);
+                        data = itemsReportPresenter.getData(DATE_TIME_FORMATTER.format(yesterday));
+                        tongSoLuong = itemsReportPresenter.countQuantityItem(data);
+                        // bind data
+                        //addDataSet(DATE_TIME_FORMATTER.format(yesterday)+"%");
+                    }
+                    if(position ==2){ // fill theo week
+                        Instant week = now.minus(7, ChronoUnit.DAYS);
+
+                        daySelected = DATE_TIME_FORMATTER_VN.format(week) +" - "+DATE_TIME_FORMATTER_VN.format(now);
+                        data = itemsReportPresenter.getData(DATE_TIME_FORMATTER.format(week),DATE_TIME_FORMATTER.format(now));
+                        tongSoLuong = itemsReportPresenter.countQuantityItem(data);
+                    }
+
+                    // set thời gian
+                    tvDaySelected.setText(daySelected);
+                    tvTongSoLuong.setText(tongSoLuong+"");
+
+                    if(data !=null && data.size() >0){ // kiểm tra và hiển thị view
+                        nvViewMain.setVisibility(View.VISIBLE);
+                        llNoData.setVisibility(View.GONE);
+
+                        tvTongTienDoanhThu.setText(decimalFormat.format(itemsReportPresenter.countPriceItem(data)));
+                        tvTienKM.setText(decimalFormat.format(itemsReportPresenter.countPriceItem(data)));
+                        itemReportAdapter.addData(data);
+                        addDataSet(data);
+                    }
+                    else{
+                        nvViewMain.setVisibility(View.GONE);
+                        llNoData.setVisibility(View.VISIBLE);
+
+                        tvTongTienDoanhThu.setText("0");
+                        tvTienKM.setText("0");
+                    }
+
                 }
-
-                itemReportAdapter.addData(data);
+                catch (Exception ex){
+                    Log.d(TAG, "onItemSelected: "+ex.getMessage());
+                }
             }
 
             @Override

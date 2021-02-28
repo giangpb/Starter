@@ -18,9 +18,11 @@ public class ItemsReportPresenter {
     }
 
     /**
-     * Hafm
-     * @param date
-     * @return
+     * Hàm lấy danh sách thống kê theo sản phẩm theo ngày
+     * @param date ngày
+     * @return danh sách sản phẩm
+     * @author giangpb
+     * @date 23/02/2021
      */
     public ArrayList<ItemReport> getData(String date){
         return itemsReportModel.getData(date);
@@ -35,6 +37,18 @@ public class ItemsReportPresenter {
      */
     public int countQuantityItem(ArrayList<ItemReport> data){
         return itemsReportModel.countQuantityItem(data);
+    }
+
+    /**
+     * Hàm lấy danh sách thống kê theo sản phẩm theo ngày
+     * @param dateStart ngày bắt đầu
+     * @param dateEnd ngày kết thúc
+     * @return danh sách sản phẩm
+     * @author giangpb
+     * @date 27/02/2021
+     */
+    public ArrayList<ItemReport> getData(String dateStart, String dateEnd){
+        return itemsReportModel.getData(dateStart, dateEnd);
     }
 
     /**

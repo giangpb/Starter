@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -67,6 +68,10 @@ public class OverviewReportFragment extends Fragment {
     private BarDataSet barDataSet;
     private ArrayList barEntries;
 
+    // view
+    private LinearLayout llViewMain;
+    private LinearLayout llNoData;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,6 +80,9 @@ public class OverviewReportFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_overview_report, container, false);
 
         // khởi tạo các điều khiển
+        llViewMain = view.findViewById(R.id.llViewMain);
+        llNoData = view.findViewById(R.id.llNoData);
+
         ivBack = view.findViewById(R.id.ivBack);
         spSelectDay = view.findViewById(R.id.spSelectDay);
         selectDaySpinner = new SelectedDayReportOverviewSpinner(getContext(), R.layout.item_selected_spinner_date);
@@ -99,7 +107,7 @@ public class OverviewReportFragment extends Fragment {
         barChart.setPinchZoom(false);
         barChart.setDrawGridBackground(true);
 
-        barChart.animateXY(1500, 1500);
+        barChart.animateXY(1200, 1200);
         barChart.getLegend().setEnabled(false);
 
         XAxis xAxis = barChart.getXAxis();
@@ -165,37 +173,60 @@ public class OverviewReportFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                posOfItemSpinnerSelected = position;
+                try{
 
-                //
-                String daySelected =null;
-                int doanhThu = 0;
+                    posOfItemSpinnerSelected = position;
 
-                ArrayList<OverviewHours> data = null;
-                // format for querry
-                Instant now = Instant.now();
-                DateTimeFormatter DATE_TIME_FORMATTER_SHOW = DateTimeFormatter.ofPattern("EEEE - dd/MM/yyyy").withZone(ZoneId.systemDefault());
-                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneId.systemDefault());
-                if (position ==0){ // fill theo today
-                    daySelected = DATE_TIME_FORMATTER_SHOW.format(now);
-                    doanhThu = overviewsPresenter.doanhThuTheoNgay(DATE_TIME_FORMATTER.format(now));
-                    data = overviewsPresenter.getAllData(DATE_TIME_FORMATTER.format(now));
-                    //barChart.notifyDataSetChanged();
+                    //
+                    String daySelected =null;
+                    int doanhThu = 0;
 
+                    ArrayList<OverviewHours> data = null;
+                    // format for querry
+                    Instant now = Instant.now();
+                    DateTimeFormatter DATE_TIME_FORMATTER_SHOW = DateTimeFormatter.ofPattern("EEEE - dd/MM/yyyy").withZone(ZoneId.systemDefault());
+                    DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneId.systemDefault());
+                    DateTimeFormatter DATE_TIME_FORMATTER_VN = DateTimeFormatter.ofPattern("dd/MM/yyyy").withZone(ZoneId.systemDefault());
+                    if (position ==0){ // fill theo today
+                        daySelected = DATE_TIME_FORMATTER_SHOW.format(now);
+                        doanhThu = overviewsPresenter.doanhThuTheoNgay(DATE_TIME_FORMATTER.format(now));
+                        data = overviewsPresenter.getAllData(DATE_TIME_FORMATTER.format(now));
+                        //barChart.notifyDataSetChanged();
+
+                    }
+                    if(position ==1){// fill theo yesterday
+                        Instant yesterday = now.minus(1, ChronoUnit.DAYS);
+                        daySelected = DATE_TIME_FORMATTER_SHOW.format(yesterday);
+                        doanhThu = overviewsPresenter.doanhThuTheoNgay(DATE_TIME_FORMATTER.format(yesterday));
+                        data = overviewsPresenter.getAllData(DATE_TIME_FORMATTER.format(yesterday));
+                    }
+                    if (position==2){ // fill theo week
+                        Instant week = now.minus(7, ChronoUnit.DAYS);
+
+                        daySelected = DATE_TIME_FORMATTER_VN.format(week) +" - "+DATE_TIME_FORMATTER_VN.format(now);
+
+                        doanhThu = overviewsPresenter.doanhThuTheoNgay(DATE_TIME_FORMATTER.format(week), DATE_TIME_FORMATTER.format(now));
+                        data = overviewsPresenter.getAllData(DATE_TIME_FORMATTER.format(week), DATE_TIME_FORMATTER.format(now));
+
+                    }
+
+                    if(data != null && data.size()>0){
+                        llViewMain.setVisibility(View.VISIBLE);
+                        llNoData.setVisibility(View.GONE);
+                        // hiển thị ngày
+                        tvDaySelected.setText(daySelected);
+                        tvTienMat.setText(decimalFormat.format(doanhThu));
+                        tvTongTienThuDuoc.setText(decimalFormat.format(doanhThu));
+                        setEntries(data);
+                    }
+                    else{
+                        llViewMain.setVisibility(View.GONE);
+                        llNoData.setVisibility(View.VISIBLE);
+                    }
                 }
-                if(position ==1){// fill theo yesterday
-                    Instant yesterday = now.minus(1, ChronoUnit.DAYS);
-                    daySelected = DATE_TIME_FORMATTER_SHOW.format(yesterday);
-                    doanhThu = overviewsPresenter.doanhThuTheoNgay(DATE_TIME_FORMATTER.format(yesterday));
-                    data = overviewsPresenter.getAllData(DATE_TIME_FORMATTER.format(yesterday));
-                    barChart.clear();
+                catch (Exception ex){
+                    Log.d(TAG, "onItemSelected: "+ex.getMessage());
                 }
-
-                // hiển thị ngày
-                tvDaySelected.setText(daySelected);
-                tvTienMat.setText(decimalFormat.format(doanhThu));
-                tvTongTienThuDuoc.setText(decimalFormat.format(doanhThu));
-                setEntries(data);
             }
 
             @Override

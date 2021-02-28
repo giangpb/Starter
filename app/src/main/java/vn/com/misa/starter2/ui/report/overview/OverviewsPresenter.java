@@ -38,4 +38,28 @@ public class OverviewsPresenter {
     public ArrayList<OverviewHours> getAllData(String date){
         return overviewsModel.getAllData(date);
     }
+
+    /**
+     * Hàm thống kê doanh thu trung bình theo giờ và ngày
+     * @param startDate ngày bắt đầu
+     * @param endDate ngày kết thúc
+     * @return danh sách để đổ lên bar chart
+     * @author giangpb
+     * @date 28/02/2021
+     */
+    public ArrayList<OverviewHours> getAllData(String startDate, String endDate){
+        return overviewsModel.getAllData(startDate, endDate);
+    }
+
+    /**
+     * Hàm thống kê tiền theo ngày
+     * @param startDate ngày bắt đầu
+     * @param endDate ngày kết thúc
+     * @return tiền
+     * @author giangpb
+     * @date 28/02/2021
+     */
+    public int doanhThuTheoNgay(String startDate, String endDate){
+        return overviewsModel.doanhThuTheoNgay(startDate, endDate);
+    }
 }
