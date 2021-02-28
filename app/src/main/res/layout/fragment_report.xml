@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_alignParentStart="true"
+        android:layout_width="match_parent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        android:layout_height="@dimen/toolbar_height_size">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="@dimen/size_ic_statusbar"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="@dimen/margin_large"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"                android:src="@drawable/ic_icon_back"
+                android:layout_height="@dimen/size_ic_statusbar"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
+                style="@style/text_large"
+                android:text="@string/text_bao_cao"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+    <LinearLayout
+        android:id="@+id/llOverviewReport"
+        android:clickable="true"
+        android:background="?android:selectableItemBackground"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="?actionBarSize">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:src="@drawable/ic_revenue"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/text_doanh_thu_tong_quan"
+            style="@style/text_normal"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+    <View
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:background="?android:attr/dividerVertical"
+        android:layout_height="@dimen/divider_size_small">
+    </View>
+
+    <LinearLayout
+        android:id="@+id/llItemsReport"
+        android:clickable="true"
+        android:background="?android:selectableItemBackground"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="?actionBarSize">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:src="@drawable/ic_revenue_item"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/text_doanh_thu_theo_mat_hang"
+            style="@style/text_normal"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+    <View
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:background="?android:attr/dividerVertical"
+        android:layout_height="@dimen/divider_size_small">
+    </View>
+</LinearLayout>

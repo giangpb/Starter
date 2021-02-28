@@ -65,4 +65,16 @@ public class PaymentPresenter {
         return amount;
     }
 
+    /**
+     * Hàm lấy toàn bộ danh sách payment 1 tuần
+     * @param date1 ngày tuần trước
+     * @param date2 ngày hiện tại
+     * @return danh sách
+     * @author giangpb
+     * @date 18/02/2021
+     */
+    public ArrayList<Payment> getAllPayment(String date1, String date2){
+        return paymentModel.getAllPayment(date1, date2);
+    }
+
 }

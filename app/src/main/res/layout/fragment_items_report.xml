@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_alignParentStart="true"
+        android:layout_width="match_parent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        android:layout_height="@dimen/toolbar_height_size">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="@dimen/size_ic_statusbar"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="@dimen/margin_large"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"                android:src="@drawable/ic_icon_back"
+                android:layout_height="@dimen/size_ic_statusbar"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
+                style="@style/text_large"
+                android:text="@string/text_doanh_thu_theo_mat_hang"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+    <RelativeLayout
+        android:id="@+id/rlChooseDay"
+        android:layout_below="@id/appBarLayout"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="@dimen/btn_setup_menu_size_height">
+        <TextView
+            android:id="@+id/tvDaySelected"
+            android:layout_centerVertical="true"
+            style="@style/text_normal"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
+            android:text="@string/day_example"
+            android:layout_height="wrap_content"/>
+        <Spinner
+            android:id="@+id/spSelectDay"
+            android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/margin_normal"
+            android:dropDownVerticalOffset="@dimen/btn_setup_menu_size_height"
+            android:layout_alignParentEnd="true"
+            android:layout_height="wrap_content"/>
+        <View
+            android:layout_alignParentBottom="true"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:background="?android:attr/dividerVertical"
+            android:layout_height="@dimen/divider_size_small">
+        </View>
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nvViewMain"
+        android:layout_below="@id/rlChooseDay"
+        android:layout_width="match_parent"
+        android:visibility="visible"
+        android:layout_above="@+id/rlBottom"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pieChart"
+                android:layout_below="@id/rlChooseDay"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_pie_chart"/>
+            <LinearLayout
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_report_title"
+                android:background="@color/bg_gray"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/margin_normal"
+                android:paddingStart="@dimen/margin_normal"
+                android:paddingEnd="@dimen/margin_normal"
+                android:weightSum="10">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4.3"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tên mặt hàng"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="86dp"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@color/grey_separate" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="Số lượng"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.6"
+                    android:gravity="center_vertical|end"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:text="Tiền hàng"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="76dp"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@color/grey_separate" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="Khuyến mãi"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="end|center"
+                    android:text="Doanh thu"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvLstItemReport"
+                tools:itemCount="4"
+                android:overScrollMode="never"
+                tools:listitem="@layout/item_report_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/llNoData"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:background="@color/white"
+            android:src="@drawable/ic_report_nodata"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="wrap_content"
+            style="@style/text_normal"
+            android:text="@string/text_payment_no_data"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlBottom"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="?actionBarSize">
+        <View
+            android:id="@+id/view_dividerTop"
+            android:layout_alignParentTop="true"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:background="?android:attr/dividerVertical"
+            android:layout_height="@dimen/divider_size_small">
+        </View>
+        <LinearLayout
+            android:padding="8dp"
+            android:layout_width="match_parent"
+            android:layout_below="@id/view_dividerTop"
+            android:weightSum="10"
+            android:orientation="horizontal"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4.3"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Tổng: "
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/tvTongSoLuong"
+                    android:text="10"
+                    android:layout_marginLeft="@dimen/margin_large"
+                    style="@style/text_normal.bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2.7"
+                android:gravity="center_vertical|end"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvTienKM"
+                    style="@style/text_normal"
+                    android:text="@string/text_default_food_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="KM: 0"
+                    style="@style/text_normal"
+                    android:textColor="@color/green"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvTongTienDoanhThu"
+                android:layout_width="0dp"
+                style="@style/text_normal.bold"
+                android:text="@string/text_con_phai_thu_tien"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="end|center"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

@@ -58,12 +58,13 @@
             android:layout_marginLeft="@dimen/margin_normal"
             android:layout_alignParentStart="true"
             android:layout_width="wrap_content"
-            android:text="Thứ sáu - Ngày 12/02/2021"
+            android:text="@string/day_example"
             android:layout_height="wrap_content"/>
         <Spinner
             android:id="@+id/spSelectDay"
             android:layout_width="wrap_content"
             android:layout_centerVertical="true"
+            android:dropDownVerticalOffset="@dimen/btn_setup_menu_size_height"
             android:layout_marginRight="@dimen/margin_normal"
             android:layout_alignParentEnd="true"
             android:layout_height="wrap_content"/>

@@ -66,7 +66,8 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
     // chi tiết hoá đơn
     private OrderDetailPresenter mOrderDetailPresenter;
     private ArrayList<OrderDetail> mOrderDetails;
-    //
+
+    // danh sách chọn sản phẩm
     public static ArrayList<Item> lstItemSelected=null;
 
     // setup bottom sheet
@@ -80,10 +81,12 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
     // danh sách danh mục
     private RecyclerView rcvListCategory;
     private CategoryAdapter categoryAdapter;
+    private ArrayList<Category> lstCategory;
 
     // danh sách sản phẩm theo danh mục
     private RecyclerView rcvListItemOfCategory;
     private SwipeItemAdapter swipeItemAdapter;
+    // danh sách hiển thị tất cả sản phẩm (sp ban đầu)
     private ArrayList<Item> lstItem;
 
 
@@ -100,6 +103,9 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
     private TextView tvItemCountLst;
     //
     private int itemQuantitySelected;
+
+    // lấy vị trí chọn cho danh mục
+    public static int categoryPositionSelected = -1;
 
     // order
     private OrderPresenter orderPresenter;
@@ -127,7 +133,9 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_order, container, false);
-
+        // danh mục ban đầu bằng 0
+        categoryPositionSelected = 0;
+        //
         categoryPresenter = new CategoryPresenter(getContext());
         itemFoodPresenter = new ItemFoodPresenter(getActivity());
 
@@ -179,7 +187,13 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         if(bundle !=null){
             mOrder = (Order) bundle.getSerializable("order");
             checkPayment = bundle.getBoolean("check");
+            // gán cho danh sách selected item
             lstItemSelected = itemFoodPresenter.getItemInOrderDetail(mOrder.getOrderID());
+
+            // cập nhật sản số lượng danh mục theo sản phẩm chọn
+            updateCountCategory();
+
+
             // gán cho danh sách order bottomsheet
             orderBottomSheetAdapter.addData(lstItemSelected);
 
@@ -188,8 +202,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
 
             mOrderDetailPresenter = new OrderDetailPresenter(getActivity());
             mOrderDetails = mOrderDetailPresenter.getOrderDetail(mOrder.getOrderID());
-
-            Log.d(TAG, "onCreateView: "+mOrderDetails.toString());
+//            Log.d(TAG, "onCreateView: "+mOrderDetails.toString());
 
             for(int i=0; i<lstItem.size(); i++){
                 Item item = lstItem.get(i);
@@ -248,6 +261,29 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+    }
+
+    /**
+     * Hàm cập nhật số lượng danh mục theo sản phẩm chọn
+     * @author giangpb
+     * @date 16/02/2021
+     */
+    private void updateCountCategory(){
+        if (lstItemSelected.size()>0){
+            for(int i=0; i<categoryPresenter.getListCategory().size(); i++){
+                Category cat = categoryPresenter.getListCategory().get(i);
+                int dem = categoryPresenter.getListCategory().get(i).getCount();
+                for(Item item : lstItemSelected){
+                    if(item.getCategoryID().equals(cat.getCategoryID()))
+                        dem+=item.getQuantity();
+                    cat.setCount(dem);
+                    categoryAdapter.updateCategory(cat,i);
+                }
+            }
+        }
+        else{
+            categoryAdapter.resetCategory();
+        }
     }
 
     //check payment
@@ -315,7 +351,8 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
             @Override
             public void onClick(View v) {
                 try{
-                    // kiểm tra order đã tồn tại trước đó hay chưa, nếu chưa thì thêm mới, có rồi thì cập nhật lại
+                    if(lstItemSelected.size()>0){
+                        // kiểm tra order đã tồn tại trước đó hay chưa, nếu chưa thì thêm mới, có rồi thì cập nhật lại
                     if(mOrder ==null){
                         Order order =new Order();
                         long timeMillis = System.currentTimeMillis();
@@ -385,6 +422,9 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
 
                     NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.listOrderFragment, false).build();
                     navController.navigate(R.id.action_addOrderFragment_to_listOrderFragment, null, navOptions);
+                    }
+                    else
+                        return;
 
                 }
                 catch (Exception ex){
@@ -487,6 +527,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
 
     @Override
     public void onClickItem(Category category) {
+        categoryPositionSelected = category.getSortOrder()-1;
         swipeItemAdapter.clearAllItem();
         for(Item item : lstItem){
             if(item.getCategoryID().equals(category.getCategoryID())){
@@ -496,8 +537,6 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         // đặt danh mục bổ sung (addition) theo danh mục sản phẩm
         mAdditionCategories =  additionPresenter.additionCategories(category.getCategoryID());
     }
-
-
 
     @Override
     public void onClickItemSwipe(Item item) {
@@ -522,7 +561,6 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         else{
             lstItemSelected.add(item);
         }
-
 
         checkAddFirst =true;
 
@@ -637,6 +675,9 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                         orderBottomSheetAdapter.addData(lstItemSelected);
                         tvItemCountLst.setText(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)+"");
                         //Log.d(TAG, "onClickItemSwipe: "+lstItemSelected.toString());
+
+                        // cập nhật sản số lượng danh mục theo sản phẩm chọn
+                        updateCountCategory();
                     }
                     catch (Exception ex){
                         Log.d(TAG, "onClick: "+ex.getMessage());
@@ -676,6 +717,9 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         orderBottomSheetAdapter.addData(lstItemSelected);
         tvItemCountLst.setText(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)+"");
 //        Log.d(TAG, "onClickItemSwipe: "+lstItemSelected.toString());
+
+        // cập nhật sản số lượng danh mục theo sản phẩm chọn
+        updateCountCategory();
     }
 
     // swipe list bottomsheet
@@ -688,6 +732,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         tvItemCountLst.setText(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)+"");
         tvGiaPhaiThu.setText(decimalFormat.format(itemFoodPresenter.tinhTienHoaDon(lstItemSelected)));
         tvGiaPhaiThuLst.setText(decimalFormat.format(itemFoodPresenter.tinhTienHoaDon(lstItemSelected)));
+
         if(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)>0){
             tvItemCount.setVisibility(View.VISIBLE);
             tvItemCount.setText(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)+"");
@@ -704,6 +749,100 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                 lstItem.set(i,itemGoc);
             }
         }
+        // thông báo danh sách
         swipeItemAdapter.notifyItemChanged(item.getPosition()-1);
+
+        // cập nhật sản số lượng danh mục theo sản phẩm chọn
+        updateCountCategory();
+
+    }
+
+    /**
+     * Hàm tăng số lượng cho item order
+     * @param item
+     * @param pos
+     * @author giangpb
+     * @date 16/02/2021
+     */
+    @Override
+    public void onItemPlusQuantity(Item item, int pos) {
+        int quan = item.getQuantity();
+        quan ++;
+        item.setQuantity(quan);
+
+        lstItemSelected.set(pos, item);
+        orderBottomSheetAdapter.updateItem(item, pos);
+
+        tvItemCountLst.setText(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)+"");
+        tvGiaPhaiThu.setText(decimalFormat.format(itemFoodPresenter.tinhTienHoaDon(lstItemSelected)));
+        tvGiaPhaiThuLst.setText(decimalFormat.format(itemFoodPresenter.tinhTienHoaDon(lstItemSelected)));
+
+        if(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)>0){
+            tvItemCount.setVisibility(View.VISIBLE);
+            tvItemCount.setText(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)+"");
+        }
+        else{
+            tvItemCount.setVisibility(View.GONE);
+        }
+
+        // cập nhật lại danh sách
+        for(int i=0; i<lstItem.size(); i++){
+            Item itemGoc = lstItem.get(i);
+            if(itemGoc.equals(item)){
+                itemGoc.setQuantity(quan);
+                lstItem.set(i,itemGoc);
+            }
+        }
+        // thông báo danh sách
+        swipeItemAdapter.notifyItemChanged(item.getPosition()-1);
+
+        // cập nhật sản số lượng danh mục theo sản phẩm chọn
+        updateCountCategory();
+
+    }
+
+    /**
+     * Hàm giảm số lượng item
+     * @param item item food
+     * @param pos position of item
+     * @author giangpb
+     * @date 14/02/2021
+     */
+    @Override
+    public void onItemMinusQuantity(Item item, int pos) {
+
+        int quan = item.getQuantity();
+        quan --;
+        item.setQuantity(quan);
+
+        lstItemSelected.set(pos, item);
+        orderBottomSheetAdapter.updateItem(item, pos);
+
+        tvItemCountLst.setText(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)+"");
+        tvGiaPhaiThu.setText(decimalFormat.format(itemFoodPresenter.tinhTienHoaDon(lstItemSelected)));
+        tvGiaPhaiThuLst.setText(decimalFormat.format(itemFoodPresenter.tinhTienHoaDon(lstItemSelected)));
+
+        if(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)>0){
+            tvItemCount.setVisibility(View.VISIBLE);
+            tvItemCount.setText(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)+"");
+        }
+        else{
+            tvItemCount.setVisibility(View.GONE);
+        }
+
+        // cập nhật lại danh sách
+        for(int i=0; i<lstItem.size(); i++){
+            Item itemGoc = lstItem.get(i);
+            if(itemGoc.equals(item)){
+
+                itemGoc.setQuantity(quan);
+                lstItem.set(i,itemGoc);
+            }
+        }
+        // thông báo danh sách
+        swipeItemAdapter.notifyItemChanged(item.getPosition()-1);
+
+        // cập nhật sản số lượng danh mục theo sản phẩm chọn
+        updateCountCategory();
     }
 }

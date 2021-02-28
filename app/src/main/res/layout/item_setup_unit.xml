@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:clickable="true"
+    android:background="?android:selectableItemBackground"
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/toolbar_height_size">
+    <ImageView
+        android:id="@+id/ivDrag"
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_drag"
+        android:layout_marginLeft="@dimen/font_normal"
+        android:layout_centerVertical="true"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tvUnitName"
+        android:layout_width="wrap_content"
+        android:text="@string/text_nhieu_sua"
+        style="@style/text_normal"
+        android:layout_marginLeft="@dimen/font_normal"
+        android:layout_toRightOf="@id/ivDrag"
+        android:layout_centerVertical="true"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_delete_red"
+        android:layout_marginRight="@dimen/font_normal"
+        android:layout_height="wrap_content"/>
+    <View
+        android:layout_alignParentBottom="true"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:background="?android:attr/dividerVertical"
+        android:layout_height="@dimen/divider_size_small">
+    </View>
+</RelativeLayout>

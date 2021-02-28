@@ -16,14 +16,15 @@
         android:layout_height="@dimen/size_image_category_item"/>
     <TextView
         android:id="@+id/tvCategoryCount"
-        android:layout_width="@dimen/font_large"
+        android:layout_width="@dimen/margin_large"
         android:text="11"
         android:layout_toRightOf="@id/ivCategoryImage"
+        android:layout_marginTop="@dimen/margin_small"
         android:layout_marginLeft="@dimen/margin_stt3"
         android:visibility="visible"
         style="@style/text_bridge_small"
         android:background="@drawable/custom_text_bridge"
-        android:layout_height="@dimen/font_large"/>
+        android:layout_height="@dimen/margin_large"/>
 <TextView
     android:id="@+id/tvCategoryName"
     android:layout_below="@id/ivCategoryImage"

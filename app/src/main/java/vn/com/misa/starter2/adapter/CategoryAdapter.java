@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.model.entity.Category;
+import vn.com.misa.starter2.ui.order_add.AddOrderFragment;
 import vn.com.misa.starter2.ui.order_add.ICategoryListener;
 
 /**
@@ -44,6 +45,29 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyHold
         this.mData = data;
     }
 
+    /**
+     * Hàm cập nhật số lượng cho mỗi danh mục
+     * @param category danh mục
+     * @param position vị trí
+     * @author giangpb
+     * @date 17/02/2021
+     */
+    public void updateCategory(Category category, int position){
+        mData.set(position, category);
+        notifyItemChanged(position);
+        categorySlected = mData.get(position);
+    }
+
+    /**
+     *
+     */
+    public void resetCategory(){
+        for(Category category :mData){
+            category.setCount(0);
+        }
+        notifyDataSetChanged();
+    }
+
 
     @NonNull
     @Override
@@ -54,31 +78,29 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyHold
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
-
-
         // bind dữ liệu và set thuộc tính, đổi màu danh sách category
         holder.tvCategoryName.setText(mData.get(position).getCategoryName());
         Drawable icon = getMyDrawable(mContext,mData.get(position).getIconPath());
         holder.ivCategoryImage.setImageDrawable(icon);
-
-        holder.tvCategoryCount.setVisibility(View.GONE);
+        holder.tvCategoryName.setTextColor(mContext.getResources().getColor(R.color.greyDark200));
 
         // đầu tiên set màu mặc định ban đầu
-        if(position ==0){
-            holder.ivCategoryImage.setImageDrawable(getMyDrawable(mContext,mData.get(0).getIconPath()+"_fill"));
+        if(position == AddOrderFragment.categoryPositionSelected){
+            holder.ivCategoryImage.setImageDrawable(getMyDrawable(mContext,mData.get(AddOrderFragment.categoryPositionSelected).getIconPath()+"_fill"));
             holder.tvCategoryName.setTextColor(mContext.getResources().getColor(R.color.purple_500));
             tvSelected = holder.tvCategoryName;
             ivSelected = holder.ivCategoryImage;
-            categorySlected = mData.get(0);
+            categorySlected = mData.get(AddOrderFragment.categoryPositionSelected);
         }
-
         // set số lượng mỗi danh mục
         if(mData.get(position).getCount()>0){
             holder.tvCategoryCount.setVisibility(View.VISIBLE);
             holder.tvCategoryCount.setText(mData.get(position).getCount()+"");
         }
+        else{
+            holder.tvCategoryCount.setVisibility(View.GONE);
+        }
     }
-
 
     /**
      * Hàm Lấy icon xml drawable từ 1 đường dẫn

@@ -676,7 +676,7 @@
       "ItemCategoryName": "Đồ uống khác",
       "IconPath": "ic_do_dong_chai",
       "IconType": 7,
-      "SortOrder": 4,
+      "SortOrder": 5,
       "InActive": false,
       "CreatedDate": "2019-01-10T05:00:00.000"
     },
@@ -686,7 +686,7 @@
       "ItemCategoryName": "Ăn vặt",
       "IconPath": "ic_banh_ngot",
       "IconType": 8,
-      "SortOrder": 5,
+      "SortOrder": 6,
       "InActive": false,
       "CreatedDate": "2019-01-10T06:00:00.000"
     }

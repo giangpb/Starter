@@ -26,4 +26,13 @@ public interface IFoodListener {
      * @date 16/02/2021
      */
     void onItemPlusQuantity(Item item, int pos);
+
+    /**
+     * Sự kiện giảm số lượng
+     * @param item
+     * @param pos
+     * @author giangpb
+     * @date 16/02/2021
+     */
+    void onItemMinusQuantity(Item item, int pos);
 }
