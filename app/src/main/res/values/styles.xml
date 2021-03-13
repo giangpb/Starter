@@ -104,6 +104,24 @@
         <item name="android:insetTop">@dimen/reset</item>
     </style>
 
+<!--    custom btn textView-->
+    <style name="btn_textView" parent="Widget.AppCompat.TextView">
+        <item name="android:background">@drawable/button_dialog_textview_selected</item>
+        <item name="android:gravity">center</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textSize">@dimen/font_large</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_marginLeft">@dimen/margin_normal</item>
+    </style>
+
+    <style name="btn_textView_recommend" parent="Widget.AppCompat.TextView">
+        <item name="android:background">@drawable/bg_selected_recommend</item>
+        <item name="android:gravity">center</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textSize">@dimen/font_large</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="text_large.bottomSheet" parent="Widget.AppCompat.TextView">
         <item name="android:fontFamily">@font/font_intel_bold</item>
         <item name="android:textSize">@dimen/font_normal_bottomSheet</item>
@@ -124,7 +142,7 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="login_input" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="login_input" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
         <item name="android:layout_margin">@dimen/margin_normal</item>
     </style>
 
@@ -159,6 +177,15 @@
     </style>
     <style name="vnd_money.large" parent="vnd_money">
         <item name="android:textSize">@dimen/font_vnd</item>
+    </style>
+
+    <style name="key_colect_money" parent="Widget.AppCompat.TextView">
+        <item name="android:background">@drawable/custom_btn_keyboard_money_selected</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_margin">@dimen/divider_size_small</item>
     </style>
 
 

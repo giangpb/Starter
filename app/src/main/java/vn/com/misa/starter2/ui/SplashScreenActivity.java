@@ -12,6 +12,7 @@ import java.util.TimerTask;
 import vn.com.misa.starter2.MainActivity;
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.ui.finishsetup.FinishSetupFragment;
+import vn.com.misa.starter2.ui.login.LoginActivity;
 import vn.com.misa.starter2.ui.order.OrderActivity;
 
 /**
@@ -39,7 +40,9 @@ public class SplashScreenActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if(check==null){
-                    Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+//                    Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+//                    startActivity(intent);
+                    Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }
                 else{
