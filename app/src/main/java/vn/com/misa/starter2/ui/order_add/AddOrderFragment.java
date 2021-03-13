@@ -1,9 +1,12 @@
 package vn.com.misa.starter2.ui.order_add;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
@@ -12,14 +15,19 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -54,7 +62,7 @@ import vn.com.misa.starter2.ui.setuplistitem.ItemFoodPresenter;
  * @author GIANG PHAN
  * @date 28/01/2021
  */
-public class AddOrderFragment extends Fragment implements ICategoryListener, IFoodListener{
+public class AddOrderFragment extends Fragment implements ICategoryListener, IFoodListener {
     private static final String TAG = "AddOrderFragment";
 
     private CategoryPresenter categoryPresenter;
@@ -126,6 +134,10 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
     private RecyclerView rcvOrderBottomSheet;
     private OrderBottomSheetAdapter orderBottomSheetAdapter;
 
+    // Chọn bàn
+    private FloatingActionButton fabSelectTable;
+    private FloatingActionButton fabSelectDiscount;
+
 
 
     @Override
@@ -157,6 +169,9 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         tvItemCount = view.findViewById(R.id.tvItemQuantity);
         btnLuuLai =view.findViewById(R.id.btnLuuLai);
         btnThuTien = view.findViewById(R.id.btnThuTien);
+
+        fabSelectTable = view.findViewById(R.id.fabSelectTable);
+        fabSelectDiscount = view.findViewById(R.id.fabSelectDiscount);
 
         // lst bottom sheet
         tvItemCountLst = view.findViewById(R.id.tvItemCountLst);
@@ -295,12 +310,133 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         }
     }
 
+
     /**
      * hàm tạo các sự kiện onclick
      * @author giangpb
      * @date 28/01/2021
      */
     private void addEvents(){
+
+        // hiển thị khuyến mãi
+        fabSelectDiscount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    View alertLayout = getLayoutInflater().inflate(R.layout.dialog_choose_promotion, null);
+
+                    LinearLayout llRecommend = alertLayout.findViewById(R.id.llRecommend);
+
+                    ImageView ivClosePopup = alertLayout.findViewById(R.id.ivClosePopup);
+
+                    // events
+
+                    RadioGroup rg = alertLayout.findViewById(R.id.rdSlected);
+                    rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(RadioGroup group, int checkedId) {
+                            switch (checkedId){
+                                case R.id.rdPhanTram:
+                                    llRecommend.setVisibility(View.VISIBLE);
+                                    break;
+                                case R.id.rdSoTien:
+                                    llRecommend.setVisibility(View.GONE);
+                                    break;
+                            }
+                        }
+                    });
+
+
+
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                    alert.setView(alertLayout);
+                    alert.setCancelable(false);
+                    AlertDialog dialog = alert.create();
+                    dialog.setCanceledOnTouchOutside(true);
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
+                    dialog.show();
+
+                    ivClosePopup.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            try{
+                                dialog.dismiss();
+                            }
+                            catch (Exception ex){
+                                Log.d(TAG, "onClick: "+ex.getMessage());
+                            }
+                        }
+                    });
+
+
+                }
+                catch (Exception ex){
+                    Log.d(TAG, "onClick: "+ex.getMessage());
+                }
+            }
+        });
+
+
+        // hển thị chọn số bàn phục vụ
+        fabSelectTable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    View alertLayout = getLayoutInflater().inflate(R.layout.dialog_choose_table, null);
+
+                    // init controls
+                    ImageView ivClosePopup = alertLayout.findViewById(R.id.ivClosePopup);
+                    EditText etValue = alertLayout.findViewById(R.id.etValue);
+
+                    // ẩn bàn phím đi
+                    etValue.setOnTouchListener(new View.OnTouchListener(){
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            int inType = etValue.getInputType(); // backup the input type
+                            etValue.setInputType(InputType.TYPE_NULL); // disable soft input
+                            etValue.onTouchEvent(event); // call native handler
+                            etValue.setInputType(inType); // restore input type
+                            return true; // consume touch even
+                        }
+                    });
+                    ImageButton btnClearValue = alertLayout.findViewById(R.id.btnClearValue);
+
+                    btnClearValue.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.d(TAG, "onClick: "+etValue.getSelectionStart());
+                            etValue.selectAll();
+                        }
+                    });
+
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                    alert.setView(alertLayout);
+                    alert.setCancelable(false);
+                    AlertDialog dialog = alert.create();
+                    dialog.setCanceledOnTouchOutside(true);
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                    // set Events
+                    ivClosePopup.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    dialog.show();
+                }
+                catch (Exception ex){
+                    Log.d(TAG, "addEvents: "+ex.getMessage());
+                }
+            }
+        });
+
+
+
+        // sự kiện quay lại
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg_dialog_show_something"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height_size">
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="@string/text_giam_gia_hoa_don"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:textSize="18dp"
+            android:textColor="@color/black"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/ivClosePopup"
+            android:layout_width="wrap_content"
+            android:src="@drawable/ic_close_20"
+            android:background="?selectableItemBackgroundBorderless"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/margin_normal"
+            android:layout_height="wrap_content"/>
+        <View
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:background="?android:attr/dividerVertical"
+            android:layout_height="@dimen/divider_size_small">
+        </View>
+    </RelativeLayout>
+
+        <RadioGroup
+            android:id="@+id/rdSlected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/margin_normal"
+            android:weightSum="2">
+
+            <RadioButton
+                android:id="@+id/rdPhanTram"
+                android:layout_width="0dp"
+                android:checked="true"
+                android:buttonTint="@color/purple_500"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/text_phan_tram" />
+
+            <RadioButton
+                android:id="@+id/rdSoTien"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:buttonTint="@color/purple_500"
+                android:text="@string/text_so_tien" />
+        </RadioGroup>
+    <EditText
+        android:id="@+id/etValue"
+        android:layout_width="match_parent"
+        android:background="@drawable/custom_border_unit"
+        android:gravity="right|center_vertical"
+        android:ellipsize="end"
+        android:paddingRight="@dimen/margin_normal"
+        android:text="0"
+        android:textSize="42dp"
+        android:layout_margin="@dimen/margin_normal"
+        android:layout_height="@dimen/text_view_button"/>
+
+    <LinearLayout
+        android:id="@+id/llRecommend"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/margin_normal"
+        android:paddingRight="@dimen/margin_normal">
+
+        <TextView
+            style="@style/text_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gợi ý" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_marginBottom="@dimen/margin_normal"
+            android:layout_weight="4"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/btn_textView_recommend"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/text_view_button"
+                android:layout_weight="1"
+                android:text="5%" />
+
+            <TextView
+                style="@style/btn_textView_recommend"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/text_view_button"
+                android:layout_marginLeft="@dimen/margin_normal"
+                android:layout_weight="1"
+                android:text="10%" />
+
+            <TextView
+                style="@style/btn_textView_recommend"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/text_view_button"
+                android:layout_marginLeft="@dimen/margin_normal"
+                android:layout_weight="1"
+                android:text="15%" />
+
+            <TextView
+                style="@style/btn_textView_recommend"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/text_view_button"
+                android:layout_marginLeft="@dimen/margin_normal"
+                android:layout_weight="1"
+                android:text="20%" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="@dimen/margin_normal"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="7"
+            style="@style/btn_textView"
+            android:layout_height="@dimen/text_view_button"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="8"
+            style="@style/btn_textView"
+            android:layout_height="@dimen/text_view_button"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="9"
+            style="@style/btn_textView"
+            android:layout_height="@dimen/text_view_button"/>
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_dialog_textview_selected"
+            android:src="@drawable/ic_back_keyboard"
+            android:clickable="true"
+            android:layout_marginRight="@dimen/margin_normal"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_height="@dimen/text_view_button"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/margin_normal"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="4"
+            style="@style/btn_textView"
+            android:layout_height="@dimen/text_view_button"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="5"
+            style="@style/btn_textView"
+            android:layout_height="@dimen/text_view_button"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="6"
+            style="@style/btn_textView"
+            android:layout_height="@dimen/text_view_button"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="C"
+            android:textColor="@color/pink"
+            style="@style/btn_textView"
+            android:layout_marginRight="@dimen/margin_normal"
+            android:layout_height="@dimen/text_view_button"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/margin_normal"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="1"
+            style="@style/btn_textView"
+            android:layout_height="@dimen/text_view_button"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="2"
+            style="@style/btn_textView"
+            android:layout_height="@dimen/text_view_button"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="3"
+            style="@style/btn_textView"
+            android:layout_height="@dimen/text_view_button"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text=","
+            style="@style/btn_textView"
+            android:layout_marginRight="@dimen/margin_normal"
+            android:layout_height="@dimen/text_view_button"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/margin_normal"
+        android:layout_marginBottom="@dimen/margin_normal"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="0"
+            style="@style/btn_textView"
+            android:layout_height="@dimen/text_view_button"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="000"
+            style="@style/btn_textView"
+            android:layout_height="@dimen/text_view_button"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:text="Đồng ý"
+            android:textColor="@color/blue"
+            style="@style/btn_textView"
+            android:layout_marginRight="@dimen/margin_normal"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_height="@dimen/text_view_button"/>
+    </LinearLayout>
+
+</LinearLayout>

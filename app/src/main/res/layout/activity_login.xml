@@ -19,6 +19,7 @@
         android:id="@+id/outlinedTextFieldPhone"
         android:layout_below="@id/ivLogo"
         android:layout_width="match_parent"
+        app:boxBackgroundColor= "@color/blueLight200"
         app:startIconDrawable="@drawable/ic_icon_user_login"
         android:layout_height="wrap_content"
         android:hint="@string/nhap_sdt"
@@ -27,6 +28,8 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:inputType="phone"
+            android:id="@+id/etPhone"
+            style="@style/et_normal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
@@ -38,12 +41,15 @@
         android:layout_below="@id/outlinedTextFieldPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:boxBackgroundColor= "@color/blueLight200"
         android:hint="@string/nhap_mk"
         app:endIconMode="clear_text"
         style="@style/login_input">
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPassWord"
             android:layout_width="match_parent"
-
+            android:inputType="textPassword"
+            style="@style/et_normal"
             android:layout_height="wrap_content"
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -54,7 +60,10 @@
         android:text="@string/quen_mk"
         android:layout_below="@id/outlinedTextFieldPassword"
         android:layout_alignParentEnd="true"
-        android:layout_margin="@dimen/margin_normal"
+        style="@style/text_normal"
+        android:layout_marginBottom="@dimen/margin_large"
+        android:layout_marginRight="@dimen/margin_normal"
+        android:textColor="@color/white"
         android:layout_height="wrap_content"/>
 
     <com.google.android.material.button.MaterialButton
@@ -67,11 +76,34 @@
         android:layout_width="match_parent"
         style="@style/btn_order"
         android:layout_height="@dimen/toolbar_height_size"/>
+    <LinearLayout
+        android:id="@+id/llRegister"
+        android:layout_below="@id/btnLogin"
+        android:layout_marginTop="@dimen/margin_large"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="@string/text_chua_co_Tk"
+            style="@style/text_normal"
+            android:textColor="@color/white"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="@string/text_chua_co_Tk_dang_ky"
+            style="@style/text_normal.bold"
+            android:textColor="@color/white"
+            android:layout_marginLeft="@dimen/margin_small"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 
     <ImageView
+        android:id="@+id/ivInforApp"
         android:layout_width="@dimen/size_ic_default"
         android:src="@drawable/ic_information"
-        android:layout_below="@id/btnLogin"
+        android:layout_below="@id/llRegister"
         android:clickable="true"
         android:background="?selectableItemBackgroundBorderless"
         android:layout_centerHorizontal="true"

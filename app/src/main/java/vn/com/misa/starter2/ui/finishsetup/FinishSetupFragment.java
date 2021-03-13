@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.google.android.material.button.MaterialButton;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.ui.order.OrderActivity;
@@ -91,7 +96,6 @@ public class FinishSetupFragment extends Fragment {
             public void onClick(View v) {
                 try{
 
-
                     View alertLayout = getLayoutInflater().inflate(R.layout.view_custom_progress_dialog, null);
 
                     AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
@@ -102,15 +106,27 @@ public class FinishSetupFragment extends Fragment {
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     dialog.show();
 
+                    new CountDownTimer(3000,100){
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            dialog.dismiss();
+                        }
+                    };
 
 
-                    // lưu trạng thái setup thành công !
+
+                     //lưu trạng thái setup thành công !
                     setupStateFinishSetup();
 
                     // chuyển sang màn hình order và kết thúc quá trình setup
                     Intent intent =new Intent(getActivity(), OrderActivity.class);
                     startActivity(intent);
-                    dialog.dismiss();
+
                     getActivity().finish();
                 }
                 catch (Exception ex){

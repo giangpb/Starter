@@ -16,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,10 +47,11 @@ import vn.com.misa.starter2.ui.order_add.AddOrderFragment;
  * @author GIANG PHAN
  * @date 07/02/2021
  */
-public class CollectMoneyFragment extends Fragment implements IMoneyClickListener {
+public class CollectMoneyFragment extends Fragment implements IMoneyClickListener, View.OnClickListener {
     private static final String TAG = "CollectMoneyFragment";
 
 
+    private View mView;
     // autoID
     AutoIDPresenter autoIDPresenter;
 
@@ -84,6 +87,12 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
     private MoneyRequirementAdapter moneyRequirementAdapter;
     private ArrayList<Integer> lstMoney;
 
+    // hiển thị bàn phím ảo lúc nhập tiền
+    private RelativeLayout rlKhachDua;
+    private TextView tvKeyXong;
+    private LinearLayout llKeyboard;
+
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -94,7 +103,7 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_collect_money, container, false);
+        mView = inflater.inflate(R.layout.fragment_collect_money, container, false);
 
         autoIDPresenter = new AutoIDPresenter(getContext());
 
@@ -112,17 +121,20 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
         lstMoney = new ArrayList<>();
 
         decimalFormat = new DecimalFormat("#,###");
-        ivBack = view.findViewById(R.id.ivBack);
-        tvTongTien = view.findViewById(R.id.tvTongTien);
-        tvKhachDua = view.findViewById(R.id.tvKhachDua);
-        tvTraLai = view.findViewById(R.id.tvTraLai);
-        btnHoanThanh = view.findViewById(R.id.btnHoanThanh);
+        ivBack = mView.findViewById(R.id.ivBack);
+        tvTongTien = mView.findViewById(R.id.tvTongTien);
+        tvKhachDua = mView.findViewById(R.id.tvKhachDua);
+        tvTraLai = mView.findViewById(R.id.tvTraLai);
+        btnHoanThanh = mView.findViewById(R.id.btnHoanThanh);
 
-        toggleButton = view.findViewById(R.id.mstb_multi_id);
+        // keyboard
+        initKeyBoard();
+
+        toggleButton = mView.findViewById(R.id.mstb_multi_id);
         toggleButton.setValue(0);
 
         // khởi tạo lst
-        rcvLstMoneyRequirement = view.findViewById(R.id.rcvLstMoneyRequirement);
+        rcvLstMoneyRequirement = mView.findViewById(R.id.rcvLstMoneyRequirement);
         // nạp danh sách gợi ý tiền
         for(int i=0; i<dataMoney.length; i++){
             if(dataMoney[i]>=mOrder.getAmount()){
@@ -145,7 +157,18 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
 
         addEvents();
 
-        return view;
+        return mView;
+    }
+
+    /**
+     * Hàm thiết lập bàn phím thu tiền
+     * @author giangpb
+     * @date 8/3/2021
+     */
+    private void initKeyBoard(){
+        llKeyboard = mView.findViewById(R.id.llKeyBoard);
+        rlKhachDua = mView.findViewById(R.id.rlKhachDua);
+        tvKeyXong = mView.findViewById(R.id.tvKey_xong);
     }
 
     /**
@@ -168,6 +191,22 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
                 }
             }
         });
+
+        // xử lý sự kiện lúc bấm vào khách đưa - > show bàn phím ảo
+        rlKhachDua.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    llKeyboard.setVisibility(View.VISIBLE);
+                }
+                catch (Exception ex){
+                    Log.d(TAG, "onClick: "+ex.getMessage());
+                }
+            }
+        });
+
+        // ẩn keyboard
+        tvKeyXong.setOnClickListener(this::onClick);
 
         // xử lý sự kiện hoàn thành
         btnHoanThanh.setOnClickListener(new View.OnClickListener() {
@@ -263,5 +302,19 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
         tvKhachDua.setText(decimalFormat.format(money));
         int moneyChange = money - mOrder.getAmount();
         tvTraLai.setText(decimalFormat.format(moneyChange));
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.tvKey_xong:
+                try{
+                    llKeyboard.setVisibility(View.GONE);
+                }
+                catch (Exception ex){
+                    Log.d(TAG, "onClick: "+ex.getMessage());
+                }
+            break;
+        }
     }
 }

@@ -63,4 +63,6 @@
     <dimen name="size_pie_chart">340dp</dimen>
 
     <dimen name="font_vnd">20dp</dimen>
+
+    <dimen name="text_view_button">60dp</dimen>
 </resources>

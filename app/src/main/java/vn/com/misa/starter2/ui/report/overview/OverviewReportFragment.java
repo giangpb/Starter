@@ -209,12 +209,11 @@ public class OverviewReportFragment extends Fragment {
                         data = overviewsPresenter.getAllData(DATE_TIME_FORMATTER.format(week), DATE_TIME_FORMATTER.format(now));
 
                     }
-
+                    tvDaySelected.setText(daySelected);
                     if(data != null && data.size()>0){
                         llViewMain.setVisibility(View.VISIBLE);
                         llNoData.setVisibility(View.GONE);
                         // hiển thị ngày
-                        tvDaySelected.setText(daySelected);
                         tvTienMat.setText(decimalFormat.format(doanhThu));
                         tvTongTienThuDuoc.setText(decimalFormat.format(doanhThu));
                         setEntries(data);

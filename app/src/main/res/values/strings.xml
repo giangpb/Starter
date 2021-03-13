@@ -56,6 +56,8 @@
     <string name="text_khach_dua">Khách đưa</string>
     <string name="text_tra_lai">Trả lại</string>
     <string name="text_hoa_don">Hoá đơn</string>
+    <string name="text_chua_co_Tk">Bạn chưa có tài khoản?</string>
+    <string name="text_chua_co_Tk_dang_ky"><u>Đăng ký</u></string>
 
 
     <!--    Text Button template-->
@@ -97,13 +99,17 @@
     <string name="thong_tin_ung_dung">Thông tin ứng dụng</string>
     <string name="dang_xuat">Đăng xuất</string>
     <string name="text_doanh_thu">Doanh thu</string>
+    <string name="text_nhap_so_ban">NHẬP SỐ BÀN</string>
+    <string name="text_giam_gia_hoa_don">GIẢM GIÁ HOÁ ĐƠN</string>
+    <string name="text_phan_tram">Phần trăm</string>
+    <string name="text_so_tien">Số tiền</string>
 
     <string name="open_draw">Open Drawer Layout</string>
     <string name="close_draw">Close Drawer Layout</string>
 
 
-    <string name="nhap_sdt">Nhập số điện thoại</string>
-    <string name="nhap_mk">Nhập mật khẩu</string>
+    <string name="nhap_sdt">Số điện thoại</string>
+    <string name="nhap_mk">Mật khẩu</string>
     <string name="quen_mk">Quên mật khẩu?</string>
     <string name="login">ĐĂNG NHẬP</string>
 

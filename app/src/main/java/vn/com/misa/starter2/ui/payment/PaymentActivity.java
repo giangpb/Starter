@@ -135,42 +135,46 @@ public class PaymentActivity extends AppCompatActivity implements IPaymentClickL
 
                 DateTimeFormatter DATE_TIME_FORMATTER_SHOW_FILL = DateTimeFormatter.ofPattern("dd/MM/yyyy")
                         .withZone(ZoneId.systemDefault());
+
                 ArrayList<Payment> data = null;
+                String daySelected = null;
 
                 if(position ==0){
                     data = paymentPresenter.getAllPayment(DATE_TIME_FORMATTER.format(now)+"%");
-                    tvDaySelected.setText(DATE_TIME_FORMATTER_SHOW.format(now));
+                    daySelected = DATE_TIME_FORMATTER_SHOW.format(now);
                     tvDateFill.setText(DATE_TIME_FORMATTER_SHOW_FILL.format(now));
                     tvPriceFill.setText(decimalFormat.format(paymentPresenter.totalPrice(data)));
                 }
                 else if(position ==1){ // minus 1 day
                     Instant yesterday = now.minus(1, ChronoUnit.DAYS);
                     data = paymentPresenter.getAllPayment(DATE_TIME_FORMATTER.format(yesterday)+"%");
-                    tvDaySelected.setText(DATE_TIME_FORMATTER_SHOW.format(yesterday));
+                    daySelected = DATE_TIME_FORMATTER_SHOW.format(yesterday);
                     tvDateFill.setText(DATE_TIME_FORMATTER_SHOW_FILL.format(yesterday));
                     tvPriceFill.setText(decimalFormat.format(paymentPresenter.totalPrice(data)));
                 }
                 else if(position ==2){ // minus 7 days
                     Instant day7Ago = now.minus(7, ChronoUnit.DAYS);
                     data = paymentPresenter.getAllPayment(DATE_TIME_FORMATTER.format(day7Ago)+"%",DATE_TIME_FORMATTER.format(now)+"%");
-                    tvDaySelected.setText(DATE_TIME_FORMATTER_SHOW.format(now));
+
+                    daySelected = DATE_TIME_FORMATTER_SHOW_FILL.format(day7Ago) +  " - "+ DATE_TIME_FORMATTER_SHOW_FILL.format(now);
                     tvDateFill.setText(DATE_TIME_FORMATTER_SHOW_FILL.format(day7Ago)+" - "+DATE_TIME_FORMATTER_SHOW_FILL.format(now));
                     tvPriceFill.setText(decimalFormat.format(paymentPresenter.totalPrice(data)));
                 }
 
+                tvDaySelected.setText(daySelected);
                 // xử lý show
-                if(data !=null){
+                if(data !=null && data.size()>0){
                     llMaiPayment.setVisibility(View.VISIBLE);
                     llNoData.setVisibility(View.GONE);
                     rlPaymentActivity.setBackgroundColor(getResources().getColor(R.color.divider));
+                    paymentAdapter.addData(data);
                 }
                 else{
                     llMaiPayment.setVisibility(View.GONE);
                     llNoData.setVisibility(View.VISIBLE);
                     rlPaymentActivity.setBackgroundColor(getResources().getColor(R.color.white));
-                    tvDaySelected.setText(DATE_TIME_FORMATTER_SHOW.format(now));
+                    //tvDaySelected.setText(DATE_TIME_FORMATTER_SHOW.format(now));
                 }
-                paymentAdapter.addData(data);
             }
 
             @Override

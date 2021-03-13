@@ -205,8 +205,8 @@ public class UpdateItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    Toast.makeText(UpdateItemActivity.this, "Đang sửa", Toast.LENGTH_SHORT).show();
-//                    showDialogAddUnit();
+//                    Toast.makeText(UpdateItemActivity.this, "Đang sửa", Toast.LENGTH_SHORT).show();
+                    showDialogAddUnit();
                 }
                 catch (Exception ex){
                     Log.d(TAG, "onClick: "+ex.getMessage());
@@ -228,48 +228,47 @@ public class UpdateItemActivity extends AppCompatActivity {
         final MaterialButton btnAddUnit = alertLayout.findViewById(R.id.btnAddUnit);
         final MaterialButton btnCancel = alertLayout.findViewById(R.id.btnCancel);
 
-
-        AlertDialog.Builder alert = new AlertDialog.Builder(getApplication());
+        AlertDialog.Builder alert = new AlertDialog.Builder(UpdateItemActivity.this);
         alert.setView(alertLayout);
         alert.setCancelable(false);
         AlertDialog dialog = alert.create();
-        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
-//
-//        // xử lý sự kiện
-//        // sự kiện thêm unit
-//        btnAddUnit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                try{
-//                    // lấy thời gian hiện tại và tên unit để cập nhật cho unit
-//                    long time = System.currentTimeMillis();
-//                    unitPresenter. addUnit(time+"",etUnitName.getText().toString());
-//                    dialog.dismiss();
-//                    // load lại unit
-//                    loadUnit();
-//                    // set vị trí chọn hiện tại
-//                    spinnerUnit.setSelection(unitPresenter.getAllUnit().size()-1);
-//                }
-//                catch (Exception ex){
-//                    Log.d(TAG, "onClick: "+ex.getMessage());
-//                }
-//            }
-//        });
-//
-//        // sự kiện huỷ bỏ
-//        btnCancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                try{
-//                    dialog.dismiss();
-//                }
-//                catch (Exception ex){
-//                    Log.d(TAG, "onClick: "+ex.getMessage());
-//                }
-//            }
-//        });
+
+        // xử lý sự kiện
+        // sự kiện thêm unit
+        btnAddUnit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    // lấy thời gian hiện tại và tên unit để cập nhật cho unit
+                    long time = System.currentTimeMillis();
+                    unitPresenter. addUnit(time+"",etUnitName.getText().toString());
+                    dialog.dismiss();
+                    // load lại unit
+                    loadUnit();
+                    // set vị trí chọn hiện tại
+                    spinnerUnit.setSelection(unitPresenter.getAllUnit().size()-1);
+                }
+                catch (Exception ex){
+                    Log.d(TAG, "onClick: "+ex.getMessage());
+                }
+            }
+        });
+
+        // sự kiện huỷ bỏ
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    dialog.dismiss();
+                }
+                catch (Exception ex){
+                    Log.d(TAG, "onClick: "+ex.getMessage());
+                }
+            }
+        });
     }
 
     /**
