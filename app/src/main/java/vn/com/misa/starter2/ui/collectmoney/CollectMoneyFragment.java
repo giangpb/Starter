@@ -24,6 +24,9 @@ import android.widget.Toast;
 import com.google.android.material.button.MaterialButton;
 import com.muddzdev.styleabletoast.StyleableToast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.honorato.multistatetogglebutton.MultiStateToggleButton;
 
 import java.text.DecimalFormat;
@@ -92,11 +95,51 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
     private TextView tvKeyXong;
     private LinearLayout llKeyboard;
 
+    // tiền
+    private StringBuilder tienNhap;
+
+    private TextView tvKey1,tvKey2, tvKey3;
+    private TextView tvKey4,tvKey5, tvKey6;
+    private TextView tvKey7,tvKey8, tvKey9;
+    private TextView tvKey0;
+    private ImageView ivKeyDel;
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+    }
+
+    @Override
+    public void onStart() {
+        EventBus.getDefault().register(this);
+        super.onStart();
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(StringBuilder stringBuilder) {
+        if (stringBuilder.length()>0){
+            int tien = Integer.parseInt(stringBuilder.toString());
+            moneyReceive = tien;
+            if (tien<=mOrder.getAmount()){
+                tvTraLai.setText("0");
+            }
+            else {
+                tvTraLai.setText(decimalFormat.format(tien- mOrder.getAmount()));
+            }
+            tvKhachDua.setText(decimalFormat.format(tien));
+        }
+        else {
+            tvKhachDua.setText("0");
+        }
     }
 
     @Override
@@ -166,9 +209,24 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
      * @date 8/3/2021
      */
     private void initKeyBoard(){
+        tienNhap = new StringBuilder();
+
         llKeyboard = mView.findViewById(R.id.llKeyBoard);
         rlKhachDua = mView.findViewById(R.id.rlKhachDua);
         tvKeyXong = mView.findViewById(R.id.tvKey_xong);
+
+        tvKey0 = mView.findViewById(R.id.key0);
+        tvKey1 = mView.findViewById(R.id.key1);
+        tvKey2 = mView.findViewById(R.id.key2);
+        tvKey3 = mView.findViewById(R.id.key3);
+        tvKey4 = mView.findViewById(R.id.key4);
+        tvKey5 = mView.findViewById(R.id.key5);
+        tvKey6 = mView.findViewById(R.id.key6);
+        tvKey7 = mView.findViewById(R.id.key7);
+        tvKey8 = mView.findViewById(R.id.key8);
+        tvKey9 = mView.findViewById(R.id.key9);
+        ivKeyDel = mView.findViewById(R.id.keyDel);
+
     }
 
     /**
@@ -207,6 +265,17 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
 
         // ẩn keyboard
         tvKeyXong.setOnClickListener(this::onClick);
+        tvKey0.setOnClickListener(this::onClick);
+        tvKey1.setOnClickListener(this::onClick);
+        tvKey2.setOnClickListener(this::onClick);
+        tvKey3.setOnClickListener(this::onClick);
+        tvKey4.setOnClickListener(this::onClick);
+        tvKey5.setOnClickListener(this::onClick);
+        tvKey6.setOnClickListener(this::onClick);
+        tvKey7.setOnClickListener(this::onClick);
+        tvKey8.setOnClickListener(this::onClick);
+        tvKey9.setOnClickListener(this::onClick);
+        ivKeyDel.setOnClickListener(this::onClick);
 
         // xử lý sự kiện hoàn thành
         btnHoanThanh.setOnClickListener(new View.OnClickListener() {
@@ -214,80 +283,86 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
             public void onClick(View v) {
                 try{
                     // thêm dialog progress
+                    if (moneyReceive>= mOrder.getAmount()){
+                        orderPresenter.paymentDone(mOrder.getOrderID());
+                        autoIDPresenter.addAutoID(mOrder.getOrderID());
+                        int type = autoIDPresenter.getIDAuto(mOrder.getOrderID());
+                        String refNo = String.format("%07d", type);
 
-                    orderPresenter.paymentDone(mOrder.getOrderID());
-                    autoIDPresenter.addAutoID(mOrder.getOrderID());
-                    int type = autoIDPresenter.getIDAuto(mOrder.getOrderID());
-                    String refNo = String.format("%07d", type);
+                        long timeMillis = System.currentTimeMillis();
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                        String currentDateAndTime = sdf.format(new Date());
 
-                    long timeMillis = System.currentTimeMillis();
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                    String currentDateAndTime = sdf.format(new Date());
-
-                    Payment payment = new Payment();
-                    payment.setRefID("ref"+timeMillis);
-                    //
-                    payment.setRefType(550);
-                    payment.setRefNO(refNo);
-                    payment.setRefDate(currentDateAndTime);
-                    payment.setAmount(mOrder.getAmount());
-
-                    // updating...
-                    // khuyến mãi theo từng sản phẩm
-                    payment.setPromotionItemsAmount(0);
-                    // sau khi khuyến mãi ...
-                    payment.setTotalAmount(mOrder.getAmount());
-                    payment.setPromotionRate(0);
-                    payment.setPromotionAmount(0);
-                    payment.setDiscountAmount(0);
-                    payment.setPreTaxAmount(mOrder.getAmount());
-
-                    payment.setTotalAmount(mOrder.getAmount());
-                    payment.setReceiveAmount(moneyReceive);
-                    payment.setReturnAmount(moneyReceive - mOrder.getAmount());
-                    payment.setPaymentStatus(3);
-                    payment.setOrderID(mOrder.getOrderID());
-                    payment.setOrderType(1);
-                    payment.setTableName("null");
-                    payment.setCreatedDate(currentDateAndTime);
-                    paymentPresenter.addPayment(payment);
-
-                    // add payment detail
-                    for(int i=0; i<AddOrderFragment.lstItemSelected.size(); i++){
-                        Item item = AddOrderFragment.lstItemSelected.get(i);
-
-                        long time = System.currentTimeMillis();
-                        PaymentDetail paymentDetail = new PaymentDetail();
-                        paymentDetail.setPaymentDetailID("de"+time);
-                        paymentDetail.setPaymentID(payment.getRefID());
+                        Payment payment = new Payment();
+                        payment.setRefID("ref"+timeMillis);
                         //
+                        payment.setRefType(550);
+                        payment.setRefNO(refNo);
+                        payment.setRefDate(currentDateAndTime);
+                        payment.setAmount(mOrder.getAmount());
+
+                        // updating...
+                        // khuyến mãi theo từng sản phẩm
+                        payment.setPromotionItemsAmount(0);
+                        // sau khi khuyến mãi ...
+                        payment.setTotalAmount(mOrder.getAmount());
+                        payment.setPromotionRate(0);
+                        payment.setPromotionAmount(0);
+                        payment.setDiscountAmount(0);
+                        payment.setPreTaxAmount(mOrder.getAmount());
+
+                        payment.setTotalAmount(mOrder.getAmount());
+                        payment.setReceiveAmount(moneyReceive);
+                        payment.setReturnAmount(moneyReceive - mOrder.getAmount());
+                        payment.setPaymentStatus(3);
+                        payment.setOrderID(mOrder.getOrderID());
+                        payment.setOrderType(1);
+                        payment.setTableName("null");
+                        payment.setCreatedDate(currentDateAndTime);
+                        paymentPresenter.addPayment(payment);
+
+                        // add payment detail
+                        for(int i=0; i<AddOrderFragment.lstItemSelected.size(); i++){
+                            Item item = AddOrderFragment.lstItemSelected.get(i);
+
+                            long time = System.currentTimeMillis();
+                            PaymentDetail paymentDetail = new PaymentDetail();
+                            paymentDetail.setPaymentDetailID("de"+time);
+                            paymentDetail.setPaymentID(payment.getRefID());
+                            //
 //                        paymentDetail.setParentID("");
 //
-                        paymentDetail.setItemID(item.getItemID());
-                        paymentDetail.setItemName(item.getItemName());
+                            paymentDetail.setItemID(item.getItemID());
+                            paymentDetail.setItemName(item.getItemName());
 //                        //
-                        paymentDetail.setRefDetailType(1);
+                            paymentDetail.setRefDetailType(1);
 //
-                        paymentDetail.setUnitID(item.getUnitID());
-                        paymentDetail.setUnitPrice(item.getPrice());
-                        paymentDetail.setQuantity(item.getQuantity());
+                            paymentDetail.setUnitID(item.getUnitID());
+                            paymentDetail.setUnitPrice(item.getPrice());
+                            paymentDetail.setQuantity(item.getQuantity());
 //                        //
-                        paymentDetail.setPromotionRate(0);
-                        paymentDetail.setPromotionAmount(0);
-                        paymentDetail.setDiscountAmount(0);
-                        paymentDetail.setAmount(item.getPrice()*item.getQuantity());
+                            paymentDetail.setPromotionRate(0);
+                            paymentDetail.setPromotionAmount(0);
+                            paymentDetail.setDiscountAmount(0);
+                            paymentDetail.setAmount(item.getPrice()*item.getQuantity());
 //
-                        paymentDetail.setSortOrder(i);
+                            paymentDetail.setSortOrder(i);
 
-                        String currentDateAndTime2 = sdf.format(new Date());
-                        paymentDetail.setCreatedDate(currentDateAndTime2);
-                        paymentDetailPresenter.addPaymentDetail(paymentDetail);
+                            String currentDateAndTime2 = sdf.format(new Date());
+                            paymentDetail.setCreatedDate(currentDateAndTime2);
+                            paymentDetailPresenter.addPaymentDetail(paymentDetail);
+                        }
+                        NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.listOrderFragment,false).build();
+                        navController.navigate(R.id.action_collectMoneyFragment_to_listOrderFragment,null, navOptions);
+
+                        // show thông báo
+                        StyleableToast.makeText(getActivity(), "Thu tiền thành công", Toast.LENGTH_LONG, R.style.mytoast).show();
                     }
-                    NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.listOrderFragment,false).build();
-                    navController.navigate(R.id.action_collectMoneyFragment_to_listOrderFragment,null, navOptions);
+                    else{
+                        StyleableToast.makeText(getActivity(), "Số tiền không hợp lệ", Toast.LENGTH_LONG, R.style.mytoast).show();
+                        return;
+                    }
 
-                    // show thông báo
-                    StyleableToast.makeText(getActivity(), "Thu tiền thành công", Toast.LENGTH_LONG, R.style.mytoast).show();
                 }
                 catch (Exception ex){
                     Log.d(TAG, "onClick: "+ex.getMessage());
@@ -315,6 +390,56 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
                     Log.d(TAG, "onClick: "+ex.getMessage());
                 }
             break;
+            case R.id.key0:
+                tienNhap.append("0");
+                EventBus.getDefault().post(tienNhap);
+                break;
+            case R.id.key1:
+                tienNhap.append("1");
+                EventBus.getDefault().post(tienNhap);
+                break;
+            case R.id.key2:
+                tienNhap.append("2");
+                EventBus.getDefault().post(tienNhap);
+                break;
+            case R.id.key3:
+                tienNhap.append("3");
+                EventBus.getDefault().post(tienNhap);
+                break;
+            case R.id.key4:
+                tienNhap.append("4");
+                EventBus.getDefault().post(tienNhap);
+                break;
+            case R.id.key5:
+                tienNhap.append("5");
+                EventBus.getDefault().post(tienNhap);
+                break;
+            case R.id.key6:
+                tienNhap.append("6");
+                EventBus.getDefault().post(tienNhap);
+                break;
+            case R.id.key7:
+                tienNhap.append("7");
+                EventBus.getDefault().post(tienNhap);
+                break;
+            case R.id.key8:
+                tienNhap.append("8");
+                EventBus.getDefault().post(tienNhap);
+                break;
+            case R.id.key9:
+                tienNhap.append("9");
+                EventBus.getDefault().post(tienNhap);
+                break;
+            case R.id.keyDel:
+                if(tienNhap.length()>0){
+                    tienNhap.deleteCharAt(tienNhap.length()-1);
+                    EventBus.getDefault().post(tienNhap);
+                }
+                else{
+                    tvKhachDua.setText("0");
+                    return;
+                }
+                break;
         }
     }
 }
