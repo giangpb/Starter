@@ -31,4 +31,35 @@ public class AdditionPresenter {
     public ArrayList<Addition> getAllAddition(){
         return additionModel.getAllAddition();
     }
+
+    /**
+     * Hàm xoá addition theo mã
+     * @param additionID
+     * @return kết quả
+     * @author giangpb on 17/03/2021
+     */
+    public boolean removeAddition(String additionID){
+        return additionModel.removeAddition(additionID);
+    }
+
+    /**
+     * Hàm thêm addition vào database
+     * @param addition
+     * @return kết quả
+     * @author giangpb on 17/03/2021
+     */
+    public boolean addAddition(Addition addition){
+        return additionModel.addAddition(addition);
+    }
+
+    /**
+     * Hàm check tồn tại tên
+     * -> Không cho thêm nữa
+     * @param additionName
+     * @return kết quả
+     * @author giangpb on 17/03/2021
+     */
+    public boolean checkExistAddition(String additionName){
+        return additionModel.checkExistAddition(additionName);
+    }
 }

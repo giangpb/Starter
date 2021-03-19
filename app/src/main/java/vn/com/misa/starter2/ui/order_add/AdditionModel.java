@@ -1,5 +1,6 @@
 package vn.com.misa.starter2.ui.order_add;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
@@ -16,6 +17,8 @@ import vn.com.misa.starter2.model.entity.Addition;
  */
 public class AdditionModel extends DatabaseHelper {
     private static final String TAG = "AdditionModel";
+
+    public static final String TABLE_ADDITION = "InventoryItemAddition";
 
     Context mContext;
 
@@ -50,6 +53,47 @@ public class AdditionModel extends DatabaseHelper {
     }
 
     /**
+     * Hàm thêm addition vào database
+     * @param addition
+     * @return kết quả
+     * @author giangpb on 17/03/2021
+     */
+    public boolean addAddition(Addition addition){
+        try{
+            connectSQLite();
+            ContentValues values = new ContentValues();
+            values.put("InventoryItemAdditionID", addition.getAdditionID());
+            values.put("Description", addition.getDescription());
+            values.put("InventoryItemCategoryAdditionID", addition.getInventoryItemCategoryAdditionID());
+            values.put("Position", addition.getPosition());
+            sqLiteDatabase.insert(TABLE_ADDITION, null, values);
+            return true;
+        }
+        catch (Exception ex){
+            Log.d(TAG, "addAddition: "+ex.getMessage());
+        }
+        return false;
+    }
+
+    /**
+     * Hàm xoá addition theo mã
+     * @param additionID
+     * @return kết quả
+     * @author giangpb on 17/03/2021
+     */
+    public boolean removeAddition(String additionID){
+        try{
+            connectSQLite();
+            sqLiteDatabase.delete(TABLE_ADDITION, "InventoryItemAdditionID = ?",new String[]{additionID});
+            return true;
+        }
+        catch (Exception ex){
+            Log.d(TAG, "removeAddition: "+ex.getMessage());
+        }
+        return false;
+    }
+
+    /**
      * Hàm lấy toàn bộ danh mục bổ sung
      * @return danh sách
      * @author giangpb
@@ -59,7 +103,7 @@ public class AdditionModel extends DatabaseHelper {
         try{
             ArrayList<Addition> data = new ArrayList<>();
             connectSQLite();
-            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM InventoryItemAddition", null);
+            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM InventoryItemAddition ORDER BY Position DESC", null);
             while (cursor.moveToNext()){
                 Addition addition = new Addition();
                 addition.setAdditionID(cursor.getString(0));
@@ -73,5 +117,27 @@ public class AdditionModel extends DatabaseHelper {
             Log.d(TAG, "getAllAddition: "+ex.getMessage());
         }
         return null;
+    }
+
+    /**
+     * Hàm check tồn tại tên
+     * -> Không cho thêm nữa
+     * @param additionName
+     * @return kết quả
+     * @author giangpb on 17/03/2021
+     */
+    public boolean checkExistAddition(String additionName){
+        try{
+            connectSQLite();
+            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM InventoryItemAddition WHERE Description = ?", new String[]{additionName});
+            if (cursor.moveToNext())
+                return true;
+            cursor.close();
+            return false;
+        }
+        catch (Exception ex){
+            Log.d(TAG, "checkExistAddition: "+ex.getMessage());
+        }
+        return true;
     }
 }

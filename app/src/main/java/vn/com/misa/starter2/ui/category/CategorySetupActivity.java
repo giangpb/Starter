@@ -4,17 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import vn.com.misa.starter2.R;
-import vn.com.misa.starter2.adapter.CategoryAdapter;
 import vn.com.misa.starter2.adapter.CategorySetupAdapter;
-import vn.com.misa.starter2.model.entity.Category;
 import vn.com.misa.starter2.presenter.CategoryPresenter;
-import vn.com.misa.starter2.ui.order_add.ICategoryListener;
 
 public class CategorySetupActivity extends AppCompatActivity{
     private static final String TAG = "CategorySetupActivity";
@@ -26,10 +27,18 @@ public class CategorySetupActivity extends AppCompatActivity{
     CategorySetupAdapter categoryAdapter;
     private CategoryPresenter categoryPresenter;
 
+    @BindView(R.id.rlAddCategory)
+    RelativeLayout rlAddCategory;
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_setup);
+        ButterKnife.bind(this);
 
         // khởi tao các điều khiển
         addControls();
@@ -48,6 +57,8 @@ public class CategorySetupActivity extends AppCompatActivity{
         rcvLstCategory.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
     }
 
+
+
     private void addEvents(){
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +71,11 @@ public class CategorySetupActivity extends AppCompatActivity{
                 }
             }
         });
+
+        rlAddCategory.setOnClickListener((v -> {
+            Intent intent = new Intent(this, AddCategoryActivity.class);
+            startActivity(intent);
+        }));
     }
 
 }

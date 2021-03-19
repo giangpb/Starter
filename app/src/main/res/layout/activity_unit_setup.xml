@@ -37,7 +37,7 @@
         android:layout_marginRight="@dimen/margin_normal"
         android:layout_height="@dimen/toolbar_height_size">
         <ImageView
-            android:id="@+id/ivAddUnit"
+            android:id="@+id/ivAddAddition"
             android:layout_width="50dp"
             android:src="@drawable/ic_add_blue_color"
             android:padding="@dimen/margin_normal"
@@ -49,7 +49,7 @@
             android:id="@+id/etUnitName"
             android:layout_width="match_parent"
             style="@style/et_unit"
-            android:layout_toLeftOf="@id/ivAddUnit"
+            android:layout_toLeftOf="@id/ivAddAddition"
             android:paddingLeft="@dimen/margin_normal"
             android:hint="@string/text_nhap_ten_so_thich_phuc_vu"
             android:background="@drawable/custom_border_unit"

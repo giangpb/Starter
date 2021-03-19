@@ -48,6 +48,9 @@ public class ListOrderFragment extends Fragment implements IOrderListener{
     // order empty
     LinearLayout llOrderEmpty;
 
+    // Tìm kiếm order
+    private ImageView ivSearch;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -66,7 +69,7 @@ public class ListOrderFragment extends Fragment implements IOrderListener{
         rcvListOrder= view.findViewById(R.id.rcvListOrder);
         llOrderEmpty = view.findViewById(R.id.llOrderEmpty);
 
-
+        ivSearch = view.findViewById(R.id.ivSearch);
 
         orderPresenter = new OrderPresenter(getContext());
 
@@ -100,6 +103,11 @@ public class ListOrderFragment extends Fragment implements IOrderListener{
      * @date 28/01/2021
      */
     private void addEvents(){
+
+        // sự kiện tìm kiếm
+        ivSearch.setOnClickListener((view)->{
+
+        });
 
         // sự kiện mở drawer navigation
         ivOpenDrawerNavigation.setOnClickListener(new View.OnClickListener() {
