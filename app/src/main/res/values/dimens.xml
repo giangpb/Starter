@@ -65,4 +65,7 @@
     <dimen name="font_vnd">20dp</dimen>
 
     <dimen name="text_view_button">60dp</dimen>
+
+    <!-- inter spacing between RecyclerView's Item-->
+    <dimen name="photos_list_spacing">10dp</dimen>
 </resources>

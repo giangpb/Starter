@@ -84,7 +84,7 @@
 
     <style name="et_unit" parent="Widget.AppCompat.EditText">
         <item name="fontFamily">@font/font_intel</item>
-        <item name="android:textSize">@dimen/font_large</item>
+        <item name="android:textSize">@dimen/font_normal</item>
     </style>
 
     <style name="text_count_item" parent="Widget.AppCompat.TextView">
@@ -98,6 +98,15 @@
     <style name="btn_order" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="cornerRadius">@dimen/reset</item>
         <item name="android:letterSpacing">0</item>
+        <item name="android:paddingTop">@dimen/margin_stt3</item>
+        <item name="android:paddingBottom">@dimen/margin_stt3</item>
+        <item name="android:insetBottom">@dimen/reset</item>
+        <item name="android:insetTop">@dimen/reset</item>
+    </style>
+
+    <style name="btn" parent="Widget.MaterialComponents.Button">
+        <item name="android:letterSpacing">0</item>
+        <item name="cornerRadius">@dimen/reset</item>
         <item name="android:paddingTop">@dimen/margin_stt3</item>
         <item name="android:paddingBottom">@dimen/margin_stt3</item>
         <item name="android:insetBottom">@dimen/reset</item>

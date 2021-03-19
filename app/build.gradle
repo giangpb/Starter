@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
 }
 
+apply plugin: 'com.jakewharton.butterknife'
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -57,5 +59,12 @@ dependencies {
 
     // toast
     implementation 'com.muddzdev:styleabletoast:2.2.4'
+
+    // event bus
+    implementation 'org.greenrobot:eventbus:3.1.1'
+
+    // butterknife
+    implementation 'com.jakewharton:butterknife:10.2.3'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
 
 }

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.category.AddCategoryActivity">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_alignParentStart="true"
+        android:layout_width="match_parent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        android:layout_height="@dimen/toolbar_height_size">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="@dimen/size_ic_statusbar"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="@dimen/margin_large"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"                android:src="@drawable/ic_icon_back"
+                android:layout_height="@dimen/size_ic_statusbar"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
+                style="@style/text_large"
+                android:text="@string/add_category_group"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tvTenNhom"
+        android:layout_below="@id/appBarLayout"
+        android:layout_width="match_parent"
+        android:hint="Tên nhóm(*)"
+        android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+        android:id="@+id/tvBieuTuong"
+        android:layout_width="match_parent"
+        android:layout_below="@id/tvTenNhom"
+        android:text="Biểu tượng(*)"
+        android:layout_height="wrap_content"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvListCategory"
+        android:layout_below="@id/tvBieuTuong"
+        android:layout_above="@id/btnSave"
+        tools:itemCount="14"
+        app:spanCount="5"
+        tools:listitem="@layout/item_show_icon"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        style="@style/btn"
+        android:text="@string/text_btn_save_food"
+        android:layout_margin="@dimen/font_normal"
+        android:layout_height="@dimen/toolbar_height_size"/>
+</RelativeLayout>

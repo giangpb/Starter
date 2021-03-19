@@ -168,5 +168,9 @@
         <item>Tháng này</item>
         <item>Khác</item>
     </string-array>
+    <string name="add_category_group">Thêm nhóm thực đơn</string>
+
+    <!--Integer Value that number of column in RecyclerView-->
+    <integer name="photo_list_preview_columns">5</integer>
 
 </resources>

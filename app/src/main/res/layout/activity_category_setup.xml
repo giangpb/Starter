@@ -37,6 +37,7 @@
         tools:listitem="@layout/item_setup_category"
         android:layout_height="wrap_content"/>
     <RelativeLayout
+        android:id="@+id/rlAddCategory"
         android:clickable="true"
         android:background="?android:selectableItemBackground"
         android:layout_width="match_parent"
