@@ -25,6 +25,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"                android:src="@drawable/ic_icon_back"
                 android:layout_height="@dimen/size_ic_statusbar"/>
             <TextView
+                android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_centerInParent="true"
                 style="@style/text_large"
@@ -35,26 +36,38 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tvTenNhom"
+        app:errorEnabled="true"
+        android:layout_marginLeft="@dimen/margin_normal"
+        android:layout_marginRight="@dimen/margin_normal"
         android:layout_below="@id/appBarLayout"
         android:layout_width="match_parent"
+        app:boxBackgroundColor="@color/white"
         android:hint="Tên nhóm(*)"
         android:layout_height="wrap_content">
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etCategoryName"
             android:layout_width="match_parent"
+            style="@style/et_normal"
+            app:endIconMode="clear_text"
             android:layout_height="match_parent"/>
     </com.google.android.material.textfield.TextInputLayout>
     <TextView
         android:id="@+id/tvBieuTuong"
         android:layout_width="match_parent"
+        style="@style/text_normal"
+        android:padding="@dimen/margin_normal"
         android:layout_below="@id/tvTenNhom"
-        android:text="Biểu tượng(*)"
+        android:text="@string/text_bieu_tuong"
         android:layout_height="wrap_content"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvListCategory"
         android:layout_below="@id/tvBieuTuong"
         android:layout_above="@id/btnSave"
         tools:itemCount="14"
+        android:layout_marginLeft="@dimen/margin_normal"
+        android:layout_marginRight="@dimen/margin_normal"
         app:spanCount="5"
+        android:overScrollMode="never"
         tools:listitem="@layout/item_show_icon"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         android:layout_width="match_parent"

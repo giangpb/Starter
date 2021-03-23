@@ -6,15 +6,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import vn.com.misa.starter2.R;
+import vn.com.misa.starter2.model.entity.Category;
+import vn.com.misa.starter2.presenter.CategoryPresenter;
+import vn.com.misa.starter2.util.GIANGUtils;
+import vn.com.misa.starter2.util.ItemDecorationAlbumColumns;
 
-public class AddCategoryActivity extends AppCompatActivity {
+public class AddCategoryActivity extends AppCompatActivity implements IIConListener {
 
 
     @BindView(R.id.ivBack)
@@ -22,24 +34,54 @@ public class AddCategoryActivity extends AppCompatActivity {
 
     @BindView(R.id.rcvListCategory)
     RecyclerView rcvListCategory;
+
     private List<Icon> data;
     private IconAdapter iconAdapter;
+
+    @BindView(R.id.btnSave)
+    MaterialButton btnSave;
+
+    @BindView(R.id.etCategoryName)
+    TextInputEditText etCategoryName;
+
+    @BindView(R.id.tvTitle)
+    TextView tvTitle;
+
+    private Icon mIcon = null;
+
+    //
+    private CategoryPresenter categoryPresenter;
+    private boolean isCheckUpdate = false;
+
+    public static int ICON_SELECTED = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_category);
         ButterKnife.bind(this);
+        Category category = (Category) getIntent().getSerializableExtra("category");
+        if (category ==null){
+            ICON_SELECTED = 0;
+            tvTitle.setText(getString(R.string.add_category_group));
+        }
+        else {
+            ICON_SELECTED = category.getSortOrder()-1;
+            tvTitle.setText(getString(R.string.update_category_group));
+            etCategoryName.setText(category.getCategoryName());
+            isCheckUpdate = true;
+        }
+        categoryPresenter = new CategoryPresenter(this);
         initCategory();
         initListView();
         addEvents();
     }
 
     private void initListView(){
-        iconAdapter = new IconAdapter(this, data);
+        iconAdapter = new IconAdapter(this, data, this);
         rcvListCategory.setAdapter(iconAdapter);
         rcvListCategory.setHasFixedSize(true);
-        rcvListCategory.setLayoutManager(new GridLayoutManager(this,5));
+        rcvListCategory.setLayoutManager(new GridLayoutManager(AddCategoryActivity.this,5));
         rcvListCategory.addItemDecoration(new ItemDecorationAlbumColumns(
                 getResources().getDimensionPixelSize(R.dimen.photos_list_spacing),
                 getResources().getInteger(R.integer.photo_list_preview_columns)));
@@ -80,7 +122,49 @@ public class AddCategoryActivity extends AppCompatActivity {
         ivBack.setOnClickListener((view)->{
             onBackPressed();
         });
+
+        btnSave.setOnClickListener((v)->{
+            try{
+                String categoryName = etCategoryName.getText().toString();
+                if (categoryName.isEmpty()){
+                    etCategoryName.setError(String.format(getString(R.string.errr_input),"Tên nhóm"));
+//                    GIANGUtils.getInstance().showMessage(this,"Tên nhóm không được để trống !", 1);
+                }
+                else {
+                    if(isCheckUpdate){
+                        // xử lý cập nhật
+                    }
+                    else{
+                        // xử lý lưu danh mục xuống db
+                        Category category = new Category();
+                        long time = System.currentTimeMillis();
+                        category.setCategoryID("ca"+time);
+                        category.setCategoryName(categoryName);
+                        category.setIconPath(mIcon.getPath());
+                        category.setIconType(mIcon.getType());
+                        category.setSortOrder(categoryPresenter.getListCategory().size());
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
+                        String currentDateAndTime = sdf.format(new Date());
+                        category.setCreatedDate(currentDateAndTime);
+                        boolean kq = categoryPresenter.addCategory(category);
+                        if (kq){
+                            finish();
+                        }
+                        else {
+                            GIANGUtils.getInstance().showMessage(this,"Lỗi thêm danh mục",0);
+                        }
+                    }
+                }
+            }
+            catch (Exception exx){
+                exx.printStackTrace();
+            }
+        });
     }
 
 
+    @Override
+    public void onIconSelected(Icon icon) {
+        mIcon = icon;
+    }
 }

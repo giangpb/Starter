@@ -34,4 +34,26 @@ public class CategoryPresenter {
     public ArrayList<Category> getListCategory(){
         return categoryModel.getListCategory();
     }
+
+    /**
+     * Hàm thêm danh mục
+     * @param category
+     * @return kết quả
+     * @author giangpb
+     * @date 20/03/2021
+     */
+    public boolean addCategory(Category category){
+        return categoryModel.addCategory(category);
+    }
+
+    /**
+     * Hàm xoá danh mục trong db
+     * @param categoryID mã danh mục
+     * @return kết quả
+     * @author giangpb
+     * @date 20/03/2021
+     */
+    public boolean deleteCategory(String categoryID){
+        return categoryModel.deleteCategory(categoryID);
+    }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="match_parent"
+<RelativeLayout
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
@@ -34,14 +35,24 @@
         android:id="@+id/rcvLstCategory"
         android:layout_width="match_parent"
         tools:itemCount="4"
+        android:layout_below="@id/appBarLayout"
+        android:layout_above="@id/rlAddCategory"
         tools:listitem="@layout/item_setup_category"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
     <RelativeLayout
         android:id="@+id/rlAddCategory"
         android:clickable="true"
+        android:layout_alignParentBottom="true"
         android:background="?android:selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize">
+        <View
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:background="?android:attr/dividerVertical"
+            android:layout_height="@dimen/divider_size_small">
+        </View>
         <ImageView
             android:id="@+id/ivAddCategory"
             android:layout_width="wrap_content"
@@ -65,4 +76,4 @@
             android:layout_height="@dimen/divider_size_small">
         </View>
     </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>

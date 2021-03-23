@@ -15,9 +15,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.adapter.CategorySetupAdapter;
+import vn.com.misa.starter2.model.entity.Category;
 import vn.com.misa.starter2.presenter.CategoryPresenter;
+import vn.com.misa.starter2.util.GIANGUtils;
 
-public class CategorySetupActivity extends AppCompatActivity{
+public class CategorySetupActivity extends AppCompatActivity implements CategorySetupAdapter.ICategorySetupListener{
     private static final String TAG = "CategorySetupActivity";
 
     // khai báo các điều khiển
@@ -51,13 +53,17 @@ public class CategorySetupActivity extends AppCompatActivity{
         ivBack = findViewById(R.id.ivBack);
         rcvLstCategory = findViewById(R.id.rcvLstCategory);
         categoryPresenter = new CategoryPresenter(this);
-        categoryAdapter = new CategorySetupAdapter(this, categoryPresenter.getListCategory());
+        categoryAdapter = new CategorySetupAdapter(this , this);
         rcvLstCategory.setHasFixedSize(true);
         rcvLstCategory.setAdapter(categoryAdapter);
         rcvLstCategory.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
     }
 
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        categoryAdapter.addData(categoryPresenter.getListCategory());
+    }
 
     private void addEvents(){
         ivBack.setOnClickListener(new View.OnClickListener() {
@@ -78,4 +84,17 @@ public class CategorySetupActivity extends AppCompatActivity{
         }));
     }
 
+    @Override
+    public void onUpdate(Category category) {
+        Intent intent = new Intent(this, AddCategoryActivity.class);
+        intent.putExtra("category",category);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDelete(Category category) {
+
+        // thêm cái popup trước khi xoá
+        categoryPresenter.deleteCategory(category.getCategoryID());
+    }
 }
