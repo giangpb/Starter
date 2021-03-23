@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,12 +25,19 @@ import vn.com.misa.starter2.model.entity.Category;
 public class CategorySetupAdapter extends RecyclerView.Adapter<CategorySetupAdapter.MyHolder> {
     private static final String TAG = "CategorySetupAdapter";
 
+    private ICategorySetupListener iCategorySetupListener;
+
     private Context mContext;
     private ArrayList<Category> mData;
 
-    public CategorySetupAdapter(Context mContext, ArrayList<Category> mData) {
+    public CategorySetupAdapter(Context mContext , ICategorySetupListener iCategorySetupListener) {
         this.mContext = mContext;
+        this.iCategorySetupListener = iCategorySetupListener;
+    }
+
+    public void addData(ArrayList<Category> mData){
         this.mData = mData;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -66,12 +74,41 @@ public class CategorySetupAdapter extends RecyclerView.Adapter<CategorySetupAdap
     public class MyHolder extends RecyclerView.ViewHolder {
         private FloatingActionButton fabImage;
         private TextView tvNameCategory;
+        private ImageView ivUpdateCategory;
+        private ImageView ivDelete;
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);
 
             fabImage = itemView.findViewById(R.id.fabImageCate);
             tvNameCategory = itemView.findViewById(R.id.tvCategoryName);
+            ivUpdateCategory = itemView.findViewById(R.id.ivUpdateCategory);
+            ivDelete = itemView.findViewById(R.id.ivDelete);
+
+            ivUpdateCategory.setOnClickListener((v)->{
+                try{
+                    iCategorySetupListener.onUpdate(mData.get(getAdapterPosition()));
+                }
+                catch (Exception ex){
+                    Log.d(TAG, "MyHolder: "+ex.getMessage());
+                }
+            });
+
+            ivDelete.setOnClickListener((v)->{
+                try{
+                    iCategorySetupListener.onDelete(mData.get(getAdapterPosition()));
+                    mData.remove(mData.get(getAdapterPosition()));
+                    notifyItemRemoved(getAdapterPosition());
+                }
+                catch (Exception ex){
+                    Log.d(TAG, "MyHolder: "+ex.getMessage());
+                }
+            });
         }
+    }
+
+    public interface ICategorySetupListener{
+        void onUpdate(Category category);
+        void onDelete(Category category);
     }
 }

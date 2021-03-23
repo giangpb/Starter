@@ -169,8 +169,14 @@
         <item>Khác</item>
     </string-array>
     <string name="add_category_group">Thêm nhóm thực đơn</string>
+    <string name="update_category_group">Sửa nhóm thực đơn</string>
+    <string name="text_bieu_tuong"><span>
+		<span>Biểu tượng</span>
+		<span style="color: red">(*)</span>
+	</span></string>
 
     <!--Integer Value that number of column in RecyclerView-->
     <integer name="photo_list_preview_columns">5</integer>
+    <string name="errr_input">%s không được để trống!!</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package vn.com.misa.starter2.ui.category;
+package vn.com.misa.starter2.util;
 
 import android.graphics.Rect;
 import android.view.View;
