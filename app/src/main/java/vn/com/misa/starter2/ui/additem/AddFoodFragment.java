@@ -1,5 +1,6 @@
 package vn.com.misa.starter2.ui.additem;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,8 +22,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -43,6 +47,7 @@ import vn.com.misa.starter2.model.entity.Item;
 import vn.com.misa.starter2.model.entity.Unit;
 import vn.com.misa.starter2.presenter.CategoryPresenter;
 import vn.com.misa.starter2.ui.setuplistitem.ItemFoodPresenter;
+import vn.com.misa.starter2.util.GIANGUtils;
 
 /**
  * - Fragment thêm món ăn
@@ -159,15 +164,18 @@ public class AddFoodFragment extends Fragment{
         startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
     }
 
-
     private void addEvents(){
         ivBackToSetupMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.setupMenuFragment,false).build();
-//                navController.navigate(R.id.action_addFoodFragment_to_setupMenuFragment,null,navOptions);
-                getActivity().onBackPressed();
+                NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.setupMenuFragment,false).build();
+                navController.navigate(R.id.action_addFoodFragment_to_setupMenuFragment,null,navOptions);
             }
+        });
+
+        etFoodPrice.setOnTouchListener((v, e)->{
+            showDialogCalulator();
+            return true;
         });
 
         ivAddUnit.setOnClickListener(new View.OnClickListener() {
@@ -190,7 +198,6 @@ public class AddFoodFragment extends Fragment{
                 openGallery();
             }
         });
-
 
 //        etFoodPrice.setOnTouchListener(new View.OnTouchListener() {
 //            @Override
@@ -220,11 +227,15 @@ public class AddFoodFragment extends Fragment{
                     item.setItemName(etFoodName.getText().toString());
                     item.setPrice(Integer.parseInt(etFoodPrice.getText().toString()));
                     item.setItemCode(etFoodName.getText().toString().toUpperCase());
-                    item.setPosition(mItemFoodPresenter.getAllItem().size());
-                    mItemFoodPresenter.getItemInforInput(item);
-
-                    NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.setupMenuFragment,false).build();
-                    navController.navigate(R.id.action_addFoodFragment_to_setupMenuFragment,null,navOptions);
+                    item.setPosition(mItemFoodPresenter.positionItemInCategory(category.getCategoryID())+1);
+                    boolean kq = mItemFoodPresenter.addItem(item);
+                    if (kq){
+                        NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.setupMenuFragment,false).build();
+                        navController.navigate(R.id.action_addFoodFragment_to_setupMenuFragment,null,navOptions);
+                    }
+                    else{
+                        GIANGUtils.getInstance().showMessage(getActivity(),"Thêm lỗi !",0);
+                    }
                 }
                 catch (Exception ex){
                     Log.d(TAG, "onClick: "+ex.getMessage());
@@ -251,8 +262,6 @@ public class AddFoodFragment extends Fragment{
         final EditText etUnitName = alertLayout.findViewById(R.id.etUnitName);
         final MaterialButton btnAddUnit = alertLayout.findViewById(R.id.btnAddUnit);
         final MaterialButton btnCancel = alertLayout.findViewById(R.id.btnCancel);
-
-
 
         AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
         alert.setView(alertLayout);
@@ -306,17 +315,20 @@ public class AddFoodFragment extends Fragment{
      * @date: 25/01/2021
      */
     private void showDialogCalulator(){
-        LayoutInflater inflater = getLayoutInflater();
-        View alertLayout = inflater.inflate(R.layout.dialog_caculator, null);
-//        final EditText etUsername = alertLayout.findViewById(R.id.etClassName);
-//        final MaterialButton btnAddClass = alertLayout.findViewById(R.id.btnAddClass);
+        View alertLayout = getLayoutInflater().inflate(R.layout.view_input_money, null);
+        ImageView ivCloseDialog = alertLayout.findViewById(R.id.ivCloseDialog);
 
-        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         alert.setView(alertLayout);
         alert.setCancelable(false);
         AlertDialog dialog = alert.create();
         dialog.setCanceledOnTouchOutside(true);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        //
+        ivCloseDialog.setOnClickListener(v->{
+            dialog.dismiss();
+        });
         dialog.show();
     }
 

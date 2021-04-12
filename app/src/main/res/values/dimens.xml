@@ -15,6 +15,10 @@
 <!--    Toolbar-->
     <dimen name="toolbar_height_size">50dp</dimen>
 
+<!--    fab-->
+    <dimen name="size_fab_mini">40dp</dimen>
+    <dimen name="size_fab">56dp</dimen>
+
 <!--    view-->
     <dimen name="margin_divider_dot">2dp</dimen>
     <dimen name="margin_small">4dp</dimen>
@@ -26,6 +30,7 @@
 <!-- textView   -->
     <dimen name="font_large">18dp</dimen>
     <dimen name="font_normal">14dp</dimen>
+    <dimen name="font_21">21dp</dimen>
     <dimen name="font_normal_bottomSheet">15dp</dimen>
     <dimen name="font_large_completed">28dp</dimen>
 

@@ -276,15 +276,17 @@ public class ItemFoodModel extends DatabaseHelper {
         try{
             connectSQLite();
             ContentValues values = new ContentValues();
-            values.put("ItemID", item.getItemID());
-            values.put("CategoryID", item.getCategoryID());
-            values.put("ItemCode", item.getItemCode());
-            values.put("ItemName", item.getItemCode());
+            values.put("InventoryItemID", item.getItemID());
+            values.put("InventoryItemCategoryID", item.getCategoryID());
+            values.put("InventoryItemCode", item.getItemCode());
+            values.put("InventoryItemName", item.getItemCode());
             values.put("Price", item.getPrice());
             values.put("UnitID", item.getUnitID());
             if(item.getImage()!=null)
                 values.put("ImagePath", item.getImage());
             values.put("Position", item.getPosition());
+            values.put("Quantity", 0);
+            values.put("InActive", false);
             sqLiteDatabase.insert(SelectRestaurantFragment.TABLE_Item,null,values);
             mIAddItemModel.addItemSuccess();
             return true;
@@ -294,6 +296,28 @@ public class ItemFoodModel extends DatabaseHelper {
         }
         mIAddItemModel.addItemFalse();
         return false;
+    }
+
+    /**
+     * Hàm lấy vị trí item thêm mới bởi mã danh mục
+     * @param categoryID
+     * @return
+     */
+    public int positionItemInCategory(String categoryID){
+        try{
+            int pos = 0;
+            connectSQLite();
+            Cursor cursor = sqLiteDatabase.rawQuery("SELECT COUNT(*) FROM InventoryItem WHERE InventoryItemCategoryID =?", new String[]{categoryID});
+            if (cursor.moveToNext()){
+                pos = cursor.getInt(0);
+            }
+            cursor.close();
+            return pos;
+        }
+        catch (Exception ex){
+            Log.d(TAG, "positionItemInCategory: "+ex.getMessage());
+        }
+        return -1;
     }
 
 

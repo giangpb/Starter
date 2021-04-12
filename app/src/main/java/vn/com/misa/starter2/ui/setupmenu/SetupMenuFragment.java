@@ -7,8 +7,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.navigation.NavController;
-import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -29,15 +29,11 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.List;
 
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.adapter.ListMenuPagerAdapter;
 import vn.com.misa.starter2.model.entity.Category;
 import vn.com.misa.starter2.presenter.CategoryPresenter;
-import vn.com.misa.starter2.ui.setuplistitem.IOnClick;
-import vn.com.misa.starter2.ui.setuplistitem.ItemFoodPresenter;
-import vn.com.misa.starter2.ui.setuplistitem.ItemListSetupMenuFragment;
 
 /**
  * - Fragment thiết lập thực đơn
@@ -94,18 +90,25 @@ public class SetupMenuFragment extends Fragment{
 
         // khởi tạo viewpager
         mData = categoryPresenter.getListCategory();
-        menuPagerAdapter = new ListMenuPagerAdapter(getActivity(),mData);
+//        menuPagerAdapter = new ListMenuPagerAdapter(getActivity(),mData);
+        menuPagerAdapter = new ListMenuPagerAdapter(getParentFragmentManager(), getLifecycle(),mData);
         viewPagerListFoodMenu = view.findViewById(R.id.viewPagerListFoodMenu);
         tabLayout = view.findViewById(R.id.tabLayout);
         viewPagerListFoodMenu.setAdapter(menuPagerAdapter);
+        viewPagerListFoodMenu.setOffscreenPageLimit(10);
 
-        new TabLayoutMediator(tabLayout, viewPagerListFoodMenu,
-                new TabLayoutMediator.TabConfigurationStrategy() {
-                    @Override public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                        tab.setText(mData.get(position).getCategoryName());
-                        tab.setIcon(getMyDrawable(getActivity(),mData.get(position).getIconPath()));
-                    }
-                }).attach();
+        new TabLayoutMediator(tabLayout, viewPagerListFoodMenu, ((tab, position) -> {
+            tab.setText(mData.get(position).getCategoryName());
+            tab.setIcon(getMyDrawable(getActivity(), mData.get(position).getIconPath()));
+        })).attach();
+
+//        new TabLayoutMediator(tabLayout, viewPagerListFoodMenu,
+//                new TabLayoutMediator.TabConfigurationStrategy() {
+//                    @Override public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+//                        tab.setText(mData.get(position).getCategoryName());
+//                        tab.setIcon(getMyDrawable(getActivity(),mData.get(position).getIconPath()));
+//                    }
+//                }).attach();
 
         // khởi tạo các sự kiện
 

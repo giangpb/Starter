@@ -81,8 +81,8 @@ public class FinishSetupFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try{
-//                    NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.setupMenuFragment,false).build();
-//                    navController.navigate(R.id.action_finishSetupFragment_to_setupMenuFragment,null,navOptions);
+                    //NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.setupMenuFragment,false).build();
+                    //navController.navigate(R.id.action_finishSetupFragment_to_setupMenuFragment,null,navOptions);
                     getActivity().onBackPressed();
                 }
                 catch (Exception ex){

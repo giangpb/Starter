@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +36,9 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.honorato.multistatetogglebutton.MultiStateToggleButton;
 
 import java.text.DecimalFormat;
@@ -56,13 +60,14 @@ import vn.com.misa.starter2.model.entity.OrderDetail;
 import vn.com.misa.starter2.presenter.CategoryPresenter;
 import vn.com.misa.starter2.ui.listorder.OrderPresenter;
 import vn.com.misa.starter2.ui.setuplistitem.ItemFoodPresenter;
+import vn.com.misa.starter2.util.GIANGUtils;
 
 /**
  * Lớp chọn món (add order)
  * @author GIANG PHAN
  * @date 28/01/2021
  */
-public class AddOrderFragment extends Fragment implements ICategoryListener, IFoodListener {
+public class AddOrderFragment extends Fragment implements ICategoryListener, IFoodListener, View.OnClickListener {
     private static final String TAG = "AddOrderFragment";
 
     private CategoryPresenter categoryPresenter;
@@ -70,6 +75,8 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
 
     // format tiền
     private DecimalFormat decimalFormat;
+
+    private EditText etValue;
 
     // chi tiết hoá đơn
     private OrderDetailPresenter mOrderDetailPresenter;
@@ -109,6 +116,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
 
     private TextView tvItemCount;
     private TextView tvItemCountLst;
+    private TextView tvTableName;
     //
     private int itemQuantitySelected;
 
@@ -172,6 +180,8 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
 
         fabSelectTable = view.findViewById(R.id.fabSelectTable);
         fabSelectDiscount = view.findViewById(R.id.fabSelectDiscount);
+        tvTableName = view.findViewById(R.id.tvTableName);
+        tvTableName.setVisibility(View.GONE);
 
         // lst bottom sheet
         tvItemCountLst = view.findViewById(R.id.tvItemCountLst);
@@ -278,6 +288,15 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         navController = Navigation.findNavController(view);
     }
 
+    private boolean checkQuantityInList(ArrayList<Item> lstItemSelected){
+        for(Item item :lstItemSelected){
+            if (item.getQuantity()>0){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Hàm cập nhật số lượng danh mục theo sản phẩm chọn
      * @author giangpb
@@ -308,8 +327,15 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         if(checkPayment){
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
+        // subscriber event bbus
+        EventBus.getDefault().register(this);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 
     /**
      * hàm tạo các sự kiện onclick
@@ -327,7 +353,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
 
                     LinearLayout llRecommend = alertLayout.findViewById(R.id.llRecommend);
 
-                    ImageView ivClosePopup = alertLayout.findViewById(R.id.ivClosePopup);
+                    LinearLayout llClosePopup = alertLayout.findViewById(R.id.llClosePopup);
 
                     // events
 
@@ -358,26 +384,20 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
 
                     dialog.show();
 
-                    ivClosePopup.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            try{
-                                dialog.dismiss();
-                            }
-                            catch (Exception ex){
-                                Log.d(TAG, "onClick: "+ex.getMessage());
-                            }
+                    llClosePopup.setOnClickListener(view->{
+                        try{
+                            dialog.dismiss();
+                        }
+                        catch (Exception ex){
+                            GIANGUtils.getInstance().handlerException(ex);
                         }
                     });
-
-
                 }
                 catch (Exception ex){
                     Log.d(TAG, "onClick: "+ex.getMessage());
                 }
             }
         });
-
 
         // hển thị chọn số bàn phục vụ
         fabSelectTable.setOnClickListener(new View.OnClickListener() {
@@ -387,27 +407,142 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                     View alertLayout = getLayoutInflater().inflate(R.layout.dialog_choose_table, null);
 
                     // init controls
-                    ImageView ivClosePopup = alertLayout.findViewById(R.id.ivClosePopup);
-                    EditText etValue = alertLayout.findViewById(R.id.etValue);
-
-                    // ẩn bàn phím đi
-                    etValue.setOnTouchListener(new View.OnTouchListener(){
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            int inType = etValue.getInputType(); // backup the input type
-                            etValue.setInputType(InputType.TYPE_NULL); // disable soft input
-                            etValue.onTouchEvent(event); // call native handler
-                            etValue.setInputType(inType); // restore input type
-                            return true; // consume touch even
-                        }
-                    });
+                    LinearLayout llClosePopup = alertLayout.findViewById(R.id.llClosePopup);
+                    etValue = alertLayout.findViewById(R.id.etValue);
+                    etValue.setFocusable(false);
                     ImageButton btnClearValue = alertLayout.findViewById(R.id.btnClearValue);
 
-                    btnClearValue.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Log.d(TAG, "onClick: "+etValue.getSelectionStart());
-                            etValue.selectAll();
+                    // key_table
+                    TextView tvKey0 = alertLayout.findViewById(R.id.table_key0);
+                    TextView tvKey1 = alertLayout.findViewById(R.id.table_key1);
+                    TextView tvKey2 = alertLayout.findViewById(R.id.table_key2);
+                    TextView tvKey3 = alertLayout.findViewById(R.id.table_key3);
+                    TextView tvKey4 = alertLayout.findViewById(R.id.table_key4);
+                    TextView tvKey5 = alertLayout.findViewById(R.id.table_key5);
+                    TextView tvKey6 = alertLayout.findViewById(R.id.table_key6);
+                    TextView tvKey7 = alertLayout.findViewById(R.id.table_key7);
+                    TextView tvKey8 = alertLayout.findViewById(R.id.table_key8);
+                    TextView tvKey9 = alertLayout.findViewById(R.id.table_key9);
+                    TextView tvKeyClearAll = alertLayout.findViewById(R.id.table_keyClearAll);
+                    TextView tvKeyAccept = alertLayout.findViewById(R.id.table_keyAccept);
+                    TextView key_plus = alertLayout.findViewById(R.id.key_plus);
+                    TextView key_minus = alertLayout.findViewById(R.id.key_minus);
+
+                    StringBuilder stringBuilder=  new StringBuilder();
+                    String tableName = tvTableName.getText().toString();
+                    if (!tableName.equals("0")){
+                        etValue.setText(tableName);
+                        stringBuilder.append(tableName);
+                    }
+                    // process events
+
+
+                    tvKey0.setOnClickListener((view)->{
+                        if (stringBuilder.length()>0) {
+                            if (checkTableCount(stringBuilder)){
+                                stringBuilder.append("0");
+                                EventBus.getDefault().post(stringBuilder);
+                            }
+                        }
+                    });
+
+                    tvKey1.setOnClickListener(view->{
+                        if (checkTableCount(stringBuilder)){
+                            stringBuilder.append("1");
+                            EventBus.getDefault().post(stringBuilder);
+                        }
+                    });
+
+                    tvKey2.setOnClickListener(view->{
+                        if (checkTableCount(stringBuilder)){
+                            stringBuilder.append("2");
+                            EventBus.getDefault().post(stringBuilder);
+                        }
+                    });
+
+                    tvKey3.setOnClickListener(view->{
+                        if (checkTableCount(stringBuilder)){
+                            stringBuilder.append("3");
+                            EventBus.getDefault().post(stringBuilder);
+                        }
+                    });
+
+                    tvKey4.setOnClickListener(view->{
+                        if (checkTableCount(stringBuilder)){
+                            stringBuilder.append("4");
+                            EventBus.getDefault().post(stringBuilder);
+                        }
+                    });
+
+                    tvKey5.setOnClickListener(view->{
+                        if (checkTableCount(stringBuilder)){
+                            stringBuilder.append("5");
+                            EventBus.getDefault().post(stringBuilder);
+                        }
+                    });
+
+                    tvKey6.setOnClickListener(view->{
+                        if (checkTableCount(stringBuilder)){
+                            stringBuilder.append("6");
+                            EventBus.getDefault().post(stringBuilder);
+                        }
+                    });
+
+                    tvKey7.setOnClickListener(view->{
+                        if (checkTableCount(stringBuilder)){
+                            stringBuilder.append("7");
+                            EventBus.getDefault().post(stringBuilder);
+                        }
+                    });
+
+                    tvKey8.setOnClickListener(view->{
+                        if (checkTableCount(stringBuilder)){
+                            stringBuilder.append("8");
+                            EventBus.getDefault().post(stringBuilder);
+                        }
+                    });
+
+                    tvKey9.setOnClickListener(view->{
+                        if (checkTableCount(stringBuilder)){
+                            stringBuilder.append("9");
+                            EventBus.getDefault().post(stringBuilder);
+                        }
+                    });
+
+                    key_plus.setOnClickListener(view->{
+                        int num = Integer.parseInt(etValue.getText().toString());
+                        num ++;
+                        if (num<100){
+                            stringBuilder.delete(0,stringBuilder.length());
+                            stringBuilder.append(num);
+                            EventBus.getDefault().post(stringBuilder);
+                        }
+                    });
+
+                    key_minus.setOnClickListener(view->{
+                        int num = Integer.parseInt(etValue.getText().toString());
+                        num --;
+                        if (num>0){
+                            stringBuilder.delete(0,stringBuilder.length());
+                            stringBuilder.append(num);
+                            EventBus.getDefault().post(stringBuilder);
+                        }
+                    });
+
+                    btnClearValue.setOnClickListener(view->{
+                        if (stringBuilder.length()>0){
+                            stringBuilder.deleteCharAt(stringBuilder.length()-1);
+                            EventBus.getDefault().post(stringBuilder);
+                        }
+                    });
+
+                    tvKeyClearAll.setOnClickListener(view->{
+                        try{
+                            stringBuilder.delete(0, stringBuilder.length());
+                            EventBus.getDefault().post(stringBuilder);
+                        }
+                        catch (Exception exx){
+                            GIANGUtils.getInstance().handlerException(exx);
                         }
                     });
 
@@ -419,11 +554,24 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
                     // set Events
-                    ivClosePopup.setOnClickListener(new View.OnClickListener() {
+                    llClosePopup.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             dialog.dismiss();
                         }
+                    });
+
+                    tvKeyAccept.setOnClickListener(view->{
+                        String table = etValue.getText().toString();
+                        if (!table.equals("0")){
+                            tvTableName.setVisibility(View.VISIBLE);
+                            tvTableName.setText(stringBuilder.toString());
+                        }
+                        else{
+                            tvTableName.setVisibility(View.GONE);
+                            tvTableName.setText("0");
+                        }
+                        dialog.dismiss();
                     });
 
                     dialog.show();
@@ -433,8 +581,6 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                 }
             }
         });
-
-
 
         // sự kiện quay lại
         ivBack.setOnClickListener(new View.OnClickListener() {
@@ -487,7 +633,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
             @Override
             public void onClick(View v) {
                 try{
-                    if(lstItemSelected.size()>0){
+                    if(lstItemSelected.size()>0 ){
                         // kiểm tra order đã tồn tại trước đó hay chưa, nếu chưa thì thêm mới, có rồi thì cập nhật lại
                     if(mOrder ==null){
                         Order order =new Order();
@@ -499,12 +645,13 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                         order.setOrderStatus(1);
                         order.setAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
                         order.setItemNames(lstItemSelected.toString());
+                        order.setTableName(tvTableName.getText().toString().equals("0")?"":tvTableName.getText().toString());
                         order.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
 
                         // thêm vào order
                         orderPresenter.addOrder(order);
 
-                        // thêm danh sách vào hoá đơn
+                        // thêm danh sách vào hoá đơnA
                         for(Item item :lstItemSelected){
                             if(item.getQuantity()>0){
                                 OrderDetail orderDetail = new OrderDetail();
@@ -659,6 +806,19 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                 }
             }
         });
+    }
+
+    private boolean checkTableCount(StringBuilder stringBuilder){
+        return stringBuilder.length()<2;
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEvent(StringBuilder stringBuilder) {
+        if (stringBuilder.length() > 0) {
+            etValue.setText(stringBuilder.toString());
+        } else {
+            etValue.setText("0");
+        }
     }
 
     @Override
@@ -980,5 +1140,11 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
 
         // cập nhật sản số lượng danh mục theo sản phẩm chọn
         updateCountCategory();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+        }
     }
 }

@@ -2,6 +2,11 @@ package vn.com.misa.starter2.util;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.muddzdev.styleabletoast.StyleableToast;
@@ -19,6 +24,11 @@ public class GIANGUtils {
         if (giangUtils ==null)
             giangUtils = new GIANGUtils();
         return giangUtils;
+    }
+
+    public void setDelayView(View view){
+        new Handler().postDelayed(()->{
+        },300);
     }
 
     /**
@@ -44,4 +54,13 @@ public class GIANGUtils {
     public void showMessage(Context context, String messagse, int time){
         StyleableToast.makeText(context,messagse,time, R.style.mytoast).show();
     }
+
+    public void handlerException(Exception ex){
+        Log.d("ERR:", "handlerException: "+ex.getMessage());
+    }
+
+    public void handlerLog(String message){
+        Log.d("LOG:->>>>" ,message);
+    }
+
 }

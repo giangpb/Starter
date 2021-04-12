@@ -85,7 +85,7 @@ public class ListOrderFragment extends Fragment implements IOrderListener{
         if(orderPresenter.getAllOrder().size()>0){
             llOrderEmpty.setVisibility(View.GONE);
             rcvListOrder.setVisibility(View.VISIBLE);
-            orderAdapter = new OrderAdapter(getContext(), this,orderPresenter.getAllOrder());
+            orderAdapter = new OrderAdapter(this,orderPresenter.getAllOrder());
             rcvListOrder.setAdapter(orderAdapter);
             rcvListOrder.setHasFixedSize(true);
             rcvListOrder.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));

@@ -60,7 +60,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyHolder> {
 
     public void removeItem(Item item){
         mData.remove(item);
-        notifyDataSetChanged();
+        notifyItemRemoved(item.getPosition()-1);
     }
 
     @Override

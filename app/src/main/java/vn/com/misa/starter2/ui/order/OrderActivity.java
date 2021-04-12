@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -23,6 +24,7 @@ import vn.com.misa.starter2.ui.login.LoginActivity;
 import vn.com.misa.starter2.ui.payment.PaymentActivity;
 import vn.com.misa.starter2.ui.report.ReportActivity;
 import vn.com.misa.starter2.ui.addition.AdditionSetupActivity;
+import vn.com.misa.starter2.ui.synchdata.SynchronizeData;
 
 public class OrderActivity extends AppCompatActivity {
     private static final String TAG = "OrderActivity";
@@ -40,6 +42,7 @@ public class OrderActivity extends AppCompatActivity {
     private LinearLayout llSoThicPhucVu;
     private LinearLayout llBaoCao;
     private LinearLayout llLogout;
+    private RelativeLayout rlSynchData;
 
 
 
@@ -70,6 +73,7 @@ public class OrderActivity extends AppCompatActivity {
         llDanhSachHoaDon = findViewById(R.id.llDanhSachHoaDon);
         llDanhSachThucDon = findViewById(R.id.llDanhSachThucDon);
         llSoThicPhucVu = findViewById(R.id.llSoThicPhucVu);
+        rlSynchData = findViewById(R.id.rlSynchData);
 
         // khởi tạo sự kiện
         addEvents();
@@ -90,10 +94,10 @@ public class OrderActivity extends AppCompatActivity {
      * @author giangpb
      * @date 08/02/2021
      */
+    @SuppressLint("WrongConstant")
     private void addEvents(){
 
         llDanhSachHoaDon.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("WrongConstant")
             @Override
             public void onClick(View v) {
                 try{
@@ -108,7 +112,6 @@ public class OrderActivity extends AppCompatActivity {
         });
 
         llDanhSachThucDon.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("WrongConstant")
             @Override
             public void onClick(View v) {
                 try{
@@ -123,7 +126,6 @@ public class OrderActivity extends AppCompatActivity {
         });
 
         llSoThicPhucVu.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("WrongConstant")
             @Override
             public void onClick(View v) {
                 try{
@@ -138,7 +140,6 @@ public class OrderActivity extends AppCompatActivity {
         });
 
         llBaoCao.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("WrongConstant")
             @Override
             public void onClick(View v) {
                 try{
@@ -149,6 +150,16 @@ public class OrderActivity extends AppCompatActivity {
                 catch (Exception ex){
                     Log.d(TAG, "onClick: "+ex.getMessage());
                 }
+            }
+        });
+        rlSynchData.setOnClickListener(v->{
+            try{
+                drawerLayout.closeDrawer(Gravity.START);
+                Intent intentSynch= new Intent(OrderActivity.this, SynchronizeData.class);
+                startActivity(intentSynch);
+            }
+            catch (Exception ex){
+                Log.d(TAG, "onClick: "+ex.getMessage());
             }
         });
 
@@ -169,43 +180,6 @@ public class OrderActivity extends AppCompatActivity {
             }
         });
 
-//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @SuppressLint("WrongConstant")
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                switch (item.getItemId()){
-//                    case R.id.mnu_danh_sach_hoa_don:
-//                        drawerLayout.closeDrawer(Gravity.START);
-//                        Intent intentPayment = new Intent(OrderActivity.this, PaymentActivity.class);
-//                        startActivity(intentPayment);
-//                        return true;
-//                    case R.id.mnuLogout:
-//                        Intent intent = new Intent(OrderActivity.this, LoginActivity.class);
-//                        startActivity(intent);
-//                        SharedPreferences.Editor editor = sharedPreferences.edit();
-//                        editor.clear();
-//                        editor.commit();
-//                        finish();
-//                        return true;
-//                    case R.id.mnuBaoCao:
-//                        drawerLayout.closeDrawer(Gravity.START);
-//                        Intent intentReport = new Intent(OrderActivity.this, ReportActivity.class);
-//                        startActivity(intentReport);
-//                        return true;
-//                    case R.id.mnuDanhSachThucDon:
-//                        drawerLayout.closeDrawer(Gravity.START);
-//                        Intent intentCate = new Intent(OrderActivity.this, CategorySetupActivity.class);
-//                        startActivity(intentCate);
-//                        return true;
-//                    case R.id.mnuSoThichPhucVu:
-//                        Intent intentUnit = new Intent(OrderActivity.this, UnitSetupActivity.class);
-//                        startActivity(intentUnit);
-//                        drawerLayout.closeDrawer(Gravity.START);
-//                        return true;
-//                }
-//                return false;
-//            }
-//        });
     }
 
 

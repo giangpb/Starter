@@ -6,6 +6,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvListItemFood"
         tools:itemCount="5"
+        android:paddingBottom="80dp"
+        android:clipToPadding="false"
         tools:listitem="@layout/item_food_setup_menu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

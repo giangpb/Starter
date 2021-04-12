@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -33,11 +34,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyHolder> {
     private IOrderListener mIOrderListener;
 
     private ArrayList<Order> mData;
-    private Context mContext;
 
-    public OrderAdapter(Context context, IOrderListener iOrderListener, ArrayList<Order> data){
+    public OrderAdapter(IOrderListener iOrderListener, ArrayList<Order> data){
         this.mIOrderListener = iOrderListener;
-        this.mContext = context;
         this.mData = data;
     }
 
@@ -58,7 +57,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyHolder> {
     @NonNull
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_order, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_order, parent, false);
         return new MyHolder(view);
     }
 
@@ -66,6 +65,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyHolder> {
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
         Order order = mData.get(position);
         //holder.tvFoodItemsName.setText(order.getItemNames());
+        if (order.getTableName().equals("")){
+            holder.fabTableName.setVisibility(View.VISIBLE);
+            holder.tvTableName.setVisibility(View.GONE);
+        }
+        else{
+            holder.tvTableName.setText(order.getTableName());
+            holder.tvTableName.setVisibility(View.VISIBLE);
+            holder.fabTableName.setVisibility(View.GONE);
+        }
         holder.tvFoodItemsName.setText(convertStringType(order.getItemNames()));
         DecimalFormat decimalFormat = new DecimalFormat("#,###");
         holder.tvTotalAmount.setText(decimalFormat.format(order.getTotalAmount()));
@@ -110,6 +118,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyHolder> {
 
         MaterialCardView itemOrder;
 
+        TextView tvTableName;
+
+        FloatingActionButton fabTableName;
+
         public MyHolder(@NonNull View itemView) {
             super(itemView);
             tvFoodItemsName = itemView.findViewById(R.id.tvFoodItemNames);
@@ -117,6 +129,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyHolder> {
             btnHuy = itemView.findViewById(R.id.btnHuy);
             btnThuTien = itemView.findViewById(R.id.btnThuTien);
             itemOrder = itemView.findViewById(R.id.itemOrder);
+            tvTableName = itemView.findViewById(R.id.tvTableName);
+            fabTableName = itemView.findViewById(R.id.fabTableName);
 
             // xử lý sự kiện
 
