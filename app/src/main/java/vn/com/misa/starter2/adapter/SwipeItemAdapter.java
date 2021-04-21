@@ -112,7 +112,10 @@ public class SwipeItemAdapter extends RecyclerView.Adapter<SwipeItemAdapter.MySw
 
         holder.tvItemName.setText(item.getItemName());
         holder.tvItemPrice.setText(decimalFormat.format(item.getPrice()));
-        Glide.with(mContext).load(item.getImage()).into(holder.ivFoodImage);
+        if (item.getImage() != null)
+            Glide.with(mContext).load(item.getImage()).into(holder.ivFoodImage);
+        else
+            holder.ivFoodImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_image_holder_emp));
 
         if(item.getQuantity()>0)
             holder.tvCount.setText(item.getQuantity()+"");

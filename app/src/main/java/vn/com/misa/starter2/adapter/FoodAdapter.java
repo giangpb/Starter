@@ -21,6 +21,7 @@ import java.util.List;
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.model.entity.Item;
 import vn.com.misa.starter2.ui.setuplistitem.IOnClick;
+import vn.com.misa.starter2.util.GIANGUtils;
 
 /**
  * ‐ Adapter hiển thị danh sách
@@ -51,7 +52,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyHolder> {
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
         Item item = mData.get(position);
         holder.tvFoodName.setText(item.getItemName());
-        holder.tvFoodPrice.setText(item.getPrice()+"");
+        holder.tvFoodPrice.setText(GIANGUtils.getInstance().convertPriceIntToString(item.getPrice()));
         if(item.getImage()!=null)
             Glide.with(mContext).load(item.getImage()).into(holder.ivFoodImage);
         else
@@ -60,7 +61,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyHolder> {
 
     public void removeItem(Item item){
         mData.remove(item);
-        notifyDataSetChanged();
+        notifyItemRemoved(item.getPosition()-1);
     }
 
     @Override

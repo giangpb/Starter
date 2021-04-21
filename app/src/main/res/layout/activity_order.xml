@@ -138,25 +138,45 @@
                         android:layout_marginLeft="@dimen/margin_large"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_marginTop="@dimen/divider_size_small"
-                    android:background="@color/white"
+
+                <RelativeLayout
+                    android:id="@+id/rlSynchData"
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_height="?actionBarSize">
+                    android:layout_height="?actionBarSize"
+                    android:layout_marginTop="@dimen/divider_size_small"
+                    android:background="@color/white">
+
                     <ImageView
+                        android:id="@+id/ivDongBo"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentStart="true"
                         android:layout_width="wrap_content"
-                        android:src="@drawable/ic_sync_nav6"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_large"
-                        android:layout_height="wrap_content"/>
+                        android:src="@drawable/ic_sync_nav6" />
+
+                    <TextView
+                        style="@style/text_normal"
+                        android:layout_toRightOf="@id/ivDongBo"
+                        android:layout_width="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_large"
+                        android:text="@string/dong_bo_data" />
+
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="@string/dong_bo_data"
-                        style="@style/text_normal"
-                        android:layout_marginLeft="@dimen/margin_large"
+                        android:layout_alignParentEnd="true"
+                        android:text="190"
+                        android:padding="2dp"
+                        android:textSize="10dp"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:background="@drawable/custom_text_bridge"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/margin_large"
                         android:layout_height="wrap_content"/>
-                </LinearLayout>
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_marginTop="@dimen/divider_size_normal"

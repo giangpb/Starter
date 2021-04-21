@@ -49,8 +49,8 @@ public class ItemFoodPresenter implements IAddItemModel {
      * @author giangpb
      * @date 27/01/2021
      */
-    public void getItemInforInput(Item item){
-        itemFoodModel.addItemFodd(item);
+    public boolean addItem(Item item){
+        return itemFoodModel.addItemFodd(item);
     }
 
 
@@ -122,5 +122,13 @@ public class ItemFoodPresenter implements IAddItemModel {
         return itemFoodModel.getItemInOrderDetail(orderID);
     }
 
+    /**
+     * Hàm lấy vị trí item thêm mới bởi mã danh mục
+     * @param categoryID
+     * @return
+     */
+    public int positionItemInCategory(String categoryID){
+        return itemFoodModel.positionItemInCategory(categoryID);
+    }
 //    public void reset
 }

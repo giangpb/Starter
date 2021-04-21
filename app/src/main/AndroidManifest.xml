@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Starter2">
-        <activity android:name=".ui.category.AddCategoryActivity"></activity>
+        <activity android:name=".ui.synchdata.SynchronizeData"></activity>
+        <activity android:name=".ui.category.AddCategoryActivity" />
         <activity
             android:name=".ui.addition.AdditionSetupActivity"
             android:screenOrientation="portrait" />

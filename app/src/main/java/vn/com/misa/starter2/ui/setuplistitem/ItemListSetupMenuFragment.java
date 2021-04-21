@@ -27,11 +27,7 @@ import vn.com.misa.starter2.model.entity.Item;
 import vn.com.misa.starter2.ui.setupmenu.SetupMenuFragment;
 import vn.com.misa.starter2.ui.updateitem.UpdateItemActivity;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ItemListSetupMenuFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ItemListSetupMenuFragment extends Fragment implements IOnClick{
 
     private static final String TAG = "ItemListSetupMenuFragme";
@@ -41,28 +37,12 @@ public class ItemListSetupMenuFragment extends Fragment implements IOnClick{
 
     private ItemFoodPresenter itemFoodPresenter;
 
-    // chia sẻ mã danh mục giữa các activity
-    public static Category category;
     private Category category2;
 
-
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment ItemListSetupMenuFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ItemListSetupMenuFragment newInstance(Category cat) {
-        ItemListSetupMenuFragment fragment = new ItemListSetupMenuFragment();
-        fragment.category2 = cat;
-//        category = cat;
-        return fragment;
+    public static ItemListSetupMenuFragment getInstance(Category cat){
+        ItemListSetupMenuFragment itemListSetupMenuFragment = new ItemListSetupMenuFragment();
+        itemListSetupMenuFragment.category2 = cat;
+        return itemListSetupMenuFragment;
     }
 
     @Override

@@ -33,14 +33,15 @@
                 android:layout_height="wrap_content"/>
             <ImageView
                 android:id="@+id/ivOptionMenu"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/toolbar_height_size"
                 android:src="@drawable/ic_menu_dot_20"
                 android:layout_alignParentEnd="true"
                 android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/margin_large"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/margin_large"
-                android:layout_height="wrap_content"/>
+                android:layout_height="@dimen/toolbar_height_size"/>
             <View
                 android:layout_width="@dimen/text_quantity"
                 android:id="@+id/viewShowPopup"

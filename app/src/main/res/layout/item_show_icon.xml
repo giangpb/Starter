@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:tint="@color/purple_500"
     app:elevation="@dimen/reset"
-    android:backgroundTint="@color/C"
+    android:backgroundTint="@color/white"
     app:backgroundTint="@color/purple_500"
     android:layout_margin="4dp"
     android:layout_width="wrap_content"

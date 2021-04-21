@@ -1,5 +1,7 @@
 package vn.com.misa.starter2.ui.additem;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -21,19 +24,30 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.adapter.CategorySpinnerAdapter;
@@ -43,6 +57,7 @@ import vn.com.misa.starter2.model.entity.Item;
 import vn.com.misa.starter2.model.entity.Unit;
 import vn.com.misa.starter2.presenter.CategoryPresenter;
 import vn.com.misa.starter2.ui.setuplistitem.ItemFoodPresenter;
+import vn.com.misa.starter2.util.GIANGUtils;
 
 /**
  * - Fragment thêm món ăn
@@ -51,7 +66,6 @@ import vn.com.misa.starter2.ui.setuplistitem.ItemFoodPresenter;
  * @date: 22/01/2021
  */
 public class AddFoodFragment extends Fragment{
-
 
     private static final String TAG = "AddFoodFragment";
     private static final int RESULT_OK = -1;
@@ -86,6 +100,8 @@ public class AddFoodFragment extends Fragment{
 
     private NavController navController;
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +116,7 @@ public class AddFoodFragment extends Fragment{
         // khởi tạo sự kiện
         ivBackToSetupMenu = view.findViewById(R.id.ivArrowBackSetupMenu);
         etFoodName = view.findViewById(R.id.tvFoodName);
-        etFoodPrice = view.findViewById(R.id.tvFoodPrice);
+        etFoodPrice = view.findViewById(R.id.etFoodPrice);
         ivAddUnit = view.findViewById(R.id.ivAddUnit);
         ivItemImage = view.findViewById(R.id.ivItemImage);
         btnAddItemFood = view.findViewById(R.id.btnAddItemFood);
@@ -128,7 +144,13 @@ public class AddFoodFragment extends Fragment{
     @Override
     public void onStart() {
         super.onStart();
-//        unitSpinnerAdapter.addListUnit();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -136,6 +158,13 @@ public class AddFoodFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         navController = Navigation.findNavController(view);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void showData(StringBuilder stringBuilder){
+        if (stringBuilder.length()>0){
+            etFoodPrice.setText(stringBuilder.toString());
+        }
     }
 
     /**
@@ -159,16 +188,16 @@ public class AddFoodFragment extends Fragment{
         startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
     }
 
-
     private void addEvents(){
         ivBackToSetupMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.setupMenuFragment,false).build();
-//                navController.navigate(R.id.action_addFoodFragment_to_setupMenuFragment,null,navOptions);
-                getActivity().onBackPressed();
+                NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.setupMenuFragment,false).build();
+                navController.navigate(R.id.action_addFoodFragment_to_setupMenuFragment,null,navOptions);
             }
         });
+
+        etFoodPrice.setOnClickListener(v->showDialogCalculator());
 
         ivAddUnit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,40 +220,37 @@ public class AddFoodFragment extends Fragment{
             }
         });
 
-
-//        etFoodPrice.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//
-//
-//                // hiển thị dialog
-//                showDialogCalulator();
-//                return false;
-//            }
-//        });
-
         // sự kiện thêm item
         btnAddItemFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    Item item = new Item();
-                    long time = System.currentTimeMillis();
-                    item.setItemID(time+"");
-                    Category category = (Category) spinnerCategory.getSelectedItem();
-                    Unit unit = (Unit) spinnerUnit.getSelectedItem();
-                    item.setCategoryID(category.getCategoryID());
-                    item.setUnitID(unit.getUnitID());
-                    if(selectedImage!=null)
-                        item.setImage(getBitmapAsByteArray(selectedImage));
-                    item.setItemName(etFoodName.getText().toString());
-                    item.setPrice(Integer.parseInt(etFoodPrice.getText().toString()));
-                    item.setItemCode(etFoodName.getText().toString().toUpperCase());
-                    item.setPosition(mItemFoodPresenter.getAllItem().size());
-                    mItemFoodPresenter.getItemInforInput(item);
-
-                    NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.setupMenuFragment,false).build();
-                    navController.navigate(R.id.action_addFoodFragment_to_setupMenuFragment,null,navOptions);
+                    if (Objects.requireNonNull(etFoodName.getText()).toString().isEmpty()){
+                        etFoodName.setError(String.format(getString(R.string.errr_input),"Tên món"));
+                    }
+                    else{
+                        Item item = new Item();
+                        long time = System.currentTimeMillis();
+                        item.setItemID(time+"");
+                        Category category = (Category) spinnerCategory.getSelectedItem();
+                        Unit unit = (Unit) spinnerUnit.getSelectedItem();
+                        item.setCategoryID(category.getCategoryID());
+                        item.setUnitID(unit.getUnitID());
+                        if(selectedImage!=null)
+                            item.setImage(getBitmapAsByteArray(selectedImage));
+                        item.setItemName(etFoodName.getText().toString());
+                        item.setPrice(Integer.parseInt(etFoodPrice.getText().toString()));
+                        item.setItemCode(etFoodName.getText().toString().toUpperCase());
+                        item.setPosition(mItemFoodPresenter.positionItemInCategory(category.getCategoryID())+1);
+                        boolean kq = mItemFoodPresenter.addItem(item);
+                        if (kq){
+                            NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.setupMenuFragment,false).build();
+                            navController.navigate(R.id.action_addFoodFragment_to_setupMenuFragment,null,navOptions);
+                        }
+                        else{
+                            GIANGUtils.getInstance().showMessage(getActivity(),"Thêm lỗi !",0);
+                        }
+                    }
                 }
                 catch (Exception ex){
                     Log.d(TAG, "onClick: "+ex.getMessage());
@@ -251,8 +277,6 @@ public class AddFoodFragment extends Fragment{
         final EditText etUnitName = alertLayout.findViewById(R.id.etUnitName);
         final MaterialButton btnAddUnit = alertLayout.findViewById(R.id.btnAddUnit);
         final MaterialButton btnCancel = alertLayout.findViewById(R.id.btnCancel);
-
-
 
         AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
         alert.setView(alertLayout);
@@ -305,18 +329,114 @@ public class AddFoodFragment extends Fragment{
      * @author: giangpb
      * @date: 25/01/2021
      */
-    private void showDialogCalulator(){
-        LayoutInflater inflater = getLayoutInflater();
-        View alertLayout = inflater.inflate(R.layout.dialog_caculator, null);
-//        final EditText etUsername = alertLayout.findViewById(R.id.etClassName);
-//        final MaterialButton btnAddClass = alertLayout.findViewById(R.id.btnAddClass);
+    private void showDialogCalculator(){
+        View alertLayout = getLayoutInflater().inflate(R.layout.view_input_money, null);
+        ImageView ivCloseDialog = alertLayout.findViewById(R.id.ivCloseDialog);
+        ImageButton btnDell = alertLayout.findViewById(R.id.btnDell);
+        TextView tvValue = alertLayout.findViewById(R.id.tvValue);
+        TextView btnXong = alertLayout.findViewById(R.id.btnXong);
+        TextView btnClearAll = alertLayout.findViewById(R.id.btnClearAll);
 
-        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        TextView num0 = alertLayout.findViewById(R.id.num0);
+        TextView num1 = alertLayout.findViewById(R.id.num1);
+        TextView num2 = alertLayout.findViewById(R.id.num2);
+        TextView num3 = alertLayout.findViewById(R.id.num3);
+        TextView num4 = alertLayout.findViewById(R.id.num4);
+        TextView num5 = alertLayout.findViewById(R.id.num5);
+        TextView num6 = alertLayout.findViewById(R.id.num6);
+        TextView num7 = alertLayout.findViewById(R.id.num7);
+        TextView num8 = alertLayout.findViewById(R.id.num8);
+        TextView num9 = alertLayout.findViewById(R.id.num9);
+        TextView num000 = alertLayout.findViewById(R.id.num000);
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         alert.setView(alertLayout);
         alert.setCancelable(false);
+
         AlertDialog dialog = alert.create();
         dialog.setCanceledOnTouchOutside(true);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        // sự kiện
+        num0.setOnClickListener(v->{
+            if (stringBuilder.length()>0){
+                stringBuilder.append("0");
+                tvValue.setText(stringBuilder.toString());
+            }
+        });
+
+        num1.setOnClickListener(v->{
+            stringBuilder.append("1");
+            tvValue.setText(stringBuilder.toString());
+        });
+
+        num2.setOnClickListener(v->{
+            stringBuilder.append("2");
+            tvValue.setText(stringBuilder.toString());
+        });
+
+        num3.setOnClickListener(v->{
+            stringBuilder.append("3");
+            tvValue.setText(stringBuilder.toString());
+        });
+
+        num4.setOnClickListener(v->{
+            stringBuilder.append("4");
+            tvValue.setText(stringBuilder.toString());
+        });
+
+        num5.setOnClickListener(v->{
+            stringBuilder.append("5");
+            tvValue.setText(stringBuilder.toString());
+        });
+
+        num6.setOnClickListener(v->{
+            stringBuilder.append("6");
+            tvValue.setText(stringBuilder.toString());
+        });
+
+        num7.setOnClickListener(v->{
+            stringBuilder.append("7");
+            tvValue.setText(stringBuilder.toString());
+        });
+
+        num8.setOnClickListener(v->{
+            stringBuilder.append("8");
+            tvValue.setText(stringBuilder.toString());
+        });
+
+        num9.setOnClickListener(v->{
+            stringBuilder.append("9");
+            tvValue.setText(stringBuilder.toString());
+        });
+
+        btnClearAll.setOnClickListener(v->{
+            stringBuilder.delete(0, stringBuilder.length());
+            tvValue.setText("0");
+        });
+        btnDell.setOnClickListener(v->{
+            int length = stringBuilder.length();
+            if (length>=1){
+                stringBuilder.deleteCharAt(length-1);
+                tvValue.setText(stringBuilder.toString());
+            }
+            else{
+                tvValue.setText("0");
+            }
+        });
+        // đóng dialog
+        ivCloseDialog.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        btnXong.setOnClickListener(v->{
+            EventBus.getDefault().post(stringBuilder);
+            dialog.dismiss();
+        });
+
+
+
         dialog.show();
     }
 

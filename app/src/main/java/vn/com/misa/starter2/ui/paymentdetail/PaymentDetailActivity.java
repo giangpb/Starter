@@ -6,11 +6,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -19,6 +24,7 @@ import vn.com.misa.starter2.adapter.PaymentDetailAdapter;
 import vn.com.misa.starter2.model.entity.Payment;
 import vn.com.misa.starter2.model.entity.PaymentDetail;
 import vn.com.misa.starter2.ui.collectmoney.PaymentDetailPresenter;
+import vn.com.misa.starter2.util.GIANGUtils;
 
 public class PaymentDetailActivity extends AppCompatActivity {
     private static final String TAG = "PaymentDetailActivity";
@@ -29,6 +35,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
 
     // controls
     ImageView ivBack;
+    private ImageView ivOptionMenu;
     //
     private TextView tvPaymentNO;
     private TextView tvAmount;
@@ -47,6 +54,9 @@ public class PaymentDetailActivity extends AppCompatActivity {
 
     //
     private PaymentDetailPresenter paymentDetailPresenter;
+
+    //
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +79,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
         tvOrderID = findViewById(R.id.tvOrderID);
         tvCountQuantity = findViewById(R.id.tvCountQuantity);
         tvReturnAmount = findViewById(R.id.tvReturnAmount);
+        ivOptionMenu = findViewById(R.id.ivOptionMenu);
         //
         decimalFormat = new DecimalFormat("#,###");
         tvAmount.setText(decimalFormat.format(mPayment.getAmount()));
@@ -109,5 +120,50 @@ public class PaymentDetailActivity extends AppCompatActivity {
                 }
             }
         });
+
+        ivOptionMenu.setOnClickListener(v->{
+            try{
+                showPopupWindow(v);
+            }
+            catch (Exception ex){
+                GIANGUtils.getInstance().handlerLog(ex.getMessage());
+            }
+        });
+    }
+
+    /**
+     * Hàm show popup menu khi nhấn vào option menu
+     * hiển thị icon
+     * @param view neo vào view nào khi hiển thị
+     * @author giangpb
+     * @date 23/01/2021
+     */
+    private void showPopupWindow(View view) {
+        PopupMenu popup = new PopupMenu(this, view);
+        try {
+            Field[] fields = popup.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                if ("mPopup".equals(field.getName())) {
+                    field.setAccessible(true);
+                    Object menuPopupHelper = field.get(popup);
+                    Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                    Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                    setForceIcons.invoke(menuPopupHelper, true);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        popup.getMenuInflater().inflate(R.menu.mnu_print_order_detail, popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+            // sự kiện nhấn vào từng item
+            public boolean onMenuItemClick(MenuItem item) {
+
+                return false;
+            }
+        });
+        popup.show();
     }
 }

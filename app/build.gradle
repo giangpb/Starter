@@ -6,7 +6,7 @@ apply plugin: 'com.jakewharton.butterknife'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "vn.com.misa.starter2"
@@ -66,5 +66,14 @@ dependencies {
     // butterknife
     implementation 'com.jakewharton:butterknife:10.2.3'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
+
+    // retrofit
+    def retrofit_version = "2.9.0"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+
+    // converter gson
+    def gson_converter = ""
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
 
 }

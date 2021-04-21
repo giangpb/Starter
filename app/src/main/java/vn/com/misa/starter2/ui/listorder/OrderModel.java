@@ -83,6 +83,7 @@ public class OrderModel extends DatabaseHelper {
             values.put("OrderStatus", order.getOrderStatus());
             values.put("Amount", order.getAmount());
             values.put("TotalAmount", order.getTotalAmount());
+            values.put("TableName", order.getTableName());
             values.put("ItemNames", order.getItemNames());
             sqLiteDatabase.insert("Order1", null,values);
             return true;

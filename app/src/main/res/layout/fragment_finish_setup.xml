@@ -48,6 +48,7 @@
         android:id="@+id/ivBackgroundCompleted"
         android:layout_width="match_parent"
         android:layout_below="@id/appBarLayout"
+        android:background="@drawable/bg_show_synch"
         android:src="@drawable/ic_bg_setup_completed"
         android:layout_height="wrap_content"/>
     <TextView
