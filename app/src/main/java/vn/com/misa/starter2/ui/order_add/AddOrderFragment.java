@@ -181,7 +181,6 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         fabSelectTable = view.findViewById(R.id.fabSelectTable);
         fabSelectDiscount = view.findViewById(R.id.fabSelectDiscount);
         tvTableName = view.findViewById(R.id.tvTableName);
-        tvTableName.setVisibility(View.GONE);
 
         // lst bottom sheet
         tvItemCountLst = view.findViewById(R.id.tvItemCountLst);
@@ -210,7 +209,9 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         // lấy bundle order
         Bundle bundle = getArguments();
         if(bundle !=null){
+            tvTableName.setVisibility(View.VISIBLE);
             mOrder = (Order) bundle.getSerializable("order");
+            tvTableName.setText(mOrder.getTableName());
             checkPayment = bundle.getBoolean("check");
             // gán cho danh sách selected item
             lstItemSelected = itemFoodPresenter.getItemInOrderDetail(mOrder.getOrderID());
@@ -255,6 +256,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         else{
             // khởi tạo danh sách mới chứa item order mới
             lstItemSelected = new ArrayList<>();
+            tvTableName.setVisibility(View.GONE);
         }
 //        tvGiaPhaiThu.setText(decimalFormat.format(itemFoodPresenter.tinhTienHoaDon(lstItemSelected)));
 

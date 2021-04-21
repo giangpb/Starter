@@ -279,7 +279,7 @@ public class ItemFoodModel extends DatabaseHelper {
             values.put("InventoryItemID", item.getItemID());
             values.put("InventoryItemCategoryID", item.getCategoryID());
             values.put("InventoryItemCode", item.getItemCode());
-            values.put("InventoryItemName", item.getItemCode());
+            values.put("InventoryItemName", item.getItemName());
             values.put("Price", item.getPrice());
             values.put("UnitID", item.getUnitID());
             if(item.getImage()!=null)

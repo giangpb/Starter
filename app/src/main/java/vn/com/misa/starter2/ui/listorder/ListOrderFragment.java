@@ -1,6 +1,7 @@
 package vn.com.misa.starter2.ui.listorder;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,16 +17,21 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.adapter.OrderAdapter;
 import vn.com.misa.starter2.model.entity.Order;
 import vn.com.misa.starter2.ui.order.OrderActivity;
+import vn.com.misa.starter2.util.GIANGUtils;
 
 /**
  * Hiển thị danh sách order
@@ -51,6 +57,10 @@ public class ListOrderFragment extends Fragment implements IOrderListener{
     // Tìm kiếm order
     private ImageView ivSearch;
 
+    private RelativeLayout rlToolbar;
+    private TextInputLayout textField;
+    private TextInputEditText etFind;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -70,6 +80,14 @@ public class ListOrderFragment extends Fragment implements IOrderListener{
         llOrderEmpty = view.findViewById(R.id.llOrderEmpty);
 
         ivSearch = view.findViewById(R.id.ivSearch);
+
+        rlToolbar = view.findViewById(R.id.rlToolbar);
+        textField = view.findViewById(R.id.textField);
+
+        etFind = view.findViewById(R.id.etFind);
+
+        rlToolbar.setVisibility(View.VISIBLE);
+        textField.setVisibility(View.GONE);
 
         orderPresenter = new OrderPresenter(getContext());
 
@@ -106,7 +124,21 @@ public class ListOrderFragment extends Fragment implements IOrderListener{
 
         // sự kiện tìm kiếm
         ivSearch.setOnClickListener((view)->{
+            rlToolbar.setVisibility(View.GONE);
+            textField.setVisibility(View.VISIBLE);
+            etFind.requestFocus();
+            // mở bàn phím
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(etFind, InputMethodManager.SHOW_IMPLICIT);
+            imm.showSoftInput(etFind, InputMethodManager.SHOW_FORCED);
+            etFind.setText("");
+        });
 
+        textField.setStartIconOnClickListener(v->{
+            rlToolbar.setVisibility(View.VISIBLE);
+            textField.setVisibility(View.GONE);
+            // đóng bàn phím
+            GIANGUtils.getInstance().hideKeyBoard(etFind, getActivity());
         });
 
         // sự kiện mở drawer navigation

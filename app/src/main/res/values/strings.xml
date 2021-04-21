@@ -183,4 +183,6 @@
     <string name="txt_btn_synch">ĐỒNG BỘ NGAY</string>
     <string name="txt_synch">Bấm \"ĐỒNG BỘ NGAY\" để chuyển các dữ liệu bán hàng mới nhất lên máy chủ.</string>
 
+    <string name="txt_in_hd">In hoá đơn</string>
+    <string name="txt_huy_hd">Huỷ hoá đơn</string>
 </resources>

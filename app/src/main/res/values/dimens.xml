@@ -73,4 +73,6 @@
 
     <!-- inter spacing between RecyclerView's Item-->
     <dimen name="photos_list_spacing">4dp</dimen>
+
+    <dimen name="image_size">60dp</dimen>
 </resources>
