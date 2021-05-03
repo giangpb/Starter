@@ -300,6 +300,7 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
                         payment.setRefNO(refNo);
                         payment.setRefDate(currentDateAndTime);
                         payment.setAmount(mOrder.getAmount());
+                        payment.setTableName(mOrder.getTableName());
 
                         // updating...
                         // khuyến mãi theo từng sản phẩm
@@ -317,7 +318,6 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
                         payment.setPaymentStatus(3);
                         payment.setOrderID(mOrder.getOrderID());
                         payment.setOrderType(1);
-                        payment.setTableName("null");
                         payment.setCreatedDate(currentDateAndTime);
                         paymentPresenter.addPayment(payment);
 

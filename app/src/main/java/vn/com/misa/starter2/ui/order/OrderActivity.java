@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import com.google.android.material.navigation.NavigationView;
 
 import vn.com.misa.starter2.R;
+import vn.com.misa.starter2.ui.aboutapp.AboutAppActivity;
 import vn.com.misa.starter2.ui.category.CategorySetupActivity;
 import vn.com.misa.starter2.ui.finishsetup.FinishSetupFragment;
 import vn.com.misa.starter2.ui.login.LoginActivity;
@@ -25,6 +26,7 @@ import vn.com.misa.starter2.ui.payment.PaymentActivity;
 import vn.com.misa.starter2.ui.report.ReportActivity;
 import vn.com.misa.starter2.ui.addition.AdditionSetupActivity;
 import vn.com.misa.starter2.ui.synchdata.SynchronizeData;
+import vn.com.misa.starter2.util.GIANGUtils;
 
 public class OrderActivity extends AppCompatActivity {
     private static final String TAG = "OrderActivity";
@@ -43,6 +45,7 @@ public class OrderActivity extends AppCompatActivity {
     private LinearLayout llBaoCao;
     private LinearLayout llLogout;
     private RelativeLayout rlSynchData;
+    private LinearLayout llAboutApp;
 
 
 
@@ -68,6 +71,7 @@ public class OrderActivity extends AppCompatActivity {
         navigationView=findViewById(R.id.nav_view);
         llBaoCao=findViewById(R.id.llBaoCao);
         llLogout=findViewById(R.id.llLogout);
+        llAboutApp=findViewById(R.id.llAboutApp);
 
         //
         llDanhSachHoaDon = findViewById(R.id.llDanhSachHoaDon);
@@ -160,6 +164,18 @@ public class OrderActivity extends AppCompatActivity {
             }
             catch (Exception ex){
                 Log.d(TAG, "onClick: "+ex.getMessage());
+            }
+        });
+
+        //about
+        llAboutApp.setOnClickListener(view->{
+            try {
+                drawerLayout.closeDrawer(Gravity.START);
+                Intent intentAbout= new Intent(OrderActivity.this, AboutAppActivity.class);
+                startActivity(intentAbout);
+            }
+            catch (Exception exx){
+                GIANGUtils.getInstance().handlerLog(exx.getMessage());
             }
         });
 

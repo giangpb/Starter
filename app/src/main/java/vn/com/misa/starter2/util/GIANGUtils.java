@@ -82,4 +82,13 @@ public class GIANGUtils {
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    public void checkShowHideView(String valueDefault, String valueEqual, View view){
+        if (valueDefault.equalsIgnoreCase(valueEqual)){
+            view.setVisibility(View.GONE);
+        }
+        else{
+            view.setVisibility(View.VISIBLE);
+        }
+    }
+
 }

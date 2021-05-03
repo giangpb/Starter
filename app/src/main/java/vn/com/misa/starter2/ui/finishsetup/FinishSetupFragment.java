@@ -118,8 +118,6 @@ public class FinishSetupFragment extends Fragment {
                         }
                     };
 
-
-
                      //lưu trạng thái setup thành công !
                     setupStateFinishSetup();
 
