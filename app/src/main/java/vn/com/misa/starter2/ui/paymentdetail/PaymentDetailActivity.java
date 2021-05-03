@@ -56,6 +56,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
     private PaymentDetailPresenter paymentDetailPresenter;
 
     //
+    private TextView tvTableName;
 
 
     @Override
@@ -64,7 +65,6 @@ public class PaymentDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_payment_detail);
         mPayment = (Payment) getIntent().getSerializableExtra("payment");
         addControls();
-
         addEvents();
     }
 
@@ -80,10 +80,13 @@ public class PaymentDetailActivity extends AppCompatActivity {
         tvCountQuantity = findViewById(R.id.tvCountQuantity);
         tvReturnAmount = findViewById(R.id.tvReturnAmount);
         ivOptionMenu = findViewById(R.id.ivOptionMenu);
+        tvTableName = findViewById(R.id.tvTableName);
+        GIANGUtils.getInstance().checkShowHideView(mPayment.getTableName(),"",tvTableName);
+        tvTableName.setText(String.format(" - Bàn: %s",mPayment.getTableName()));
         //
         decimalFormat = new DecimalFormat("#,###");
         tvAmount.setText(decimalFormat.format(mPayment.getAmount()));
-        tvPaymentNO.setText("Số: "+mPayment.getRefNO());
+        tvPaymentNO.setText(String.format("Số: %s", mPayment.getRefNO()));
         tvReceiveAmount.setText(decimalFormat.format(mPayment.getReceiveAmount()));
         tvOrderID.setText(mPayment.getOrderID());
         tvPaymentDateCreate.setText(mPayment.getRefDate());

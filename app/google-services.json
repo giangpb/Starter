@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "933832802122",
+    "project_id": "starter2-d3f81",
+    "storage_bucket": "starter2-d3f81.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:933832802122:android:a6eb242cfaf638075fcbb3",
+        "android_client_info": {
+          "package_name": "vn.com.misa.starter2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "933832802122-eueheumpneh8hva22kq01fp2943vtenc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlNr6J_VqB-kzGMmcsPWvJ9CqFx5hlhL4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "933832802122-eueheumpneh8hva22kq01fp2943vtenc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

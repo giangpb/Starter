@@ -1,5 +1,7 @@
 package vn.com.misa.starter2.ui.order_add;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -22,10 +24,12 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,6 +39,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -60,6 +66,8 @@ import vn.com.misa.starter2.model.entity.OrderDetail;
 import vn.com.misa.starter2.presenter.CategoryPresenter;
 import vn.com.misa.starter2.ui.listorder.OrderPresenter;
 import vn.com.misa.starter2.ui.setuplistitem.ItemFoodPresenter;
+import vn.com.misa.starter2.util.GIANGCache;
+import vn.com.misa.starter2.util.GIANGConstants;
 import vn.com.misa.starter2.util.GIANGUtils;
 
 /**
@@ -146,8 +154,19 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
     private FloatingActionButton fabSelectTable;
     private FloatingActionButton fabSelectDiscount;
 
+    private RelativeLayout rlViewPromotion;
+    private LinearLayout lnViewPromotionSheet;
 
+    private TextInputLayout textField;
+    private RelativeLayout rlToolbar;
+    private TextInputEditText etFind;
 
+    private boolean isPromotionRate =  true;
+
+    private TextView tvPromotion;
+    private TextView tvPromotionDialog;
+
+    private ImageView ivSearch;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -181,10 +200,26 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         fabSelectTable = view.findViewById(R.id.fabSelectTable);
         fabSelectDiscount = view.findViewById(R.id.fabSelectDiscount);
         tvTableName = view.findViewById(R.id.tvTableName);
+        tvTableName.setVisibility(View.GONE);
 
         // lst bottom sheet
         tvItemCountLst = view.findViewById(R.id.tvItemCountLst);
         tvGiaPhaiThuLst = view.findViewById(R.id.tvGiaPhaiThuLst);
+
+        rlViewPromotion= view.findViewById(R.id.rlViewPromotion);
+        rlViewPromotion.setVisibility(View.GONE);
+        lnViewPromotionSheet = view.findViewById(R.id.lnViewPromotionSheet);
+
+        ivSearch = view.findViewById(R.id.ivSearch);
+
+        textField =view.findViewById(R.id.textField);
+        rlToolbar =view.findViewById(R.id.rlToolbar);
+        etFind =view.findViewById(R.id.etFind);
+
+        tvPromotion =view.findViewById(R.id.tvPromotion);
+
+        textField.setVisibility(View.GONE);
+        rlToolbar.setVisibility(View.VISIBLE);
 
         rcvOrderBottomSheet = view.findViewById(R.id.rcvOrderBottomSheet);
         orderBottomSheetAdapter = new OrderBottomSheetAdapter(getActivity(), this);
@@ -209,8 +244,8 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         // lấy bundle order
         Bundle bundle = getArguments();
         if(bundle !=null){
-            tvTableName.setVisibility(View.VISIBLE);
             mOrder = (Order) bundle.getSerializable("order");
+            GIANGUtils.getInstance().checkShowHideView(mOrder.getTableName(),"",tvTableName);
             tvTableName.setText(mOrder.getTableName());
             checkPayment = bundle.getBoolean("check");
             // gán cho danh sách selected item
@@ -340,11 +375,54 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
     }
 
     /**
+     * Hàm nhập dữ liệu thông tin khuyễn mãi
+     * @param stringBuilder
+     * @param value
+     */
+    private void addValuePromotionDialog(StringBuilder stringBuilder, String value){
+        if (isPromotionRate){
+            if (stringBuilder.length()<2)
+                stringBuilder.append(value);
+        }
+        else
+        {
+            if (stringBuilder.length()<8)
+                stringBuilder.append(value);
+        }
+    }
+
+    private int tryParseInt(String value, int defaultVal) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return defaultVal;
+        }
+    }
+
+    /**
      * hàm tạo các sự kiện onclick
      * @author giangpb
      * @date 28/01/2021
      */
     private void addEvents(){
+
+        ivSearch.setOnClickListener(v->{
+            textField.setVisibility(View.VISIBLE);
+            rlToolbar.setVisibility(View.GONE);
+            etFind.requestFocus();
+            // mở bàn phím
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(etFind, InputMethodManager.SHOW_IMPLICIT);
+            imm.showSoftInput(etFind, InputMethodManager.SHOW_FORCED);
+            etFind.setText("");
+        });
+
+        textField.setStartIconOnClickListener(v->{
+            rlToolbar.setVisibility(View.VISIBLE);
+            textField.setVisibility(View.GONE);
+            // đóng bàn phím
+            GIANGUtils.getInstance().hideKeyBoard(etFind, getActivity());
+        });
 
         // hiển thị khuyến mãi
         fabSelectDiscount.setOnClickListener(new View.OnClickListener() {
@@ -353,30 +431,130 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                 try{
                     View alertLayout = getLayoutInflater().inflate(R.layout.dialog_choose_promotion, null);
 
+
                     LinearLayout llRecommend = alertLayout.findViewById(R.id.llRecommend);
 
                     LinearLayout llClosePopup = alertLayout.findViewById(R.id.llClosePopup);
 
+                    StringBuilder stringBuilder= new StringBuilder();
+                    EditText etValue = alertLayout.findViewById(R.id.etValue);
+
+                    TextView tvKey0 = alertLayout.findViewById(R.id.key0);
+                    TextView tvKey1 = alertLayout.findViewById(R.id.key1);
+                    TextView tvKey2 = alertLayout.findViewById(R.id.key2);
+                    TextView tvKey3 = alertLayout.findViewById(R.id.key3);
+                    TextView tvKey4 = alertLayout.findViewById(R.id.key4);
+                    TextView tvKey5 = alertLayout.findViewById(R.id.key5);
+                    TextView tvKey6 = alertLayout.findViewById(R.id.key6);
+                    TextView tvKey7 = alertLayout.findViewById(R.id.key7);
+                    TextView tvKey8 = alertLayout.findViewById(R.id.key8);
+                    TextView tvKey9 = alertLayout.findViewById(R.id.key9);
+
+                    TextView keyDellAll = alertLayout.findViewById(R.id.keyDellAll);
+                    TextView keyAccept = alertLayout.findViewById(R.id.keyAccept);
+                    ImageButton keyDell = alertLayout.findViewById(R.id.keyDell);
+
                     // events
+                    tvKey0.setOnClickListener((view)->{
+                        if (stringBuilder.length()>0)
+                            addValuePromotionDialog(stringBuilder,"0");
+                        etValue.setText(GIANGUtils.getInstance().convertPriceIntToString(tryParseInt(stringBuilder.toString(),0)));
+                    });
+                    tvKey1.setOnClickListener((view)->{
+                        addValuePromotionDialog(stringBuilder,"1");
+                        etValue.setText(GIANGUtils.getInstance().convertPriceIntToString(Integer.parseInt(stringBuilder.toString())));
+                    });
+                    tvKey2.setOnClickListener((view)->{
+                        addValuePromotionDialog(stringBuilder,"2");
+                        etValue.setText(GIANGUtils.getInstance().convertPriceIntToString(Integer.parseInt(stringBuilder.toString())));
+                    });
+                    tvKey3.setOnClickListener((view)->{
+                        addValuePromotionDialog(stringBuilder,"3");
+                        etValue.setText(GIANGUtils.getInstance().convertPriceIntToString(Integer.parseInt(stringBuilder.toString())));
+                    });
+                    tvKey4.setOnClickListener((view)->{
+                        addValuePromotionDialog(stringBuilder,"4");
+                        etValue.setText(GIANGUtils.getInstance().convertPriceIntToString(Integer.parseInt(stringBuilder.toString())));
+                    });
+                    tvKey5.setOnClickListener((view)->{
+                        addValuePromotionDialog(stringBuilder,"5");
+                        etValue.setText(GIANGUtils.getInstance().convertPriceIntToString(Integer.parseInt(stringBuilder.toString())));
+                    });
+                    tvKey6.setOnClickListener((view)->{
+                        addValuePromotionDialog(stringBuilder,"6");
+                        etValue.setText(GIANGUtils.getInstance().convertPriceIntToString(Integer.parseInt(stringBuilder.toString())));
+                    });
+                    tvKey7.setOnClickListener((view)->{
+                        addValuePromotionDialog(stringBuilder,"7");
+                        etValue.setText(GIANGUtils.getInstance().convertPriceIntToString(Integer.parseInt(stringBuilder.toString())));
+                    });
+                    tvKey8.setOnClickListener((view)->{
+                        addValuePromotionDialog(stringBuilder,"8");
+                        etValue.setText(GIANGUtils.getInstance().convertPriceIntToString(Integer.parseInt(stringBuilder.toString())));
+                    });
+                    tvKey9.setOnClickListener((view)->{
+                        addValuePromotionDialog(stringBuilder,"9");
+                        etValue.setText(GIANGUtils.getInstance().convertPriceIntToString(Integer.parseInt(stringBuilder.toString())));
+                    });
+
+                    keyDell.setOnClickListener(v1 -> {
+                        try{
+                            etValue.setText(GIANGUtils.getInstance().convertPriceIntToString(tryParseInt(stringBuilder.length()>0?stringBuilder.deleteCharAt(stringBuilder.length()-1).toString():"0",0)));
+                        }
+                        catch (Exception ex){
+                            ex.printStackTrace();
+                        }
+
+                    });
+                    keyDellAll.setOnClickListener(view->{
+                        if (stringBuilder.length()>0){
+                            stringBuilder.delete(0,stringBuilder.length());
+                        }
+                        etValue.setText("0");
+                    });
 
                     RadioGroup rg = alertLayout.findViewById(R.id.rdSlected);
+                    RadioButton rdPhanTram = alertLayout.findViewById(R.id.rdPhanTram);
+                    RadioButton rdSoTien = alertLayout.findViewById(R.id.rdSoTien);
+                    isPromotionRate = GIANGCache.getInstance().get(GIANGConstants.CACHE_PROMOTION,Boolean.class);
+                    if (isPromotionRate){
+                        rdPhanTram.setChecked(true);
+                        rdSoTien.setChecked(false);
+                        llRecommend.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        rdPhanTram.setChecked(false);
+                        rdSoTien.setChecked(true);
+                        llRecommend.setVisibility(View.GONE);
+                    }
                     rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                        @SuppressLint("NonConstantResourceId")
                         @Override
                         public void onCheckedChanged(RadioGroup group, int checkedId) {
                             switch (checkedId){
                                 case R.id.rdPhanTram:
+                                    if (stringBuilder.length()>0){
+                                        stringBuilder.delete(0,stringBuilder.length());
+                                    }
+                                    etValue.setText("0");
+                                    isPromotionRate = true;
+                                    GIANGCache.getInstance().put(GIANGConstants.CACHE_PROMOTION, true);
                                     llRecommend.setVisibility(View.VISIBLE);
                                     break;
                                 case R.id.rdSoTien:
+                                    if (stringBuilder.length()>0){
+                                        stringBuilder.delete(0,stringBuilder.length());
+                                    }
+                                    etValue.setText("0");
+                                    isPromotionRate = false;
+                                    GIANGCache.getInstance().put(GIANGConstants.CACHE_PROMOTION, false);
                                     llRecommend.setVisibility(View.GONE);
                                     break;
                             }
                         }
                     });
 
-
-
-                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                     alert.setView(alertLayout);
                     alert.setCancelable(false);
                     AlertDialog dialog = alert.create();
@@ -393,6 +571,13 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                         catch (Exception ex){
                             GIANGUtils.getInstance().handlerException(ex);
                         }
+                    });
+
+                    keyAccept.setOnClickListener(view->{
+                        if (stringBuilder.length()<=0)
+                            stringBuilder.append("0");
+                        EventBus.getDefault().post(new OrderPromotion(Integer.parseInt(stringBuilder.toString())));
+                        dialog.dismiss();
                     });
                 }
                 catch (Exception ex){
@@ -679,7 +864,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                         mOrder.setAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
                         mOrder.setItemNames(lstItemSelected.toString());
                         mOrder.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
-
+                        mOrder.setTableName(tvTableName.getText().toString().equals("0")?"":tvTableName.getText().toString());
                         // cập nhật hoá đơn
                         orderPresenter.updateOrder(mOrder);
                         // cập nhật chi tiết hoá đơn
@@ -724,9 +909,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                 try{
                     // kiểm tra xem danh sách order có sản phẩm
                     if(lstItemSelected.size() >0){
-
                         // lưu lại
-
                         // kiểm tra order đã tồn tại trước đó hay chưa, nếu chưa thì thêm mới, có rồi thì cập nhật lại
                         if(mOrder ==null){
                             mOrder =new Order();
@@ -738,6 +921,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                             mOrder.setOrderStatus(1);
                             mOrder.setAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
                             mOrder.setItemNames(lstItemSelected.toString());
+                            mOrder.setTableName(tvTableName.getText().toString().equals("0")?"":tvTableName.getText().toString());
                             mOrder.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
 
                             // thêm vào order
@@ -769,7 +953,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                             mOrder.setAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
                             mOrder.setItemNames(lstItemSelected.toString());
                             mOrder.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
-
+                            mOrder.setTableName(tvTableName.getText().toString().equals("0")?"":tvTableName.getText().toString());
                             // cập nhật hoá đơn
                             orderPresenter.updateOrder(mOrder);
                             // cập nhật chi tiết hoá đơn
@@ -812,6 +996,20 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
 
     private boolean checkTableCount(StringBuilder stringBuilder){
         return stringBuilder.length()<2;
+    }
+
+    @SuppressLint("DefaultLocale")
+    @Subscribe( threadMode = ThreadMode.MAIN)
+    public void getPromotion(OrderPromotion orderPromotion){
+        if (orderPromotion.getPromotion() ==0){
+            lnViewPromotionSheet.setVisibility(View.GONE);
+            rlViewPromotion.setVisibility(View.GONE);
+        }
+        else{
+            lnViewPromotionSheet.setVisibility(View.VISIBLE);
+            rlViewPromotion.setVisibility(View.VISIBLE);
+            tvPromotion.setText(String.format("-%s",GIANGUtils.getInstance().convertPriceIntToString(orderPromotion.getPromotion())));
+        }
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)

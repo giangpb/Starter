@@ -31,14 +31,14 @@
             android:layout_height="wrap_content"/>
         <ImageView
             android:id="@+id/ivCloseBottomSheet"
-            android:layout_width="32dp"
+            android:layout_width="?android:actionBarSize"
             android:layout_centerVertical="true"
             android:clickable="true"
+            android:padding="@dimen/margin_normal"
             android:background="?android:selectableItemBackgroundBorderless"
-            android:layout_margin="@dimen/margin_normal"
             android:layout_alignParentEnd="true"
             android:src="@drawable/ic_delete_red"
-            android:layout_height="32dp"/>
+            android:layout_height="?android:actionBarSize"/>
         <View
             android:layout_alignParentBottom="true"
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -56,55 +56,153 @@
         android:layout_above="@id/llViewBottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/llViewBottom"
-        android:background="@color/white"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize">
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
         <View
-            android:layout_alignParentTop="true"
-            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/view_dividerTop"
             android:layout_width="match_parent"
             android:background="?android:attr/dividerVertical"
             android:layout_height="@dimen/divider_size_small">
         </View>
+        <LinearLayout
+            android:id="@+id/lnViewPromotionSheet"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="@string/text_so_luong"
+                    android:visibility="invisible"
+                    android:layout_marginStart="@dimen/margin_normal"
+                    style="@style/text_bottomSheet_normal"
+                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/tvConPhaiThu2"
+                    android:layout_width="wrap_content"
+                    android:text="Tổng tiền:"
+                    style="@style/text_normal"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/tvItemCountLst2"
+                    android:layout_width="wrap_content"
+                    android:text="0"
+                    style="@style/text_large"
+                    android:visibility="invisible"
+                    android:textColor="@color/green"
+                    android:layout_marginRight="@dimen/margin_bottomSheet"
+                    android:layout_toLeftOf="@id/tvConPhaiThu2"
+                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:text="@string/text_so_luong"
-            android:layout_margin="@dimen/margin_normal"
-            style="@style/text_bottomSheet_normal"
-            android:layout_centerVertical="true"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/tvConPhaiThu"
-            android:layout_width="wrap_content"
-            android:text="@string/text_con_phai_thu"
-            style="@style/text_bottomSheet_normal"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/tvItemCountLst"
-            android:layout_width="wrap_content"
-            android:text="0"
-            style="@style/text_large"
-            android:textColor="@color/green"
-            android:layout_marginRight="@dimen/margin_bottomSheet"
-            android:layout_toLeftOf="@id/tvConPhaiThu"
-            android:layout_centerVertical="true"
-            android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/tvGiaPhaiThuLst2"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    style="@style/text_normal"
+                    android:text="50.000"
+                    android:layout_marginRight="@dimen/margin_normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="@string/text_so_luong"
+                    android:visibility="invisible"
+                    android:layout_marginStart="@dimen/margin_normal"
+                    style="@style/text_bottomSheet_normal"
+                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/tvConPhaiThu1"
+                    android:layout_width="wrap_content"
+                    android:text="Khuyến mại(63%)"
+                    style="@style/text_normal.item"
+                    android:textStyle="italic"
+                    android:textColor="@color/pink"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/tvItemCountLst1"
+                    android:layout_width="wrap_content"
+                    android:text="0"
+                    style="@style/text_large"
+                    android:visibility="invisible"
+                    android:textColor="@color/green"
+                    android:layout_marginRight="@dimen/margin_bottomSheet"
+                    android:layout_toLeftOf="@id/tvConPhaiThu1"
+                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content"/>
 
-        <TextView
-            android:id="@+id/tvGiaPhaiThuLst"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            style="@style/text_large"
-            android:text="0"
-            android:textColor="@color/green"
-            android:layout_marginRight="@dimen/margin_normal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/tvGiaPhaiThuLst1"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    style="@style/text_normal.item"
+                    android:textColor="@color/pink"
+                    android:text="-37.000"
+                    android:layout_marginRight="@dimen/margin_normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+        </LinearLayout>
+        <RelativeLayout
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/toolbar_height_size">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/text_so_luong"
+                android:layout_marginStart="@dimen/margin_normal"
+                style="@style/text_bottomSheet_normal"
+                android:layout_centerVertical="true"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/tvConPhaiThu"
+                android:layout_width="wrap_content"
+                android:text="@string/text_con_phai_thu"
+                style="@style/text_bottomSheet_normal"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/tvItemCountLst"
+                android:layout_width="wrap_content"
+                android:text="0"
+                style="@style/text_large"
+                android:textColor="@color/green"
+                android:layout_marginRight="@dimen/margin_bottomSheet"
+                android:layout_toLeftOf="@id/tvConPhaiThu"
+                android:layout_centerVertical="true"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tvGiaPhaiThuLst"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                style="@style/text_large"
+                android:text="0"
+                android:textColor="@color/green"
+                android:layout_marginRight="@dimen/margin_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+    </LinearLayout>
 </RelativeLayout>

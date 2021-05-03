@@ -185,4 +185,7 @@
 
     <string name="txt_in_hd">In hoá đơn</string>
     <string name="txt_huy_hd">Huỷ hoá đơn</string>
+
+    <string name="txt_promotion_percent">Khuyến mại:</string>
+    <string name="txt_table_name">- Bàn %s:</string>
 </resources>

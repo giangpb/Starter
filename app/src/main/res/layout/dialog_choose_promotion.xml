@@ -40,37 +40,39 @@
         </View>
     </RelativeLayout>
 
-        <RadioGroup
-            android:id="@+id/rdSlected"
-            android:layout_width="match_parent"
+    <RadioGroup
+        android:id="@+id/rdSlected"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/margin_normal"
+        android:weightSum="2">
+
+        <RadioButton
+            android:id="@+id/rdPhanTram"
+            android:layout_width="0dp"
+            android:checked="true"
+            android:buttonTint="@color/purple_500"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/margin_normal"
-            android:weightSum="2">
+            android:layout_weight="1"
+            android:text="@string/text_phan_tram" />
 
-            <RadioButton
-                android:id="@+id/rdPhanTram"
-                android:layout_width="0dp"
-                android:checked="true"
-                android:buttonTint="@color/purple_500"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/text_phan_tram" />
-
-            <RadioButton
-                android:id="@+id/rdSoTien"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:buttonTint="@color/purple_500"
-                android:text="@string/text_so_tien" />
-        </RadioGroup>
+        <RadioButton
+            android:id="@+id/rdSoTien"
+            android:layout_width="0dp"
+            android:checked="true"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/purple_500"
+            android:text="@string/text_so_tien" />
+    </RadioGroup>
     <EditText
         android:id="@+id/etValue"
         android:layout_width="match_parent"
         android:background="@drawable/custom_border_unit"
         android:gravity="right|center_vertical"
         android:ellipsize="end"
+        android:focusable="false"
         android:paddingRight="@dimen/margin_normal"
         android:text="0"
         android:textSize="42dp"
@@ -101,6 +103,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/key5p"
                 style="@style/btn_textView_recommend"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/text_view_button"
@@ -108,6 +111,7 @@
                 android:text="5%" />
 
             <TextView
+                android:id="@+id/key10p"
                 style="@style/btn_textView_recommend"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/text_view_button"
@@ -116,6 +120,7 @@
                 android:text="10%" />
 
             <TextView
+                android:id="@+id/key15p"
                 style="@style/btn_textView_recommend"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/text_view_button"
@@ -124,6 +129,7 @@
                 android:text="15%" />
 
             <TextView
+                android:id="@+id/key20p"
                 style="@style/btn_textView_recommend"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/text_view_button"
@@ -139,24 +145,28 @@
         android:weightSum="4"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/key7"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="7"
             style="@style/btn_textView"
             android:layout_height="@dimen/text_view_button"/>
         <TextView
+            android:id="@+id/key8"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="8"
             style="@style/btn_textView"
             android:layout_height="@dimen/text_view_button"/>
         <TextView
+            android:id="@+id/key9"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="9"
             style="@style/btn_textView"
             android:layout_height="@dimen/text_view_button"/>
         <ImageButton
+            android:id="@+id/keyDell"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:background="@drawable/button_dialog_textview_selected"
@@ -174,18 +184,21 @@
         android:weightSum="4"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/key4"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="4"
             style="@style/btn_textView"
             android:layout_height="@dimen/text_view_button"/>
         <TextView
+            android:id="@+id/key5"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="5"
             style="@style/btn_textView"
             android:layout_height="@dimen/text_view_button"/>
         <TextView
+            android:id="@+id/key6"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="6"
@@ -193,6 +206,7 @@
             android:layout_height="@dimen/text_view_button"/>
 
         <TextView
+            android:id="@+id/keyDellAll"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="C"
@@ -209,18 +223,21 @@
         android:weightSum="4"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/key1"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="1"
             style="@style/btn_textView"
             android:layout_height="@dimen/text_view_button"/>
         <TextView
+            android:id="@+id/key2"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="2"
             style="@style/btn_textView"
             android:layout_height="@dimen/text_view_button"/>
         <TextView
+            android:id="@+id/key3"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="3"
@@ -244,18 +261,21 @@
         android:weightSum="4"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/key0"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="0"
             style="@style/btn_textView"
             android:layout_height="@dimen/text_view_button"/>
         <TextView
+            android:id="@+id/key000"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="000"
             style="@style/btn_textView"
             android:layout_height="@dimen/text_view_button"/>
         <TextView
+            android:id="@+id/keyAccept"
             android:layout_width="0dp"
             android:layout_weight="2"
             android:text="Đồng ý"
