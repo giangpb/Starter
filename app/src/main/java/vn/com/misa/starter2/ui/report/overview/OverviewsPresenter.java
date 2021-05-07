@@ -62,4 +62,16 @@ public class OverviewsPresenter {
     public int doanhThuTheoNgay(String startDate, String endDate){
         return overviewsModel.doanhThuTheoNgay(startDate, endDate);
     }
+
+    /**
+     * Hàm thống kê doanh thu trung bình theo ngày
+     * @param startDate ngày bắt đầu
+     * @param endDate ngày kết thúc
+     * @return danh sách để đổ lên bar chart
+     * @author giangpb
+     * @date 05/05/2021
+     */
+    public ArrayList<OverviewHours> getAllDataByDay(String startDate, String endDate){
+        return overviewsModel.getAllDataByDay(startDate, endDate);
+    }
 }

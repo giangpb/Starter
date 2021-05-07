@@ -1,261 +1,335 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="match_parent">
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
-        android:layout_alignParentStart="true"
         android:layout_width="match_parent"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark"
-        android:layout_height="@dimen/toolbar_height_size">
+        android:layout_height="@dimen/toolbar_height_size"
+        android:layout_alignParentStart="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ImageView
                 android:id="@+id/ivBack"
                 android:layout_width="@dimen/size_ic_statusbar"
+                android:layout_height="@dimen/size_ic_statusbar"
                 android:layout_alignParentStart="true"
-                android:layout_marginLeft="@dimen/margin_large"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_large"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
-                android:background="?attr/selectableItemBackgroundBorderless"                android:src="@drawable/ic_icon_back"
-                android:layout_height="@dimen/size_ic_statusbar"/>
+                android:src="@drawable/ic_icon_back" />
+
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_centerInParent="true"
                 style="@style/text_large"
-                android:text="@string/text_doanh_thu_tong_quan"
-                android:layout_height="wrap_content"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/text_doanh_thu_tong_quan" />
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
+
     <RelativeLayout
         android:id="@+id/rlChooseDay"
-        android:layout_below="@id/appBarLayout"
         android:layout_width="match_parent"
-        android:background="@color/white"
-        android:layout_height="@dimen/btn_setup_menu_size_height">
+        android:layout_height="@dimen/btn_setup_menu_size_height"
+        android:layout_below="@id/appBarLayout"
+        android:background="@color/white">
+
         <TextView
             android:id="@+id/tvDaySelected"
-            android:layout_centerVertical="true"
             style="@style/text_normal"
-            android:layout_marginLeft="@dimen/margin_normal"
-            android:layout_alignParentStart="true"
             android:layout_width="wrap_content"
-            android:text="@string/day_example"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:text="@string/day_example" />
+
         <Spinner
             android:id="@+id/spSelectDay"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/margin_normal"
-            android:dropDownVerticalOffset="@dimen/btn_setup_menu_size_height"
-            android:layout_alignParentEnd="true"
-            android:layout_height="wrap_content"/>
-        <View
-            android:layout_alignParentBottom="true"
-            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:dropDownVerticalOffset="@dimen/btn_setup_menu_size_height" />
+
+        <View xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:background="?android:attr/dividerVertical"
-            android:layout_height="@dimen/divider_size_small">
-        </View>
+            android:layout_height="@dimen/divider_size_small"
+            android:layout_alignParentBottom="true"
+            android:background="?android:attr/dividerVertical"/>
     </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_below="@id/rlChooseDay"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/rlChooseDay">
+
         <LinearLayout
             android:id="@+id/llViewMain"
-            android:orientation="vertical"
-            android:visibility="visible"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height_size">
+
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:text="@string/text_tong_tien_thu_duoc"
                     style="@style/text_normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/margin_normal"
-                    android:layout_height="wrap_content"/>
+                    android:text="@string/text_tong_tien_thu_duoc" />
 
                 <TextView
                     android:id="@+id/tvTongTienThuDuoc"
-                    android:layout_width="wrap_content"
-                    android:layout_toLeftOf="@id/tvVnd"
-                    android:layout_centerVertical="true"
                     style="@style/vnd_money.large"
-                    android:text="@string/text_default_food_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/margin_small"
-                    android:layout_height="wrap_content"/>
+                    android:layout_toLeftOf="@id/tvVnd"
+                    android:text="@string/text_default_food_price" />
 
                 <TextView
                     android:id="@+id/tvVnd"
+                    style="@style/vnd_money"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:text="đ"
-                    style="@style/vnd_money"
                     android:layout_marginRight="@dimen/margin_normal"
-                    android:layout_height="wrap_content"/>
+                    android:text="đ" />
 
-                <View
-                    android:layout_alignParentBottom="true"
-                    xmlns:android="http://schemas.android.com/apk/res/android"
+                <View xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
-                    android:background="?android:attr/dividerVertical"
-                    android:layout_height="@dimen/divider_size_small">
-                </View>
+                    android:layout_height="@dimen/divider_size_small"
+                    android:layout_alignParentBottom="true"
+                    android:background="?android:attr/dividerVertical"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height_size">
+
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:text="@string/text_tien_mat"
                     style="@style/text_normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/margin_normal"
-                    android:layout_height="wrap_content"/>
+                    android:text="@string/text_tien_mat" />
 
                 <TextView
                     android:id="@+id/tvTienMat"
-                    android:layout_width="wrap_content"
-                    android:layout_toLeftOf="@id/tvVnd2"
-                    android:layout_centerVertical="true"
                     style="@style/vnd_money.large"
-                    android:text="@string/text_default_food_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/margin_small"
-                    android:layout_height="wrap_content"/>
+                    android:layout_toLeftOf="@id/tvVnd2"
+                    android:text="@string/text_default_food_price" />
 
                 <TextView
                     android:id="@+id/tvVnd2"
+                    style="@style/vnd_money"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:text="đ"
-                    style="@style/vnd_money"
                     android:layout_marginRight="@dimen/margin_normal"
-                    android:layout_height="wrap_content"/>
+                    android:text="đ" />
 
                 <View
-                    android:layout_alignParentBottom="true"
                     android:layout_width="match_parent"
-                    android:background="?android:attr/dividerVertical"
-                    android:layout_height="@dimen/divider_size_small">
-                </View>
+                    android:layout_height="@dimen/divider_size_small"
+                    android:layout_alignParentBottom="true"
+                    android:background="?android:attr/dividerVertical"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height_size">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:text="@string/text_thanh_toan_khac"
-                    style="@style/text_normal"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/margin_normal"
-                    android:layout_height="wrap_content"/>
 
                 <TextView
+                    style="@style/text_normal"
                     android:layout_width="wrap_content"
-                    android:layout_toLeftOf="@id/tvVnd3"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/margin_normal"
+                    android:text="@string/text_thanh_toan_khac" />
+
+                <TextView
                     style="@style/vnd_money.large"
-                    android:text="0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/margin_small"
-                    android:layout_height="wrap_content"/>
+                    android:layout_toLeftOf="@id/tvVnd3"
+                    android:text="0" />
 
                 <TextView
                     android:id="@+id/tvVnd3"
+                    style="@style/vnd_money"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:text="đ"
-                    style="@style/vnd_money"
                     android:layout_marginRight="@dimen/margin_normal"
-                    android:layout_height="wrap_content"/>
-                <View
-                    android:layout_alignParentBottom="true"
-                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:text="đ" />
+
+                <View xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
-                    android:background="?android:attr/dividerVertical"
-                    android:layout_height="@dimen/divider_size_small">
-                </View>
+                    android:layout_height="@dimen/divider_size_small"
+                    android:layout_alignParentBottom="true"
+                    android:background="?android:attr/dividerVertical"/>
             </RelativeLayout>
+
             <RelativeLayout
+                android:id="@+id/rlBaoCaoTheoNgay"
                 android:layout_width="match_parent"
                 android:layout_height="270dp">
+
+                <View xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/divider_top_day"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_size_small"
+                    android:layout_alignParentTop="true"
+                    android:background="?android:attr/dividerVertical"/>
+
+                <TextView
+                    android:id="@+id/tvDoanhThuTheoNgay"
+                    style="@style/text_normal.bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/divider_top_day"
+                    android:layout_marginLeft="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:letterSpacing="0.02"
+                    android:text="@string/text_doanh_thu_tb_theo_ngay" />
+
+                <TextView
+                    android:id="@+id/tvDoanhThuNgay"
+                    style="@style/text_normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvDoanhThuTheoNgay"
+                    android:layout_marginLeft="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/font_large"
+                    android:text="@string/text_doanh_thu" />
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/barChartNgay"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/tvDoanhThuNgay"
+                    android:layout_marginLeft="@dimen/margin_normal"
+                    android:layout_toLeftOf="@id/tvNgay" />
+
+                <TextView
+                    android:id="@+id/tvNgay"
+                    style="@style/text_normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_above="@id/dividerlalala"
+                    android:layout_marginBottom="@dimen/margin_normal"
+                    android:layout_marginRight="@dimen/margin_normal"
+                    android:text="Ngày" />
+
+                <View
+                    android:id="@+id/dividerlalala"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_size_small"
+                    android:background="?android:attr/dividerVertical" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="270dp"
+                android:layout_marginBottom="?actionBarSize">
+
                 <View
                     android:id="@+id/divider_top"
-                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
-                    android:layout_alignParentTop="true"
-                    android:background="?android:attr/dividerVertical"
-                    android:layout_height="@dimen/divider_size_small">
-                </View>
+                    android:layout_height="@dimen/divider_size_small"
+                    android:background="?android:attr/dividerVertical" />
+
                 <TextView
                     android:id="@+id/tvDoanhThuTheoGio"
-                    android:layout_width="wrap_content"
                     style="@style/text_normal.bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/divider_top"
-                    android:letterSpacing="0.02"
-                    android:layout_marginTop="@dimen/margin_normal"
                     android:layout_marginLeft="@dimen/margin_normal"
-                    android:text="@string/text_doanh_thu_tb_theo_gio"
-                    android:layout_height="wrap_content"/>
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:letterSpacing="0.02"
+                    android:text="@string/text_doanh_thu_tb_theo_gio" />
 
                 <TextView
                     android:id="@+id/tvDoanhThu"
                     style="@style/text_normal"
-                    android:layout_marginLeft="@dimen/margin_normal"
-                    android:text="@string/text_doanh_thu"
-                    android:layout_marginTop="@dimen/font_large"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/tvDoanhThuTheoGio"
-                    android:layout_height="wrap_content"/>
+                    android:layout_marginLeft="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/font_large"
+                    android:text="@string/text_doanh_thu" />
+
                 <com.github.mikephil.charting.charts.BarChart
                     android:id="@+id/barChart"
-                    android:layout_below="@id/tvDoanhThu"
                     android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/tvDoanhThu"
                     android:layout_marginLeft="@dimen/margin_normal"
-                    android:layout_toLeftOf="@id/tvGio"
-                    android:layout_height="match_parent"/>
+                    android:layout_toLeftOf="@id/tvGio" />
+
                 <TextView
                     android:id="@+id/tvGio"
-                    android:layout_width="wrap_content"
-                    android:text="Giờ"
                     style="@style/text_normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
                     android:layout_marginRight="@dimen/margin_normal"
-                    android:layout_height="wrap_content"/>
+                    android:text="Giờ" />
             </RelativeLayout>
         </LinearLayout>
 
 
     </ScrollView>
+
     <LinearLayout
         android:id="@+id/llNoData"
-        android:visibility="gone"
         android:layout_width="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_height="wrap_content">
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
         <ImageView
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@color/white"
-            android:src="@drawable/ic_report_nodata"
-            android:layout_height="wrap_content"/>
+            android:src="@drawable/ic_report_nodata" />
+
         <TextView
-            android:layout_width="wrap_content"
             style="@style/text_normal"
-            android:text="@string/text_payment_no_data"
-            android:layout_height="wrap_content"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_payment_no_data" />
     </LinearLayout>
 </RelativeLayout>

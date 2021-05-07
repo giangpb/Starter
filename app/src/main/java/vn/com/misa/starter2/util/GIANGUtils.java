@@ -4,11 +4,14 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.muddzdev.styleabletoast.StyleableToast;
@@ -90,5 +93,6 @@ public class GIANGUtils {
             view.setVisibility(View.VISIBLE);
         }
     }
+
 
 }

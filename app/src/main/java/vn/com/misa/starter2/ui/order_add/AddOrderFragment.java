@@ -33,6 +33,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -66,6 +67,7 @@ import vn.com.misa.starter2.model.entity.OrderDetail;
 import vn.com.misa.starter2.presenter.CategoryPresenter;
 import vn.com.misa.starter2.ui.listorder.OrderPresenter;
 import vn.com.misa.starter2.ui.setuplistitem.ItemFoodPresenter;
+import vn.com.misa.starter2.util.App;
 import vn.com.misa.starter2.util.GIANGCache;
 import vn.com.misa.starter2.util.GIANGConstants;
 import vn.com.misa.starter2.util.GIANGUtils;
@@ -85,6 +87,8 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
     private DecimalFormat decimalFormat;
 
     private EditText etValue;
+
+    private boolean isNewOrder = true;
 
     // chi tiết hoá đơn
     private OrderDetailPresenter mOrderDetailPresenter;
@@ -164,15 +168,20 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
     private boolean isPromotionRate =  true;
 
     private TextView tvPromotion;
-    private TextView tvPromotionDialog;
+
+    // promotion bottomsheet
+    private TextView tvGiaPhaiThuLst2;// Tổng tiền
+    private TextView tvGiaPhaiThuLst1; // khuyến mại
 
     private ImageView ivSearch;
+    @SuppressLint("DefaultLocale")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_order, container, false);
         // danh mục ban đầu bằng 0
+        // subscriber event bbus
         categoryPositionSelected = 0;
         //
         categoryPresenter = new CategoryPresenter(getContext());
@@ -196,6 +205,8 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         tvItemCount = view.findViewById(R.id.tvItemQuantity);
         btnLuuLai =view.findViewById(R.id.btnLuuLai);
         btnThuTien = view.findViewById(R.id.btnThuTien);
+        //
+
 
         fabSelectTable = view.findViewById(R.id.fabSelectTable);
         fabSelectDiscount = view.findViewById(R.id.fabSelectDiscount);
@@ -204,11 +215,14 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
 
         // lst bottom sheet
         tvItemCountLst = view.findViewById(R.id.tvItemCountLst);
-        tvGiaPhaiThuLst = view.findViewById(R.id.tvGiaPhaiThuLst);
+        tvGiaPhaiThuLst = view.findViewById(R.id.tvGiaPhaiThuLst); // còn phải thu
+        tvGiaPhaiThuLst2 = view.findViewById(R.id.tvGiaPhaiThuLst2); // Tổng tiền
+        tvGiaPhaiThuLst1 = view.findViewById(R.id.tvGiaPhaiThuLst1); // khuyến mại
 
         rlViewPromotion= view.findViewById(R.id.rlViewPromotion);
         rlViewPromotion.setVisibility(View.GONE);
         lnViewPromotionSheet = view.findViewById(R.id.lnViewPromotionSheet);
+        lnViewPromotionSheet.setVisibility(View.GONE);
 
         ivSearch = view.findViewById(R.id.ivSearch);
 
@@ -239,12 +253,27 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         additionPresenter = new AdditionPresenter(getActivity());
         orderDetailPresenter  = new OrderDetailPresenter(getActivity());
 
-
+        // khởi tạo
+        mOrder = new Order();
+        mOrder.setTotalAmount(0);
 
         // lấy bundle order
         Bundle bundle = getArguments();
+        isNewOrder = true;
+        EventBus.getDefault().register(this);
         if(bundle !=null){
+            isNewOrder = false;
             mOrder = (Order) bundle.getSerializable("order");
+            if (mOrder.getPromotionRate()==0){
+                if (mOrder.getPromotionAmount()>0){
+                    isPromotionRate = false;
+                    EventBus.getDefault().post(new OrderPromotion(mOrder.getPromotionAmount()));
+                }
+            }
+            else{
+                isPromotionRate = true;
+                EventBus.getDefault().post(new OrderPromotion(mOrder.getPromotionRate()));
+            }
             GIANGUtils.getInstance().checkShowHideView(mOrder.getTableName(),"",tvTableName);
             tvTableName.setText(mOrder.getTableName());
             checkPayment = bundle.getBoolean("check");
@@ -275,17 +304,14 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                 }
             }
 
-            for (OrderDetail orderDetail :mOrderDetails){
-                priceItemSelected += orderDetail.getAmount();
-            }
-            tvGiaPhaiThu.setText(decimalFormat.format(priceItemSelected));
-            tvGiaPhaiThuLst.setText(decimalFormat.format(priceItemSelected));
+            tvGiaPhaiThu.setText(decimalFormat.format(mOrder.getTotalAmount()));
+            tvGiaPhaiThuLst.setText(decimalFormat.format(mOrder.getTotalAmount()));
 
             if(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)>0){
                 tvItemCount.setVisibility(View.VISIBLE);
-                tvItemCount.setText(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)+"");
+                tvItemCount.setText(String.format("%d",itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)));
             }
-            tvItemCountLst.setText(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)+"");
+            tvItemCountLst.setText(String.format("%d",itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)));
 
         }
         else{
@@ -364,8 +390,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         if(checkPayment){
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
-        // subscriber event bbus
-        EventBus.getDefault().register(this);
+
     }
 
     @Override
@@ -431,7 +456,6 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                 try{
                     View alertLayout = getLayoutInflater().inflate(R.layout.dialog_choose_promotion, null);
 
-
                     LinearLayout llRecommend = alertLayout.findViewById(R.id.llRecommend);
 
                     LinearLayout llClosePopup = alertLayout.findViewById(R.id.llClosePopup);
@@ -453,6 +477,11 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                     TextView keyDellAll = alertLayout.findViewById(R.id.keyDellAll);
                     TextView keyAccept = alertLayout.findViewById(R.id.keyAccept);
                     ImageButton keyDell = alertLayout.findViewById(R.id.keyDell);
+
+                    if (mOrder.getPromotionAmount()!=0){
+                        stringBuilder.append(String.valueOf(mOrder.getPromotionAmount()));
+                        etValue.setText(GIANGUtils.getInstance().convertPriceIntToString(Integer.parseInt(stringBuilder.toString())));
+                    }
 
                     // events
                     tvKey0.setOnClickListener((view)->{
@@ -822,21 +851,25 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                 try{
                     if(lstItemSelected.size()>0 ){
                         // kiểm tra order đã tồn tại trước đó hay chưa, nếu chưa thì thêm mới, có rồi thì cập nhật lại
-                    if(mOrder ==null){
-                        Order order =new Order();
+                    if(isNewOrder){
                         long timeMillis = System.currentTimeMillis();
-                        order.setOrderID(timeMillis+"");
+                        mOrder.setOrderID(timeMillis+"");
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
                         String currentDateAndTime = sdf.format(new Date());
-                        order.setDateCrate(currentDateAndTime);
-                        order.setOrderStatus(1);
-                        order.setAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
-                        order.setItemNames(lstItemSelected.toString());
-                        order.setTableName(tvTableName.getText().toString().equals("0")?"":tvTableName.getText().toString());
-                        order.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
+                        mOrder.setDateCrate(currentDateAndTime);
+                        mOrder.setOrderStatus(1);
+                        int totalItemAmount = itemFoodPresenter.tinhTienHoaDon(lstItemSelected);
+                        mOrder.setAmount(totalItemAmount);
+                        mOrder.setItemNames(lstItemSelected.toString());
+                        mOrder.setTableName(tvTableName.getText().toString().equals("0")?"":tvTableName.getText().toString());
+                        mOrder.setTotalItemAmount(totalItemAmount);
+
+                        // kiểm tra đã chọn khuyến mại trước đó chưa, nếu chọn rồi thì ko thêm nữa
+                        if (mOrder.getTotalAmount() ==0)
+                            mOrder.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
 
                         // thêm vào order
-                        orderPresenter.addOrder(order);
+                        orderPresenter.addOrder(mOrder);
 
                         // thêm danh sách vào hoá đơnA
                         for(Item item :lstItemSelected){
@@ -861,9 +894,16 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                         String currentDateandTime = sdf.format(new Date());
 
                         mOrder.setOrderDate(currentDateandTime);
-                        mOrder.setAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
+                        int totalItemAmount = itemFoodPresenter.tinhTienHoaDon(lstItemSelected);
+
+                        mOrder.setAmount(totalItemAmount);
+                        mOrder.setTotalItemAmount(totalItemAmount);
                         mOrder.setItemNames(lstItemSelected.toString());
-                        mOrder.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
+
+                        // kiểm tra đã chọn khuyến mại trước đó chưa, nếu chọn rồi thì ko thêm nữa
+                        if (mOrder.getTotalAmount() ==0)
+                            mOrder.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
+
                         mOrder.setTableName(tvTableName.getText().toString().equals("0")?"":tvTableName.getText().toString());
                         // cập nhật hoá đơn
                         orderPresenter.updateOrder(mOrder);
@@ -911,8 +951,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                     if(lstItemSelected.size() >0){
                         // lưu lại
                         // kiểm tra order đã tồn tại trước đó hay chưa, nếu chưa thì thêm mới, có rồi thì cập nhật lại
-                        if(mOrder ==null){
-                            mOrder =new Order();
+                        if(isNewOrder){
                             long timeMillis = System.currentTimeMillis();
                             mOrder.setOrderID(timeMillis+"");
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
@@ -1006,9 +1045,39 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
             rlViewPromotion.setVisibility(View.GONE);
         }
         else{
-            lnViewPromotionSheet.setVisibility(View.VISIBLE);
-            rlViewPromotion.setVisibility(View.VISIBLE);
-            tvPromotion.setText(String.format("-%s",GIANGUtils.getInstance().convertPriceIntToString(orderPromotion.getPromotion())));
+            // kiểm tra có lớn hơn <= số tiền của order ko
+            if (!isPromotionRate){ // khuyến mại tiền
+                int totalItemAmount = itemFoodPresenter.tinhTienHoaDon(lstItemSelected);
+                mOrder.setTotalItemAmount(totalItemAmount);
+                if (totalItemAmount>=orderPromotion.getPromotion()){
+                    // tiền khuyễn mãi
+                    mOrder.setPromotionRate(0);
+                    mOrder.setPromotionAmount(orderPromotion.getPromotion());
+                    int totalAmount = totalItemAmount - orderPromotion.getPromotion();
+                    mOrder.setTotalAmount(totalAmount);
+
+                    lnViewPromotionSheet.setVisibility(View.VISIBLE);
+                    rlViewPromotion.setVisibility(View.VISIBLE);
+                    tvPromotion.setText(String.format("-%s",GIANGUtils.getInstance().convertPriceIntToString(orderPromotion.getPromotion())));
+                    tvGiaPhaiThu.setText(decimalFormat.format(totalAmount));
+
+                    // bottomSheet
+                    tvGiaPhaiThuLst2.setText(decimalFormat.format(totalItemAmount)); // tổng tiền
+                    tvGiaPhaiThuLst.setText(decimalFormat.format(totalAmount));
+                    tvGiaPhaiThuLst1.setText(decimalFormat.format(orderPromotion.getPromotion()));
+                }
+                else{
+                    Toast.makeText(getContext(), "Tiền khuyễn mại không được lớn hơn tổng tiền order.", Toast.LENGTH_SHORT).show();
+                    lnViewPromotionSheet.setVisibility(View.GONE);
+                    rlViewPromotion.setVisibility(View.GONE);
+                }
+            }
+            else{ // khuyến mại phần trăm
+                lnViewPromotionSheet.setVisibility(View.VISIBLE);
+                rlViewPromotion.setVisibility(View.VISIBLE);
+                tvPromotion.setText(String.format("-%s",GIANGUtils.getInstance().convertPriceIntToString(orderPromotion.getPromotion())));
+            }
+
         }
     }
 

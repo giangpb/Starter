@@ -120,4 +120,32 @@ public class OverviewsModel extends DatabaseHelper {
         }
         return null;
     }
+
+    /**
+     * Hàm thống kê doanh thu trung bình theo ngày
+     * @param startDate ngày bắt đầu
+     * @param endDate ngày kết thúc
+     * @return danh sách để đổ lên bar chart
+     * @author giangpb
+     * @date 05/05/2021
+     */
+    public ArrayList<OverviewHours> getAllDataByDay(String startDate, String endDate){
+        try{
+            ArrayList<OverviewHours> data = new ArrayList<>();
+            connectSQLite();
+            Cursor cursor = sqLiteDatabase.rawQuery("SELECT strftime ('%d',CreatedDate) day, sum(Amount) FROM SAInvoiceDetail GROUP BY strftime ('%d',CreatedDate) HAVING CreatedDate BETWEEN ? AND ? AND RefDetailType = 1 ORDER BY strftime ('%d',CreatedDate)", new String[]{startDate+"%", endDate+"%"});
+            while (cursor.moveToNext()){
+                OverviewHours overviewHours = new OverviewHours();
+                overviewHours.setHour(cursor.getInt(0));
+                overviewHours.setMoney(cursor.getInt(1));
+                data.add(overviewHours);
+            }
+            cursor.close();
+            return data;
+        }
+        catch (Exception ex){
+            Log.d(TAG, "getAllData: "+ex.getMessage());
+        }
+        return null;
+    }
 }

@@ -85,6 +85,11 @@ public class OrderModel extends DatabaseHelper {
             values.put("TotalAmount", order.getTotalAmount());
             values.put("TableName", order.getTableName());
             values.put("ItemNames", order.getItemNames());
+
+            values.put("TotalItemAmount", order.getTotalItemAmount());
+            values.put("PromotionRate", order.getPromotionRate());
+            values.put("PromotionAmount", order.getPromotionAmount());
+            values.put("DiscountAmount", order.getDiscountAmount());
             sqLiteDatabase.insert("Order1", null,values);
             return true;
         }
@@ -111,6 +116,11 @@ public class OrderModel extends DatabaseHelper {
             values.put("TableName", order.getTableName());
             values.put("TotalAmount", order.getTotalAmount());
             values.put("ItemNames", order.getItemNames());
+
+            values.put("TotalItemAmount", order.getTotalItemAmount());
+            values.put("PromotionRate", order.getPromotionRate());
+            values.put("PromotionAmount", order.getPromotionAmount());
+            values.put("DiscountAmount", order.getDiscountAmount());
             sqLiteDatabase.update("Order1", values,"OrderID = ?", new String[]{order.getOrderID()});
             return true;
         }
