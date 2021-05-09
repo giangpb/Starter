@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -33,6 +34,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.List;
 
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.adapter.spinn.SelectedDayReportOverviewSpinner;
@@ -72,6 +74,13 @@ public class OverviewReportFragment extends Fragment {
     private LinearLayout llViewMain;
     private LinearLayout llNoData;
 
+    // Báo cáo theo ngày
+    private RelativeLayout rlBaoCaoTheoNgay;
+    private BarChart barChartNgay;
+    private BarData barDataNgay;
+    private BarDataSet barDataSetNgay;
+    private ArrayList barEntriesNgay;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,6 +99,10 @@ public class OverviewReportFragment extends Fragment {
         tvTongTienThuDuoc = view.findViewById(R.id.tvTongTienThuDuoc);
         tvTienMat = view.findViewById(R.id.tvTienMat);
         tvDaySelected = view.findViewById(R.id.tvDaySelected);
+
+        rlBaoCaoTheoNgay = view.findViewById(R.id.rlBaoCaoTheoNgay);
+        barChartNgay = view.findViewById(R.id.barChartNgay);
+        rlBaoCaoTheoNgay.setVisibility(View.GONE);
 
         overviewsPresenter = new OverviewsPresenter(getContext());
 
@@ -120,13 +133,42 @@ public class OverviewReportFragment extends Fragment {
         YAxis rightAxis = barChart.getAxisRight();
         rightAxis.setDrawLabels(false);
 
+        initBarcharDay();
+
         // xử lý sự kiện
         addEvents();
 
         return view;
     }
 
-    private void setEntries(ArrayList<OverviewHours> data){
+    private void initBarcharDay(){
+        barChartNgay.setDrawBarShadow(false);
+        barChartNgay.setDrawValueAboveBar(true);
+        barChartNgay.getDescription().setEnabled(false);
+
+        // scaling can now only be done on x- and y-axis separately
+        barChartNgay.setPinchZoom(false);
+        barChartNgay.setDrawGridBackground(true);
+
+        barChartNgay.animateXY(1200, 1200);
+        barChartNgay.getLegend().setEnabled(false);
+
+        XAxis xAxis = barChartNgay.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f); //only intervals of 1 hour
+
+        //IAxisValueFormatter custom = new MyAxisValueFormatter();
+
+        YAxis rightAxis = barChartNgay.getAxisRight();
+        rightAxis.setDrawLabels(false);
+    }
+
+    /**
+     * Hàm fill theo giờ
+     * @param data
+     */
+    private void setEntries(List<OverviewHours> data){
         // xoá bỏ vew cũ đi, cập nhật lại theo ngày
         barChart.removeAllViews();
 
@@ -147,6 +189,29 @@ public class OverviewReportFragment extends Fragment {
 
         //barDataSet.setBarBorderWidth(20f);
         //barDataSet.setValueTextSize(16f);
+    }
+
+    /**
+     * Hàm fill theo ngày
+     * @param data
+     */
+    private void setEntriesByDay(List<OverviewHours> data){
+        // xoá bỏ vew cũ đi, cập nhật lại theo ngày
+        barChartNgay.removeAllViews();
+
+        barEntriesNgay = new ArrayList();
+        for (OverviewHours item :data){
+            barEntriesNgay.add(new BarEntry((float)item.getHour(), (float)item.getMoney()));
+        }
+        barDataSetNgay = new BarDataSet(barEntriesNgay,"Data set");
+        //barDataSet.setBarBorderWidth(10f);
+        barDataSetNgay.setHighlightEnabled(false);
+        barDataNgay = new BarData(barDataSetNgay);
+        //barData.setBarWidth(2f);
+        barChartNgay.setData(barDataNgay);
+
+        barDataSetNgay.setColors(ColorTemplate.MATERIAL_COLORS);
+        barDataSetNgay.setValueTextColor(Color.BLACK);
     }
 
     /**
@@ -181,13 +246,14 @@ public class OverviewReportFragment extends Fragment {
                     String daySelected =null;
                     int doanhThu = 0;
 
-                    ArrayList<OverviewHours> data = null;
+                    List<OverviewHours> data = null;
                     // format for querry
                     Instant now = Instant.now();
                     DateTimeFormatter DATE_TIME_FORMATTER_SHOW = DateTimeFormatter.ofPattern("EEEE - dd/MM/yyyy").withZone(ZoneId.systemDefault());
                     DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneId.systemDefault());
                     DateTimeFormatter DATE_TIME_FORMATTER_VN = DateTimeFormatter.ofPattern("dd/MM/yyyy").withZone(ZoneId.systemDefault());
                     if (position ==0){ // fill theo today
+                        rlBaoCaoTheoNgay.setVisibility(View.GONE);
                         daySelected = DATE_TIME_FORMATTER_SHOW.format(now);
                         doanhThu = overviewsPresenter.doanhThuTheoNgay(DATE_TIME_FORMATTER.format(now));
                         data = overviewsPresenter.getAllData(DATE_TIME_FORMATTER.format(now));
@@ -195,19 +261,22 @@ public class OverviewReportFragment extends Fragment {
 
                     }
                     if(position ==1){// fill theo yesterday
+                        rlBaoCaoTheoNgay.setVisibility(View.GONE);
                         Instant yesterday = now.minus(1, ChronoUnit.DAYS);
                         daySelected = DATE_TIME_FORMATTER_SHOW.format(yesterday);
                         doanhThu = overviewsPresenter.doanhThuTheoNgay(DATE_TIME_FORMATTER.format(yesterday));
                         data = overviewsPresenter.getAllData(DATE_TIME_FORMATTER.format(yesterday));
                     }
                     if (position==2){ // fill theo week
+                        rlBaoCaoTheoNgay.setVisibility(View.VISIBLE);
                         Instant week = now.minus(7, ChronoUnit.DAYS);
 
                         daySelected = DATE_TIME_FORMATTER_VN.format(week) +" - "+DATE_TIME_FORMATTER_VN.format(now);
 
                         doanhThu = overviewsPresenter.doanhThuTheoNgay(DATE_TIME_FORMATTER.format(week), DATE_TIME_FORMATTER.format(now));
                         data = overviewsPresenter.getAllData(DATE_TIME_FORMATTER.format(week), DATE_TIME_FORMATTER.format(now));
-
+                        List<OverviewHours> dataByDay = overviewsPresenter.getAllDataByDay(DATE_TIME_FORMATTER.format(week), DATE_TIME_FORMATTER.format(now));
+                        setEntriesByDay(dataByDay);
                     }
                     tvDaySelected.setText(daySelected);
                     if(data != null && data.size()>0){

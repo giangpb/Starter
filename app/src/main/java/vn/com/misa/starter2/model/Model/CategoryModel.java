@@ -11,6 +11,7 @@ import vn.com.misa.starter2.datautils.DatabaseHelper;
 import vn.com.misa.starter2.model.entity.Category;
 import vn.com.misa.starter2.ui.chooserectaurant.SelectRestaurantFragment;
 import vn.com.misa.starter2.ui.setupmenu.SetupMenuFragment;
+import vn.com.misa.starter2.util.GIANGUtils;
 
 /**
  * ‐ model category lấy danh danh mục từ sqlite
@@ -52,6 +53,27 @@ public class CategoryModel extends DatabaseHelper {
         }
         cursor.close();
         return categoryList;
+    }
+
+    /**
+     * Cập nhật danh mục
+     * @param category
+     * @return
+     */
+    public boolean updateCategory(Category category){
+        try{
+            connectSQLite();
+            ContentValues values = new ContentValues();
+            values.put("InventoryItemCategoryName", category.getCategoryName());
+            values.put("IconPath", category.getIconPath());
+            values.put("IconType", category.getIconType());
+            sqLiteDatabase.update(TABLE, values, "InventoryItemCategoryID = ?", new String[]{category.getCategoryID()});
+            return true;
+        }
+        catch (Exception ex){
+            GIANGUtils.getInstance().handlerLog(ex.getMessage());
+        }
+        return false;
     }
 
     /**

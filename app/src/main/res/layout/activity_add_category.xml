@@ -59,19 +59,23 @@
         android:layout_below="@id/tvTenNhom"
         android:text="@string/text_bieu_tuong"
         android:layout_height="wrap_content"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvListCategory"
-        android:layout_below="@id/tvBieuTuong"
-        android:layout_above="@id/btnSave"
-        tools:itemCount="14"
-        android:layout_marginLeft="@dimen/margin_normal"
-        android:layout_marginRight="@dimen/margin_normal"
-        app:spanCount="5"
-        android:overScrollMode="never"
-        tools:listitem="@layout/item_show_icon"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_above="@id/btnSave"
+        android:layout_below="@id/tvBieuTuong"
+        android:layout_marginLeft="@dimen/margin_normal"
+        android:layout_marginTop="1dp"
+        android:layout_marginRight="@dimen/margin_normal"
+        android:layout_marginBottom="13dp"
+        android:overScrollMode="never"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="5"
+        tools:itemCount="14"
+        tools:listitem="@layout/item_show_icon" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSave"
         android:layout_width="match_parent"

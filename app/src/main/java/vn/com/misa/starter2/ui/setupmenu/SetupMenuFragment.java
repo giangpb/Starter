@@ -1,6 +1,8 @@
 package vn.com.misa.starter2.ui.setupmenu;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -34,6 +36,8 @@ import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.adapter.ListMenuPagerAdapter;
 import vn.com.misa.starter2.model.entity.Category;
 import vn.com.misa.starter2.presenter.CategoryPresenter;
+import vn.com.misa.starter2.ui.category.CategorySetupActivity;
+import vn.com.misa.starter2.util.GIANGUtils;
 
 /**
  * - Fragment thiết lập thực đơn
@@ -76,43 +80,40 @@ public class SetupMenuFragment extends Fragment{
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_setup_menu, container, false);
 
-        viewShowPopup = view.findViewById(R.id.viewShowPopup);
-        // khởi tạo các điều khiển
-        btnContinueSetupMenu = view.findViewById(R.id.btnContinueSelectMenu);
-        ivArrowBackHome = view.findViewById(R.id.ivArrowBackHome);
-        fabAddFood = view.findViewById(R.id.fabAddFood);
+        try {
+            viewShowPopup = view.findViewById(R.id.viewShowPopup);
+            // khởi tạo các điều khiển
+            btnContinueSetupMenu = view.findViewById(R.id.btnContinueSelectMenu);
+            ivArrowBackHome = view.findViewById(R.id.ivArrowBackHome);
+            fabAddFood = view.findViewById(R.id.fabAddFood);
 
 
-        categoryPresenter = new CategoryPresenter(getActivity());
+            categoryPresenter = new CategoryPresenter(getActivity());
 
 
-        ivOptionMenu = view.findViewById(R.id.ivOptionMenu);
+            ivOptionMenu = view.findViewById(R.id.ivOptionMenu);
 
-        // khởi tạo viewpager
-        mData = categoryPresenter.getListCategory();
+            // khởi tạo viewpager
+            mData = categoryPresenter.getListCategory();
 //        menuPagerAdapter = new ListMenuPagerAdapter(getActivity(),mData);
-        menuPagerAdapter = new ListMenuPagerAdapter(getParentFragmentManager(), getLifecycle(),mData);
-        viewPagerListFoodMenu = view.findViewById(R.id.viewPagerListFoodMenu);
-        tabLayout = view.findViewById(R.id.tabLayout);
-        viewPagerListFoodMenu.setAdapter(menuPagerAdapter);
-        viewPagerListFoodMenu.setOffscreenPageLimit(10);
+            menuPagerAdapter = new ListMenuPagerAdapter(getParentFragmentManager(), getLifecycle(),mData);
+            viewPagerListFoodMenu = view.findViewById(R.id.viewPagerListFoodMenu);
+            tabLayout = view.findViewById(R.id.tabLayout);
+            viewPagerListFoodMenu.setAdapter(menuPagerAdapter);
+            viewPagerListFoodMenu.setOffscreenPageLimit(10);
 
-        new TabLayoutMediator(tabLayout, viewPagerListFoodMenu, ((tab, position) -> {
-            tab.setText(mData.get(position).getCategoryName());
-            tab.setIcon(getMyDrawable(getActivity(), mData.get(position).getIconPath()));
-        })).attach();
+            new TabLayoutMediator(tabLayout, viewPagerListFoodMenu, ((tab, position) -> {
+                tab.setText(mData.get(position).getCategoryName());
+                tab.setIcon(getMyDrawable(getActivity(), mData.get(position).getIconPath()));
+            })).attach();
 
-//        new TabLayoutMediator(tabLayout, viewPagerListFoodMenu,
-//                new TabLayoutMediator.TabConfigurationStrategy() {
-//                    @Override public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-//                        tab.setText(mData.get(position).getCategoryName());
-//                        tab.setIcon(getMyDrawable(getActivity(),mData.get(position).getIconPath()));
-//                    }
-//                }).attach();
+            // khởi tạo các sự kiện
 
-        // khởi tạo các sự kiện
-
-        addEvents();
+            addEvents();
+        }
+        catch (Exception ex){
+            GIANGUtils.getInstance().handlerLog(ex.getMessage());
+        }
 
         return view;
     }
@@ -164,10 +165,15 @@ public class SetupMenuFragment extends Fragment{
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
             // sự kiện nhấn vào từng item
+            @SuppressLint("NonConstantResourceId")
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.menu_delete_all_food:
                         Toast.makeText(getActivity(), ""+category.getCategoryName(), Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.menu_setupGroupMenu:
+                        Intent intent = new Intent(getContext(), CategorySetupActivity.class);
+                        startActivity(intent);
                         return true;
                 }
                 return false;
@@ -175,7 +181,6 @@ public class SetupMenuFragment extends Fragment{
         });
         popup.show();
     }
-
 
     /**
      * Hàm thiết lập các sự kiện

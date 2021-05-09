@@ -84,6 +84,7 @@
     <string name="text_tien_mat">Tiền mặt</string>
     <string name="text_thanh_toan_khac">Thanh toán khác</string>
     <string name="text_doanh_thu_tb_theo_gio">DOANH THU TRUNG BÌNH THEO GIỜ</string>
+    <string name="text_doanh_thu_tb_theo_ngay">DOANH THU TRUNG BÌNH THEO NGÀY</string>
 
     <!--    Drawable navigation-->
     <string name="ds_hoa_don">Danh sách hoá đơn</string>
@@ -186,6 +187,6 @@
     <string name="txt_in_hd">In hoá đơn</string>
     <string name="txt_huy_hd">Huỷ hoá đơn</string>
 
-    <string name="txt_promotion_percent">Khuyến mại:</string>
+    <string name="txt_promotion_percent">Khuyến mại</string>
     <string name="txt_table_name">- Bàn %s:</string>
 </resources>

@@ -37,7 +37,15 @@ public class Order implements Serializable {
 
     private String dateCrate; // ngày tạo
 
-    public Order(){}
+    public Order(){
+        this.amount = 0;
+        this.promotionItemsAmount = 0;
+        this.totalItemAmount = 0;
+        this.promotionRate = 0;
+        this.promotionAmount = 0;
+        this.discountAmount = 0;
+        this.totalAmount = 0;
+    }
 
     public String getOrderID() {
         return orderID;

@@ -129,11 +129,11 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
         if (stringBuilder.length()>0){
             int tien = Integer.parseInt(stringBuilder.toString());
             moneyReceive = tien;
-            if (tien<=mOrder.getAmount()){
+            if (tien<=mOrder.getTotalAmount()){
                 tvTraLai.setText("0");
             }
             else {
-                tvTraLai.setText(decimalFormat.format(tien- mOrder.getAmount()));
+                tvTraLai.setText(decimalFormat.format(tien- mOrder.getTotalAmount()));
             }
             tvKhachDua.setText(decimalFormat.format(tien));
         }
@@ -153,7 +153,7 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
         Bundle bundle = getArguments();
         mOrder = (Order)  bundle.getSerializable("order");
 
-        moneyReceive = mOrder.getAmount();
+        moneyReceive = mOrder.getTotalAmount();
         // khởi tạo điều khiển
         orderPresenter = new OrderPresenter(getContext());
         paymentPresenter = new PaymentPresenter(getContext());
@@ -180,7 +180,7 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
         rcvLstMoneyRequirement = mView.findViewById(R.id.rcvLstMoneyRequirement);
         // nạp danh sách gợi ý tiền
         for(int i=0; i<dataMoney.length; i++){
-            if(dataMoney[i]>=mOrder.getAmount()){
+            if(dataMoney[i]>=mOrder.getTotalAmount()){
                 lstMoney.add(dataMoney[i]);
             }
         }
@@ -194,8 +194,8 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
         Log.d(TAG, "onCreateView: "+AddOrderFragment.lstItemSelected.toString());
 
         // gán thông tin
-        tvTongTien.setText(decimalFormat.format(mOrder.getAmount()));
-        tvKhachDua.setText(decimalFormat.format(mOrder.getAmount()));
+        tvTongTien.setText(decimalFormat.format(mOrder.getTotalAmount()));
+        tvKhachDua.setText(decimalFormat.format(mOrder.getTotalAmount()));
         tvTraLai.setText(0+"");
 
         addEvents();
@@ -283,7 +283,7 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
             public void onClick(View v) {
                 try{
                     // thêm dialog progress
-                    if (moneyReceive>= mOrder.getAmount()){
+                    if (moneyReceive>= mOrder.getTotalAmount()){
                         orderPresenter.paymentDone(mOrder.getOrderID());
                         autoIDPresenter.addAutoID(mOrder.getOrderID());
                         int type = autoIDPresenter.getIDAuto(mOrder.getOrderID());
@@ -306,15 +306,15 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
                         // khuyến mãi theo từng sản phẩm
                         payment.setPromotionItemsAmount(0);
                         // sau khi khuyến mãi ...
-                        payment.setTotalAmount(mOrder.getAmount());
+                        payment.setTotalAmount(mOrder.getTotalAmount());
                         payment.setPromotionRate(0);
                         payment.setPromotionAmount(0);
                         payment.setDiscountAmount(0);
-                        payment.setPreTaxAmount(mOrder.getAmount());
+                        payment.setPreTaxAmount(mOrder.getTotalAmount());
 
-                        payment.setTotalAmount(mOrder.getAmount());
+                        payment.setTotalAmount(mOrder.getTotalAmount());
                         payment.setReceiveAmount(moneyReceive);
-                        payment.setReturnAmount(moneyReceive - mOrder.getAmount());
+                        payment.setReturnAmount(moneyReceive - mOrder.getTotalAmount());
                         payment.setPaymentStatus(3);
                         payment.setOrderID(mOrder.getOrderID());
                         payment.setOrderType(1);
@@ -375,7 +375,7 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
     public void onListMoneyClick(int money) {
         moneyReceive = money;
         tvKhachDua.setText(decimalFormat.format(money));
-        int moneyChange = money - mOrder.getAmount();
+        int moneyChange = money - mOrder.getTotalAmount();
         tvTraLai.setText(decimalFormat.format(moneyChange));
     }
 
