@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Toast;
+
+import vn.com.misa.starter2.ui.setupmenu.SetupMenuFragment;
 
 public class MainActivity extends AppCompatActivity {
 

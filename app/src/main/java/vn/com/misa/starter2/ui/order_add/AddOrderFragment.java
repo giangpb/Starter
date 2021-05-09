@@ -253,95 +253,99 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
         additionPresenter = new AdditionPresenter(getActivity());
         orderDetailPresenter  = new OrderDetailPresenter(getActivity());
 
-        // khởi tạo
-        mOrder = new Order();
-        mOrder.setTotalAmount(0);
+        try{
+            // khởi tạo
+            mOrder = new Order();
+            mOrder.setTotalAmount(0);
 
-        // lấy bundle order
-        Bundle bundle = getArguments();
-        isNewOrder = true;
-        EventBus.getDefault().register(this);
-        if(bundle !=null){
-            isNewOrder = false;
-            mOrder = (Order) bundle.getSerializable("order");
-            if (mOrder.getPromotionRate()==0){
-                if (mOrder.getPromotionAmount()>0){
-                    isPromotionRate = false;
-                    EventBus.getDefault().post(new OrderPromotion(mOrder.getPromotionAmount()));
-                }
-            }
-            else{
-                isPromotionRate = true;
-                EventBus.getDefault().post(new OrderPromotion(mOrder.getPromotionRate()));
-            }
-            GIANGUtils.getInstance().checkShowHideView(mOrder.getTableName(),"",tvTableName);
-            tvTableName.setText(mOrder.getTableName());
-            checkPayment = bundle.getBoolean("check");
-            // gán cho danh sách selected item
-            lstItemSelected = itemFoodPresenter.getItemInOrderDetail(mOrder.getOrderID());
-
-            // cập nhật sản số lượng danh mục theo sản phẩm chọn
-            updateCountCategory();
-
-
-            // gán cho danh sách order bottomsheet
-            orderBottomSheetAdapter.addData(lstItemSelected);
-
-            checkAddFirst=true;
-            // kiểm tra đang xem order hay tạo mới
-
-            mOrderDetailPresenter = new OrderDetailPresenter(getActivity());
-            mOrderDetails = mOrderDetailPresenter.getOrderDetail(mOrder.getOrderID());
-//            Log.d(TAG, "onCreateView: "+mOrderDetails.toString());
-
-            for(int i=0; i<lstItem.size(); i++){
-                Item item = lstItem.get(i);
-                for(OrderDetail orderDetail :mOrderDetails){
-                    if (orderDetail.getItemID().equalsIgnoreCase(item.getItemID())){ // fix sau
-                        item.setQuantity(orderDetail.getQuantity());
-                        lstItem.set(i,item);
+            // lấy bundle order
+            Bundle bundle = getArguments();
+            isNewOrder = true;
+            EventBus.getDefault().register(this);
+            if(bundle !=null){
+                isNewOrder = false;
+                mOrder = (Order) bundle.getSerializable("order");
+                if (mOrder.getPromotionRate()==0){
+                    if (mOrder.getPromotionAmount()>0){
+                        isPromotionRate = false;
+                        EventBus.getDefault().post(new OrderPromotion(mOrder.getPromotionAmount()));
                     }
                 }
-            }
+                else{
+                    isPromotionRate = true;
+                    EventBus.getDefault().post(new OrderPromotion(mOrder.getPromotionRate()));
+                }
+                GIANGUtils.getInstance().checkShowHideView(mOrder.getTableName(),"",tvTableName);
+                tvTableName.setText(mOrder.getTableName());
+                checkPayment = bundle.getBoolean("check");
+                // gán cho danh sách selected item
+                lstItemSelected = itemFoodPresenter.getItemInOrderDetail(mOrder.getOrderID());
+
+                // cập nhật sản số lượng danh mục theo sản phẩm chọn
+                updateCountCategory();
+
+
+                // gán cho danh sách order bottomsheet
+                orderBottomSheetAdapter.addData(lstItemSelected);
+
+                checkAddFirst=true;
+                // kiểm tra đang xem order hay tạo mới
+
+                mOrderDetailPresenter = new OrderDetailPresenter(getActivity());
+                mOrderDetails = mOrderDetailPresenter.getOrderDetail(mOrder.getOrderID());
+//            Log.d(TAG, "onCreateView: "+mOrderDetails.toString());
+
+                for(int i=0; i<lstItem.size(); i++){
+                    Item item = lstItem.get(i);
+                    for(OrderDetail orderDetail :mOrderDetails){
+                        if (orderDetail.getItemID().equalsIgnoreCase(item.getItemID())){ // fix sau
+                            item.setQuantity(orderDetail.getQuantity());
+                            lstItem.set(i,item);
+                        }
+                    }
+                }
 
             tvGiaPhaiThu.setText(decimalFormat.format(mOrder.getTotalAmount()));
             tvGiaPhaiThuLst.setText(decimalFormat.format(mOrder.getTotalAmount()));
 
-            if(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)>0){
-                tvItemCount.setVisibility(View.VISIBLE);
-                tvItemCount.setText(String.format("%d",itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)));
-            }
-            tvItemCountLst.setText(String.format("%d",itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)));
+                if(itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)>0){
+                    tvItemCount.setVisibility(View.VISIBLE);
+                    tvItemCount.setText(String.format("%d",itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)));
+                }
+                tvItemCountLst.setText(String.format("%d",itemFoodPresenter.tongSoLuongSanPham(lstItemSelected)));
 
-        }
-        else{
-            // khởi tạo danh sách mới chứa item order mới
-            lstItemSelected = new ArrayList<>();
-            tvTableName.setVisibility(View.GONE);
-        }
+            }
+            else{
+                // khởi tạo danh sách mới chứa item order mới
+                lstItemSelected = new ArrayList<>();
+                tvTableName.setVisibility(View.GONE);
+            }
 //        tvGiaPhaiThu.setText(decimalFormat.format(itemFoodPresenter.tinhTienHoaDon(lstItemSelected)));
 
-        //Log.d(TAG, "onCreateView: "+lstItemSelected.toString());
-        // khởi tạo danh sách sản phẩm
-        rcvListItemOfCategory = view.findViewById(R.id.rcvListItemOfCategory);
-        swipeItemAdapter = new SwipeItemAdapter(getActivity(), this);
+            //Log.d(TAG, "onCreateView: "+lstItemSelected.toString());
+            // khởi tạo danh sách sản phẩm
+            rcvListItemOfCategory = view.findViewById(R.id.rcvListItemOfCategory);
+            swipeItemAdapter = new SwipeItemAdapter(getActivity(), this);
 
-        // danh sách bổ sung danh mục
-        mAdditionCategories = additionPresenter.additionCategories(categoryPresenter.getListCategory().get(0).getCategoryID());
+            // danh sách bổ sung danh mục
+            mAdditionCategories = additionPresenter.additionCategories(categoryPresenter.getListCategory().get(0).getCategoryID());
 
-        // danh sách sản phẩm theo danh mục
-        swipeItemAdapter.clearAllItem();
-        for(Item item : lstItem){
-            if(item.getCategoryID().equals(categoryPresenter.getListCategory().get(0).getCategoryID())){
-                swipeItemAdapter.addItem(item);
+            // danh sách sản phẩm theo danh mục
+            swipeItemAdapter.clearAllItem();
+            for(Item item : lstItem){
+                if(item.getCategoryID().equals(categoryPresenter.getListCategory().get(0).getCategoryID())){
+                    swipeItemAdapter.addItem(item);
+                }
             }
+
+            rcvListItemOfCategory.setHasFixedSize(true);
+            rcvListItemOfCategory.setAdapter(swipeItemAdapter);
+            rcvListItemOfCategory.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         }
-
-        rcvListItemOfCategory.setHasFixedSize(true);
-        rcvListItemOfCategory.setAdapter(swipeItemAdapter);
-        rcvListItemOfCategory.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+        catch (Exception exx){
+            GIANGUtils.getInstance().handlerLog(exx.getMessage());
+        }
         addEvents();
-
         return view;
     }
 
@@ -851,122 +855,27 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                 try{
                     if(lstItemSelected.size()>0 ){
                         // kiểm tra order đã tồn tại trước đó hay chưa, nếu chưa thì thêm mới, có rồi thì cập nhật lại
-                    if(isNewOrder){
-                        long timeMillis = System.currentTimeMillis();
-                        mOrder.setOrderID(timeMillis+"");
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
-                        String currentDateAndTime = sdf.format(new Date());
-                        mOrder.setDateCrate(currentDateAndTime);
-                        mOrder.setOrderStatus(1);
-                        int totalItemAmount = itemFoodPresenter.tinhTienHoaDon(lstItemSelected);
-                        mOrder.setAmount(totalItemAmount);
-                        mOrder.setItemNames(lstItemSelected.toString());
-                        mOrder.setTableName(tvTableName.getText().toString().equals("0")?"":tvTableName.getText().toString());
-                        mOrder.setTotalItemAmount(totalItemAmount);
-
-                        // kiểm tra đã chọn khuyến mại trước đó chưa, nếu chọn rồi thì ko thêm nữa
-                        if (mOrder.getTotalAmount() ==0)
-                            mOrder.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
-
-                        // thêm vào order
-                        orderPresenter.addOrder(mOrder);
-
-                        // thêm danh sách vào hoá đơnA
-                        for(Item item :lstItemSelected){
-                            if(item.getQuantity()>0){
-                                OrderDetail orderDetail = new OrderDetail();
-                                long idOrder = System.currentTimeMillis();
-                                orderDetail.setOrderDetailID("s"+idOrder);
-                                orderDetail.setOrderID(timeMillis+"");
-                                orderDetail.setItemID(item.getItemID());
-                                orderDetail.setItemName(item.getItemName());
-                                orderDetail.setUnitID(item.getUnitID());
-                                orderDetail.setUnitPrice(item.getPrice());
-                                orderDetail.setQuantity(item.getQuantity());
-                                orderDetail.setAmount(item.getQuantity()*item.getPrice());
-                                orderDetail.setDateCreate(currentDateAndTime);
-                                orderDetailPresenter.themOrderDetail(orderDetail);
-                            }
-                        }
-                    }
-                    else{
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
-                        String currentDateandTime = sdf.format(new Date());
-
-                        mOrder.setOrderDate(currentDateandTime);
-                        int totalItemAmount = itemFoodPresenter.tinhTienHoaDon(lstItemSelected);
-
-                        mOrder.setAmount(totalItemAmount);
-                        mOrder.setTotalItemAmount(totalItemAmount);
-                        mOrder.setItemNames(lstItemSelected.toString());
-
-                        // kiểm tra đã chọn khuyến mại trước đó chưa, nếu chọn rồi thì ko thêm nữa
-                        if (mOrder.getTotalAmount() ==0)
-                            mOrder.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
-
-                        mOrder.setTableName(tvTableName.getText().toString().equals("0")?"":tvTableName.getText().toString());
-                        // cập nhật hoá đơn
-                        orderPresenter.updateOrder(mOrder);
-                        // cập nhật chi tiết hoá đơn
-                        orderDetailPresenter.deleteOrderDetail(mOrder.getOrderID());
-
-                        // thêm danh sách vào hoá đơn
-                        for(Item item :lstItemSelected){
-                            if(item.getQuantity()>0){
-                                OrderDetail orderDetail = new OrderDetail();
-                                long idOrder = System.currentTimeMillis();
-                                orderDetail.setOrderDetailID("s"+idOrder);
-                                orderDetail.setOrderID(mOrder.getOrderID());
-                                orderDetail.setItemID(item.getItemID());
-                                orderDetail.setItemName(item.getItemName());
-                                orderDetail.setUnitID(item.getUnitID());
-                                orderDetail.setUnitPrice(item.getPrice());
-                                orderDetail.setQuantity(item.getQuantity());
-                                orderDetail.setAmount(item.getQuantity()*item.getPrice());
-                                orderDetail.setDateCreate(currentDateandTime);
-                                orderDetailPresenter.themOrderDetail(orderDetail);
-                            }
-                        }
-
-                    }
-
-                    NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.listOrderFragment, false).build();
-                    navController.navigate(R.id.action_addOrderFragment_to_listOrderFragment, null, navOptions);
-                    }
-                    else
-                        return;
-
-                }
-                catch (Exception ex){
-                    Log.d(TAG, "onClick: "+ex.getMessage());
-                }
-            }
-        });
-
-        btnThuTien.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try{
-                    // kiểm tra xem danh sách order có sản phẩm
-                    if(lstItemSelected.size() >0){
-                        // lưu lại
-                        // kiểm tra order đã tồn tại trước đó hay chưa, nếu chưa thì thêm mới, có rồi thì cập nhật lại
                         if(isNewOrder){
                             long timeMillis = System.currentTimeMillis();
                             mOrder.setOrderID(timeMillis+"");
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
-                            String currentDateandTime = sdf.format(new Date());
-                            mOrder.setDateCrate(currentDateandTime);
+                            String currentDateAndTime = sdf.format(new Date());
+                            mOrder.setDateCrate(currentDateAndTime);
                             mOrder.setOrderStatus(1);
-                            mOrder.setAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
+                            int totalItemAmount = itemFoodPresenter.tinhTienHoaDon(lstItemSelected);
+                            mOrder.setAmount(totalItemAmount);
                             mOrder.setItemNames(lstItemSelected.toString());
                             mOrder.setTableName(tvTableName.getText().toString().equals("0")?"":tvTableName.getText().toString());
-                            mOrder.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
+                            mOrder.setTotalItemAmount(totalItemAmount);
+
+                            // kiểm tra đã chọn khuyến mại trước đó chưa, nếu chọn rồi thì ko thêm nữa
+                            if (mOrder.getTotalAmount() ==0)
+                                mOrder.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
 
                             // thêm vào order
                             orderPresenter.addOrder(mOrder);
 
-                            // thêm danh sách vào hoá đơn
+                            // thêm danh sách vào hoá đơnA
                             for(Item item :lstItemSelected){
                                 if(item.getQuantity()>0){
                                     OrderDetail orderDetail = new OrderDetail();
@@ -979,7 +888,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                                     orderDetail.setUnitPrice(item.getPrice());
                                     orderDetail.setQuantity(item.getQuantity());
                                     orderDetail.setAmount(item.getQuantity()*item.getPrice());
-                                    orderDetail.setDateCreate(currentDateandTime);
+                                    orderDetail.setDateCreate(currentDateAndTime);
                                     orderDetailPresenter.themOrderDetail(orderDetail);
                                 }
                             }
@@ -989,9 +898,16 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                             String currentDateandTime = sdf.format(new Date());
 
                             mOrder.setOrderDate(currentDateandTime);
-                            mOrder.setAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
+                            int totalItemAmount = itemFoodPresenter.tinhTienHoaDon(lstItemSelected);
+
+                            mOrder.setAmount(totalItemAmount);
+                            mOrder.setTotalItemAmount(totalItemAmount);
                             mOrder.setItemNames(lstItemSelected.toString());
-                            mOrder.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
+
+                            // kiểm tra đã chọn khuyến mại trước đó chưa, nếu chọn rồi thì ko thêm nữa
+                            if (mOrder.getTotalAmount() ==0)
+                                mOrder.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
+
                             mOrder.setTableName(tvTableName.getText().toString().equals("0")?"":tvTableName.getText().toString());
                             // cập nhật hoá đơn
                             orderPresenter.updateOrder(mOrder);
@@ -1015,15 +931,115 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                                     orderDetailPresenter.themOrderDetail(orderDetail);
                                 }
                             }
+
                         }
 
-//                        Toast.makeText(getActivity(), ""+mOrder.getOrderID(), Toast.LENGTH_SHORT).show();
+                        NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.listOrderFragment, false).build();
+                        navController.navigate(R.id.action_addOrderFragment_to_listOrderFragment, null, navOptions);
+                    }
+                    else{
+                        GIANGUtils.getInstance().showMessage(getContext(), "Vui lòng chọn món !!!", 1);
+                    }
+
+                }
+                catch (Exception ex){
+                    Log.d(TAG, "onClick: "+ex.getMessage());
+                }
+            }
+        });
+
+        btnThuTien.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    // kiểm tra xem danh sách order có sản phẩm
+                    if(lstItemSelected.size()>0 ){
+                        // kiểm tra order đã tồn tại trước đó hay chưa, nếu chưa thì thêm mới, có rồi thì cập nhật lại
+                        if(isNewOrder){
+                            long timeMillis = System.currentTimeMillis();
+                            mOrder.setOrderID(timeMillis+"");
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
+                            String currentDateAndTime = sdf.format(new Date());
+                            mOrder.setDateCrate(currentDateAndTime);
+                            mOrder.setOrderStatus(1);
+                            int totalItemAmount = itemFoodPresenter.tinhTienHoaDon(lstItemSelected);
+                            mOrder.setAmount(totalItemAmount);
+                            mOrder.setItemNames(lstItemSelected.toString());
+                            mOrder.setTableName(tvTableName.getText().toString().equals("0")?"":tvTableName.getText().toString());
+                            mOrder.setTotalItemAmount(totalItemAmount);
+
+                            // kiểm tra đã chọn khuyến mại trước đó chưa, nếu chọn rồi thì ko thêm nữa
+                            if (mOrder.getTotalAmount() ==0)
+                                mOrder.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
+
+                            // thêm vào order
+                            orderPresenter.addOrder(mOrder);
+
+                            // thêm danh sách vào hoá đơnA
+                            for(Item item :lstItemSelected){
+                                if(item.getQuantity()>0){
+                                    OrderDetail orderDetail = new OrderDetail();
+                                    long idOrder = System.currentTimeMillis();
+                                    orderDetail.setOrderDetailID("s"+idOrder);
+                                    orderDetail.setOrderID(timeMillis+"");
+                                    orderDetail.setItemID(item.getItemID());
+                                    orderDetail.setItemName(item.getItemName());
+                                    orderDetail.setUnitID(item.getUnitID());
+                                    orderDetail.setUnitPrice(item.getPrice());
+                                    orderDetail.setQuantity(item.getQuantity());
+                                    orderDetail.setAmount(item.getQuantity()*item.getPrice());
+                                    orderDetail.setDateCreate(currentDateAndTime);
+                                    orderDetailPresenter.themOrderDetail(orderDetail);
+                                }
+                            }
+                        }
+                        else{
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
+                            String currentDateandTime = sdf.format(new Date());
+
+                            mOrder.setOrderDate(currentDateandTime);
+                            int totalItemAmount = itemFoodPresenter.tinhTienHoaDon(lstItemSelected);
+
+                            mOrder.setAmount(totalItemAmount);
+                            mOrder.setTotalItemAmount(totalItemAmount);
+                            mOrder.setItemNames(lstItemSelected.toString());
+
+                            // kiểm tra đã chọn khuyến mại trước đó chưa, nếu chọn rồi thì ko thêm nữa
+                            if (mOrder.getTotalAmount() ==0)
+                                mOrder.setTotalAmount(itemFoodPresenter.tinhTienHoaDon(lstItemSelected));
+
+                            mOrder.setTableName(tvTableName.getText().toString().equals("0")?"":tvTableName.getText().toString());
+                            // cập nhật hoá đơn
+                            orderPresenter.updateOrder(mOrder);
+                            // cập nhật chi tiết hoá đơn
+                            orderDetailPresenter.deleteOrderDetail(mOrder.getOrderID());
+
+                            // thêm danh sách vào hoá đơn
+                            for(Item item :lstItemSelected){
+                                if(item.getQuantity()>0){
+                                    OrderDetail orderDetail = new OrderDetail();
+                                    long idOrder = System.currentTimeMillis();
+                                    orderDetail.setOrderDetailID("s"+idOrder);
+                                    orderDetail.setOrderID(mOrder.getOrderID());
+                                    orderDetail.setItemID(item.getItemID());
+                                    orderDetail.setItemName(item.getItemName());
+                                    orderDetail.setUnitID(item.getUnitID());
+                                    orderDetail.setUnitPrice(item.getPrice());
+                                    orderDetail.setQuantity(item.getQuantity());
+                                    orderDetail.setAmount(item.getQuantity()*item.getPrice());
+                                    orderDetail.setDateCreate(currentDateandTime);
+                                    orderDetailPresenter.themOrderDetail(orderDetail);
+                                }
+                            }
+
+                        }
+
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("order", mOrder);
                         navController.navigate(R.id.action_addOrderFragment_to_collectMoneyFragment,bundle, null);
                     }
                     else{
-                        return;
+                        GIANGUtils.getInstance().showMessage(getContext(), "Vui lòng chọn món !!!", 1);
                     }
                 }
                 catch (Exception ex){

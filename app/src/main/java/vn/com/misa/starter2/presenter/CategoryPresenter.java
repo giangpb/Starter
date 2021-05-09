@@ -56,4 +56,13 @@ public class CategoryPresenter {
     public boolean deleteCategory(String categoryID){
         return categoryModel.deleteCategory(categoryID);
     }
+
+    /**
+     * Cập nhật danh mục
+     * @param category
+     * @return
+     */
+    public boolean updateCategory(Category category){
+        return categoryModel.updateCategory(category);
+    }
 }

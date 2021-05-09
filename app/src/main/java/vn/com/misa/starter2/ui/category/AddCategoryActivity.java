@@ -51,30 +51,40 @@ public class AddCategoryActivity extends AppCompatActivity implements IIConListe
 
     //
     private CategoryPresenter categoryPresenter;
-    private boolean isCheckUpdate = false;
 
     public static int ICON_SELECTED = -1;
+
+    private Category category = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_category);
         ButterKnife.bind(this);
-        Category category = (Category) getIntent().getSerializableExtra("category");
+        initCategory();
+        category = (Category) getIntent().getSerializableExtra("category");
         if (category ==null){
             ICON_SELECTED = 0;
             tvTitle.setText(getString(R.string.add_category_group));
         }
         else {
-            ICON_SELECTED = category.getSortOrder()-1;
+            ICON_SELECTED = getIconSelected(category, data);
             tvTitle.setText(getString(R.string.update_category_group));
             etCategoryName.setText(category.getCategoryName());
-            isCheckUpdate = true;
         }
         categoryPresenter = new CategoryPresenter(this);
-        initCategory();
         initListView();
         addEvents();
+    }
+
+    private int getIconSelected(Category category, List<Icon> lstIcon){
+        for(int i=0; i<lstIcon.size(); i++){
+            Icon icon  =lstIcon.get(i);
+            if (icon.getPath().equals(category.getIconPath())){
+                return i;
+            }
+        }
+        return 0;
     }
 
     private void initListView(){
@@ -131,12 +141,22 @@ public class AddCategoryActivity extends AppCompatActivity implements IIConListe
 //                    GIANGUtils.getInstance().showMessage(this,"Tên nhóm không được để trống !", 1);
                 }
                 else {
-                    if(isCheckUpdate){
+                    if(category != null){
                         // xử lý cập nhật
+                        category.setCategoryName(categoryName);
+                        category.setIconPath(mIcon.getPath());
+                        category.setIconType(mIcon.getType());
+                        boolean kq = categoryPresenter.updateCategory(category);
+                        if (kq){
+                            finish();
+                        }
+                        else {
+                            GIANGUtils.getInstance().showMessage(this,"Lỗi cập nhật danh mục",0);
+                        }
                     }
                     else{
                         // xử lý lưu danh mục xuống db
-                        Category category = new Category();
+                        category = new Category();
                         long time = System.currentTimeMillis();
                         category.setCategoryID("ca"+time);
                         category.setCategoryName(categoryName);

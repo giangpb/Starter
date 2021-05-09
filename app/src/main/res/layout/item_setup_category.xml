@@ -40,24 +40,29 @@
         android:layout_height="wrap_content"/>
     <ImageView
         android:id="@+id/ivDelete"
-        android:layout_width="wrap_content"
+        android:layout_width="?actionBarSize"
         android:src="@drawable/ic_delete_red"
         android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/margin_normal"
+        android:focusable="true"
+        android:padding="10dp"
         android:clickable="true"
         android:background="?selectableItemBackgroundBorderless"
         android:layout_alignParentEnd="true"
-        android:layout_height="wrap_content"/>
+        android:layout_height="?actionBarSize"/>
     <ImageView
         android:id="@+id/ivUpdateCategory"
-        android:layout_width="28dp"
+        android:layout_width="?actionBarSize"
         android:src="@drawable/ic_blue_pen_edit"
         android:layout_toLeftOf="@id/ivDelete"
         android:clickable="true"
+        android:paddingLeft="14dp"
+        android:paddingBottom="14dp"
+        android:paddingTop="14dp"
+        android:focusable="true"
         android:background="?selectableItemBackgroundBorderless"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/margin_large"
-        android:layout_height="28dp"/>
+        android:layout_height="?actionBarSize"/>
     <View
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
