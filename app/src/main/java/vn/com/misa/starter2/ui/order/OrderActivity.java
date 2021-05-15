@@ -14,10 +14,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
 import vn.com.misa.starter2.R;
+import vn.com.misa.starter2.model.dto.User;
 import vn.com.misa.starter2.ui.aboutapp.AboutAppActivity;
 import vn.com.misa.starter2.ui.category.CategorySetupActivity;
 import vn.com.misa.starter2.ui.finishsetup.FinishSetupFragment;
@@ -26,6 +28,7 @@ import vn.com.misa.starter2.ui.payment.PaymentActivity;
 import vn.com.misa.starter2.ui.report.ReportActivity;
 import vn.com.misa.starter2.ui.addition.AdditionSetupActivity;
 import vn.com.misa.starter2.ui.synchdata.SynchronizeData;
+import vn.com.misa.starter2.util.GIANGCache;
 import vn.com.misa.starter2.util.GIANGUtils;
 
 public class OrderActivity extends AppCompatActivity {
@@ -47,7 +50,7 @@ public class OrderActivity extends AppCompatActivity {
     private RelativeLayout rlSynchData;
     private LinearLayout llAboutApp;
 
-
+    private TextView txtUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +82,23 @@ public class OrderActivity extends AppCompatActivity {
         llSoThicPhucVu = findViewById(R.id.llSoThicPhucVu);
         rlSynchData = findViewById(R.id.rlSynchData);
 
+        txtUser = findViewById(R.id.txtUser);
+
+        // check Quyền
+        User user = GIANGCache.getInstance().get(LoginActivity.KEY_LOGIN, User.class);
+        if (user.getPermission() == 0){
+            llBaoCao.setVisibility(View.GONE);
+            llDanhSachThucDon.setVisibility(View.GONE);
+            llSoThicPhucVu.setVisibility(View.GONE);
+        }
+        else if (user.getPermission() == 1){
+            llBaoCao.setVisibility(View.VISIBLE);
+            llDanhSachThucDon.setVisibility(View.VISIBLE);
+            llSoThicPhucVu.setVisibility(View.VISIBLE);
+        }
+        txtUser.setText(user.getUserName());
         // khởi tạo sự kiện
         addEvents();
-
-
     }
 
     @Override

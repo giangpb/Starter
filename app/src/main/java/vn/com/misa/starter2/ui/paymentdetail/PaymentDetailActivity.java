@@ -58,6 +58,11 @@ public class PaymentDetailActivity extends AppCompatActivity {
     //
     private TextView tvTableName;
 
+    //
+    private RelativeLayout rlPromotion;
+    private TextView tvPromotion;
+    private TextView tvTotalAmout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,34 +86,53 @@ public class PaymentDetailActivity extends AppCompatActivity {
         tvReturnAmount = findViewById(R.id.tvReturnAmount);
         ivOptionMenu = findViewById(R.id.ivOptionMenu);
         tvTableName = findViewById(R.id.tvTableName);
-        GIANGUtils.getInstance().checkShowHideView(mPayment.getTableName(),"",tvTableName);
-        tvTableName.setText(String.format(" - Bàn: %s",mPayment.getTableName()));
-        //
-        decimalFormat = new DecimalFormat("#,###");
-        tvAmount.setText(decimalFormat.format(mPayment.getAmount()));
-        tvPaymentNO.setText(String.format("Số: %s", mPayment.getRefNO()));
-        tvReceiveAmount.setText(decimalFormat.format(mPayment.getReceiveAmount()));
-        tvOrderID.setText(mPayment.getOrderID());
-        tvPaymentDateCreate.setText(mPayment.getRefDate());
-        int returnMoney = mPayment.getReturnAmount();
-        // kiểm tra tiền trả lại để ẩn
-        if(returnMoney ==0){
-            rlTraLai.setVisibility(View.GONE);
-        }
-        else {
-            rlTraLai.setVisibility(View.VISIBLE);
-            tvReturnAmount.setText(decimalFormat.format(returnMoney));
-        }
 
-        paymentDetailPresenter = new PaymentDetailPresenter(getApplicationContext());
-        dataPaymentDetail = paymentDetailPresenter.getAllPaymentDetail(mPayment.getRefID());
-        paymentDetailAdapter = new PaymentDetailAdapter(getApplicationContext(),dataPaymentDetail);
+        rlPromotion = findViewById(R.id.rlPromotion);
+        tvPromotion = findViewById(R.id.tvPromotion);
+        tvTotalAmout = findViewById(R.id.tvTotalAmout);
 
-        tvCountQuantity.setText(paymentDetailPresenter.quantityCount(dataPaymentDetail)+"");
-        rcvListPaymentDetail.setAdapter(paymentDetailAdapter);
-        rcvListPaymentDetail.setHasFixedSize(true);
-        rcvListPaymentDetail.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
-        rcvListPaymentDetail.setNestedScrollingEnabled(false);
+        try{
+            GIANGUtils.getInstance().checkShowHideView(mPayment.getTableName(),"",tvTableName);
+            tvTableName.setText(String.format(" - Bàn: %s",mPayment.getTableName()));
+            //
+            decimalFormat = new DecimalFormat("#,###");
+            tvAmount.setText(decimalFormat.format(mPayment.getAmount()));
+            tvPaymentNO.setText(String.format("Số: %s", mPayment.getRefNO()));
+            tvReceiveAmount.setText(decimalFormat.format(mPayment.getReceiveAmount()));
+            tvOrderID.setText(mPayment.getOrderID());
+            tvPaymentDateCreate.setText(mPayment.getRefDate());
+            int returnMoney = mPayment.getReturnAmount();
+            // kiểm tra tiền trả lại để ẩn
+            if(returnMoney ==0){
+                rlTraLai.setVisibility(View.GONE);
+            }
+            else {
+                rlTraLai.setVisibility(View.VISIBLE);
+                tvReturnAmount.setText(decimalFormat.format(returnMoney));
+            }
+
+            if (mPayment.getDiscountAmount()>0){
+                rlPromotion.setVisibility(View.VISIBLE);
+                tvPromotion.setText(decimalFormat.format(mPayment.getPromotionAmount()));
+                tvTotalAmout.setText(decimalFormat.format(mPayment.getTotalAmount()));
+            }
+            else{
+                rlPromotion.setVisibility(View.GONE);
+            }
+
+            paymentDetailPresenter = new PaymentDetailPresenter(getApplicationContext());
+            dataPaymentDetail = paymentDetailPresenter.getAllPaymentDetail(mPayment.getRefID());
+            paymentDetailAdapter = new PaymentDetailAdapter(getApplicationContext(),dataPaymentDetail);
+
+            tvCountQuantity.setText(paymentDetailPresenter.quantityCount(dataPaymentDetail)+"");
+            rcvListPaymentDetail.setAdapter(paymentDetailAdapter);
+            rcvListPaymentDetail.setHasFixedSize(true);
+            rcvListPaymentDetail.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
+            rcvListPaymentDetail.setNestedScrollingEnabled(false);
+        }
+        catch (Exception exception){
+            GIANGUtils.getInstance().handlerLog(exception.getMessage());
+        }
     }
 
     private void addEvents(){

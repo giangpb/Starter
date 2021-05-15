@@ -179,14 +179,58 @@
                         android:layout_centerHorizontal="true"
                         style="@style/text_normal.bold"
                         android:layout_height="wrap_content"/>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:layout_below="@id/tvCountQuantity"
-                        android:background="@color/black"
-                        android:layout_height="1dp"/>
-
                 </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:id="@+id/rlPromotion"
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/txtPromotion"
+                        android:layout_width="wrap_content"
+                        style="@style/text_normal"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:text="@string/txt_promotion_percent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:layout_width="wrap_content"
+                        style="@style/text_normal"
+                        android:textStyle="bold"
+                        android:layout_below="@id/txtPromotion"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/txt_amount_promotion"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/tvPromotion"
+                        android:layout_width="wrap_content"
+                        style="@style/text_normal"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:text="25.000"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:id="@+id/tvTotalAmout"
+                        android:layout_width="wrap_content"
+                        style="@style/text_normal"
+                        android:layout_below="@id/tvPromotion"
+                        android:layout_alignParentEnd="true"
+                        android:text="25.000"
+                        android:layout_height="wrap_content"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:background="@color/black"
+                    android:layout_height="1dp"/>
 
                 <RelativeLayout
                     android:layout_marginTop="@dimen/margin_small"

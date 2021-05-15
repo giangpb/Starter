@@ -1,6 +1,8 @@
 package vn.com.misa.starter2.util;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.Log;
@@ -14,13 +16,17 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.muddzdev.styleabletoast.StyleableToast;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
+import java.util.zip.Inflater;
 
 import vn.com.misa.starter2.R;
+import vn.com.misa.starter2.ui.login.LoginActivity;
 
 /**
  * ‐ @created_by giangpb on 3/18/2021
@@ -92,6 +98,17 @@ public class GIANGUtils {
         else{
             view.setVisibility(View.VISIBLE);
         }
+    }
+
+    public AlertDialog showDialog(Context context, LayoutInflater layoutInflater){
+        View alertLayout = layoutInflater.inflate(R.layout.view_custom_progress_dialog, null);
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        alert.setView(alertLayout);
+        alert.setCancelable(false);
+        AlertDialog dialog = alert.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        return dialog;
     }
 
 

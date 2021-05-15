@@ -60,7 +60,7 @@ public class PaymentPresenter {
     public int totalPrice(ArrayList<Payment> data){
         int amount =0;
         for(Payment payment :data){
-            amount += payment.getAmount();
+            amount += payment.getTotalAmount();
         }
         return amount;
     }
@@ -75,6 +75,23 @@ public class PaymentPresenter {
      */
     public ArrayList<Payment> getAllPayment(String date1, String date2){
         return paymentModel.getAllPayment(date1, date2);
+    }
+
+    /**
+     * Hàm lấy danh sách để đồng bộ
+     * @return
+     */
+    public ArrayList<Payment> getAllPaymentForSynch() {
+        return paymentModel.getAllPaymentForSynch();
+    }
+
+    /**
+     * Hàm cập nhật trạng thái sau khi đồng bộ xong
+     * @param refID
+     * @return
+     */
+    public boolean updateStateSyn(String refID) {
+        return paymentModel.synSuccess(refID);
     }
 
 }

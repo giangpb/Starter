@@ -307,9 +307,9 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
                         payment.setPromotionItemsAmount(0);
                         // sau khi khuyến mãi ...
                         payment.setTotalAmount(mOrder.getTotalAmount());
-                        payment.setPromotionRate(0);
-                        payment.setPromotionAmount(0);
-                        payment.setDiscountAmount(0);
+                        payment.setPromotionRate(mOrder.getPromotionRate());
+                        payment.setPromotionAmount(mOrder.getPromotionAmount());
+                        payment.setDiscountAmount(mOrder.getPromotionAmount());
                         payment.setPreTaxAmount(mOrder.getTotalAmount());
 
                         payment.setTotalAmount(mOrder.getTotalAmount());

@@ -11,13 +11,15 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/margin_large_completed"
         android:layout_height="wrap_content"/>
+
     <TextView
-        android:layout_width="wrap_content"
-        android:text="0962818571"
-        android:layout_toRightOf="@id/ivUser"
-        android:layout_centerVertical="true"
-        android:textColor="@color/white"
-        android:layout_marginLeft="@dimen/margin_large"
+        android:id="@+id/txtUser"
         style="@style/text_normal"
-        android:layout_height="wrap_content"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/margin_large"
+        android:layout_toRightOf="@id/ivUser"
+        android:text="0962818571"
+        android:textColor="@color/white" />
 </RelativeLayout>
