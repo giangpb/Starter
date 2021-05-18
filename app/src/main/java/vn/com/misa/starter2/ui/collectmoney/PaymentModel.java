@@ -5,10 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import vn.com.misa.starter2.datautils.DatabaseHelper;
 import vn.com.misa.starter2.model.entity.Payment;
+import vn.com.misa.starter2.ui.finishsetup.SAInvoice;
 import vn.com.misa.starter2.util.GIANGUtils;
 
 /**
@@ -17,6 +20,8 @@ import vn.com.misa.starter2.util.GIANGUtils;
  */
 public class PaymentModel extends DatabaseHelper {
     private static final String TAG = "PaymentModel";
+
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
     Context mContext;
 
@@ -67,6 +72,47 @@ public class PaymentModel extends DatabaseHelper {
     }
 
     /**
+     * Hàm thêm payment
+     *
+     * @param payment payment
+     * @return kết quả
+     * @author giangpb
+     * @date 10/02/2021
+     */
+    public boolean addSAInvoice(SAInvoice payment) {
+        try {
+            connectSQLite();
+            ContentValues values = new ContentValues();
+            values.put("RefID", payment.getRefID());
+            values.put("RefType", 550);
+            values.put("RefNo", payment.getRefNo());
+            values.put("RefDate", simpleDateFormat.format(payment.getRefDate()));
+            values.put("Amount", payment.getAmount());
+            values.put("PromotionItemsAmount", payment.getPromotionItemsAmount());
+            values.put("TotalItemAmount", payment.getTotalItemAmount());
+            values.put("PromotionRate", payment.getPromotionRate());
+            values.put("PromotionAmount", payment.getPromotionAmount());
+            values.put("DiscountAmount", payment.getDiscountAmount());
+            values.put("PreTaxAmount", payment.getPreTaxAmount());
+            values.put("TotalAmount", payment.getTotalAmount());
+            values.put("ReceiveAmount", payment.getReceiveAmount());
+            values.put("ReturnAmount", payment.getReturnAmount());
+            values.put("PaymentStatus", 3);
+            values.put("OrderID", payment.getOrderID());
+            values.put("OrderType", 1);
+            values.put("TableName", payment.getTableName());
+            values.put("CreatedDate", simpleDateFormat.format(payment.getRefDate()));
+            values.put("isSyn", 1);
+            sqLiteDatabase.insert("SAInvoice", null, values);
+            close();
+            return true;
+        } catch (Exception ex) {
+            Log.d(TAG, "addPayment: " + ex.getMessage());
+        }
+        return false;
+    }
+
+    /**
      * Hàm lấy toàn bộ danh sách payment
      *
      * @return danh sách
@@ -105,6 +151,7 @@ public class PaymentModel extends DatabaseHelper {
 
     /**
      * Hàm cập nhật trạng thái sau khi đồng bộ xong
+     *
      * @param refID
      * @return
      */

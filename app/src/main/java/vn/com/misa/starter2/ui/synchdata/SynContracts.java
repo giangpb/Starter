@@ -5,12 +5,9 @@ public interface SynContracts {
         void onStartSync();
         void onSuccess();
         void onFailure();
+
     }
-    interface Presenter{
-        void onStart();
-        void onSuccess();
-        void onFailure();
-    }
+
     interface Model{
         void onStart();
         void onSuccess();

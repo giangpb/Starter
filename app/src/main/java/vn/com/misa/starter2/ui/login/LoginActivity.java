@@ -187,8 +187,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     }
 
     @Override
-    public void onLoginFalse() {
+    public void onLoginFalse(String message) {
         mDialog.dismiss();
-        Toast.makeText(this, "Login false !", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

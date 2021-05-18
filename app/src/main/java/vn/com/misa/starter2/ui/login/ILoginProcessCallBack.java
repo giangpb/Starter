@@ -7,5 +7,5 @@ import vn.com.misa.starter2.model.dto.User;
  */
 public interface ILoginProcessCallBack {
     void onLoginSuccess(User user);
-    void onLoginFalse();
+    void onLoginFalse(String message);
 }

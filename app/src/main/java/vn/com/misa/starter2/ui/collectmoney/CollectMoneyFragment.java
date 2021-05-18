@@ -34,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.adapter.MoneyRequirementAdapter;
@@ -43,7 +44,10 @@ import vn.com.misa.starter2.model.entity.Payment;
 import vn.com.misa.starter2.model.entity.PaymentDetail;
 import vn.com.misa.starter2.ui.listorder.OrderPresenter;
 import vn.com.misa.starter2.ui.order.AutoIDPresenter;
+import vn.com.misa.starter2.ui.order.entities.NumNotiSyn;
 import vn.com.misa.starter2.ui.order_add.AddOrderFragment;
+import vn.com.misa.starter2.util.GIANGCache;
+import vn.com.misa.starter2.util.GIANGConstants;
 
 /**
  * - frangment thu tiền
@@ -294,7 +298,7 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
                         String currentDateAndTime = sdf.format(new Date());
 
                         Payment payment = new Payment();
-                        payment.setRefID("ref"+timeMillis);
+                        payment.setRefID("Ref"+timeMillis);
                         //
                         payment.setRefType(550);
                         payment.setRefNO(refNo);
@@ -322,15 +326,15 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
                         paymentPresenter.addPayment(payment);
 
                         // add payment detail
-                        for(int i=0; i<AddOrderFragment.lstItemSelected.size(); i++){
-                            Item item = AddOrderFragment.lstItemSelected.get(i);
+                        ArrayList<Item> lstItem = AddOrderFragment.lstItemSelected;
+                        for(int i=0; i<lstItem.size(); i++){
+                            Item item = lstItem.get(i);
 
-                            long time = System.currentTimeMillis();
                             PaymentDetail paymentDetail = new PaymentDetail();
-                            paymentDetail.setPaymentDetailID("de"+time);
+                            paymentDetail.setPaymentDetailID(UUID.randomUUID().toString());
                             paymentDetail.setPaymentID(payment.getRefID());
                             //
-//                        paymentDetail.setParentID("");
+                            paymentDetail.setParentID("");
 //
                             paymentDetail.setItemID(item.getItemID());
                             paymentDetail.setItemName(item.getItemName());
@@ -352,6 +356,10 @@ public class CollectMoneyFragment extends Fragment implements IMoneyClickListene
                             paymentDetail.setCreatedDate(currentDateAndTime2);
                             paymentDetailPresenter.addPaymentDetail(paymentDetail);
                         }
+                        NumNotiSyn numNotiSyn = GIANGCache.getInstance().get(GIANGConstants.CACHE_COUNT_SYNC, NumNotiSyn.class);
+                        numNotiSyn.setCount(numNotiSyn.getCount() +lstItem.size() +1);
+                        GIANGCache.getInstance().put(GIANGConstants.CACHE_COUNT_SYNC, numNotiSyn);
+                        EventBus.getDefault().post(numNotiSyn);
                         NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.listOrderFragment,false).build();
                         navController.navigate(R.id.action_collectMoneyFragment_to_listOrderFragment,null, navOptions);
 

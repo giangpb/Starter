@@ -1,5 +1,6 @@
 package vn.com.misa.starter2.ui.order;
 
+import androidx.annotation.MainThread;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -18,17 +19,23 @@ import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.model.dto.User;
 import vn.com.misa.starter2.ui.aboutapp.AboutAppActivity;
 import vn.com.misa.starter2.ui.category.CategorySetupActivity;
 import vn.com.misa.starter2.ui.finishsetup.FinishSetupFragment;
 import vn.com.misa.starter2.ui.login.LoginActivity;
+import vn.com.misa.starter2.ui.order.entities.NumNotiSyn;
 import vn.com.misa.starter2.ui.payment.PaymentActivity;
 import vn.com.misa.starter2.ui.report.ReportActivity;
 import vn.com.misa.starter2.ui.addition.AdditionSetupActivity;
 import vn.com.misa.starter2.ui.synchdata.SynchronizeData;
 import vn.com.misa.starter2.util.GIANGCache;
+import vn.com.misa.starter2.util.GIANGConstants;
 import vn.com.misa.starter2.util.GIANGUtils;
 
 public class OrderActivity extends AppCompatActivity {
@@ -52,6 +59,8 @@ public class OrderActivity extends AppCompatActivity {
 
     private TextView txtUser;
 
+    private TextView tvnumSynch;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,11 +70,37 @@ public class OrderActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void upDateCountSynch(NumNotiSyn notiSyn){
+        GIANGUtils.getInstance().handlerLog(notiSyn.getCount()+"");
+        if (notiSyn.getCount()>0){
+            tvnumSynch.setVisibility(View.VISIBLE);
+            tvnumSynch.setText(notiSyn.getCount()+"");
+        }
+        else{
+            tvnumSynch.setVisibility(View.GONE);
+        }
+    }
+
     /**
      * Hàm khởi tạo các sự kiện
      * @author giangpb
      * @date 27/01/2021
      */
+    @SuppressLint("SetTextI18n")
     private void addControls(){
         drawerLayout=findViewById(R.id.drawer_layout);
         drawerToggle=new ActionBarDrawerToggle(this,drawerLayout,R.string.open_draw,R.string.close_draw);
@@ -83,6 +118,17 @@ public class OrderActivity extends AppCompatActivity {
         rlSynchData = findViewById(R.id.rlSynchData);
 
         txtUser = findViewById(R.id.txtUser);
+
+        tvnumSynch = findViewById(R.id.tvnumSynch);
+
+        NumNotiSyn numNotiSyn= GIANGCache.getInstance().get(GIANGConstants.CACHE_COUNT_SYNC, NumNotiSyn.class);
+        if (numNotiSyn.getCount()>0){
+            tvnumSynch.setVisibility(View.VISIBLE);
+            tvnumSynch.setText(numNotiSyn.getCount()+"");
+        }
+        else{
+            tvnumSynch.setVisibility(View.GONE);
+        }
 
         // check Quyền
         User user = GIANGCache.getInstance().get(LoginActivity.KEY_LOGIN, User.class);
@@ -203,7 +249,7 @@ public class OrderActivity extends AppCompatActivity {
                     startActivity(intent);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.clear();
-                    editor.commit();
+                    editor.apply();
                     finish();
                 }
                 catch (Exception ex){

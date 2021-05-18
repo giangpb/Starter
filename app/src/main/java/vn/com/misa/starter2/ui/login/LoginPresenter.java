@@ -25,7 +25,7 @@ public class LoginPresenter implements ILoginProcessCallBack{
     }
 
     @Override
-    public void onLoginFalse() {
-        mILoginView.onLoginFalse();
+    public void onLoginFalse(String message) {
+        mILoginView.onLoginFalse(message);
     }
 }

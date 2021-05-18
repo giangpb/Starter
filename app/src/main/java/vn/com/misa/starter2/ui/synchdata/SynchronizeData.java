@@ -20,16 +20,26 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.databinding.ActivitySynchronizeDataBinding;
+import vn.com.misa.starter2.model.dto.User;
 import vn.com.misa.starter2.model.entity.Payment;
+import vn.com.misa.starter2.model.entity.PaymentDetail;
 import vn.com.misa.starter2.service.APIService;
+import vn.com.misa.starter2.ui.collectmoney.PaymentDetailPresenter;
 import vn.com.misa.starter2.ui.collectmoney.PaymentPresenter;
+import vn.com.misa.starter2.ui.login.LoginActivity;
+import vn.com.misa.starter2.ui.order.entities.NumNotiSyn;
+import vn.com.misa.starter2.util.GIANGCache;
+import vn.com.misa.starter2.util.GIANGConstants;
 import vn.com.misa.starter2.util.GIANGUtils;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
@@ -64,7 +74,8 @@ public class SynchronizeData extends AppCompatActivity implements SynContracts.V
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_synchronize_data);
-        synPresenter = new SynPresenter(this);
+        User user = GIANGCache.getInstance().get(LoginActivity.KEY_LOGIN,User.class);
+        synPresenter = new SynPresenter(this, user);
         paymentPresenter = new PaymentPresenter(SynchronizeData.this);
         mDialogLoading = GIANGUtils.getInstance().showDialog(SynchronizeData.this, getLayoutInflater());
         addEvents();
@@ -73,38 +84,26 @@ public class SynchronizeData extends AppCompatActivity implements SynContracts.V
     private void addEvents(){
         binding.btnSyn.setOnClickListener(v->{
             try{
-
-                ////////// TEST ///////////
-//                APIService.API_SERVICE.insertUser("","34","",2).enqueue(new Callback<Boolean>() {
-//                    @Override
-//                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-//                        if (response.body() != null){
-//                            boolean res = response.body();
-//                            if(res){
-//                                Toast.makeText(SynchronizeData.this, "OK", Toast.LENGTH_SHORT).show();
-//                            }
-//                            else{
-//                                Toast.makeText(SynchronizeData.this, "FA", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<Boolean> call, Throwable t) {
-//                        Toast.makeText(SynchronizeData.this, "FA", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-
+                EventBus.getDefault().post(new NumNotiSyn());
                 ArrayList<Payment> lsstpayment = paymentPresenter.getAllPaymentForSynch();
                 if (lsstpayment.size()>0){
                     for (Payment payment : lsstpayment){
                         synPresenter.handleSyn(payment);
                         paymentPresenter.updateStateSyn(payment.getRefID());
                     }
+                    PaymentDetailPresenter paymentDetailPresenter = new PaymentDetailPresenter(getApplicationContext());
+                    List<PaymentDetail> data= paymentDetailPresenter.getAllPaymentDetailSynch();
+                    if (data.size()>0){
+                        for (PaymentDetail paymentDetail : data){
+                            synPresenter.handleSynDetai(paymentDetail);
+                            paymentDetailPresenter.updateSynchDone(paymentDetail.getPaymentDetailID());
+                        }
+                    }
                 }
                 else{
-                    Toast.makeText(this, "Danh sách rỗng", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Không có dữ liệu để đồng bộ!", Toast.LENGTH_SHORT).show();
                 }
+
             }
             catch (Exception ex){
                 GIANGUtils.getInstance().handlerLog(ex.getMessage());
@@ -161,6 +160,7 @@ public class SynchronizeData extends AppCompatActivity implements SynContracts.V
 
     @Override
     public void onSuccess() {
+        GIANGCache.getInstance().put(GIANGConstants.CACHE_COUNT_SYNC, new NumNotiSyn());
         mDialogLoading.dismiss();
         Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
     }
