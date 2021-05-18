@@ -1,6 +1,6 @@
 package vn.com.misa.starter2.ui.login;
 
-import vn.com.misa.starter2.ui.login.dto.User;
+import vn.com.misa.starter2.model.dto.User;
 
 /**
  * ‐ @created_by giangpb on 2/28/2021
@@ -20,12 +20,12 @@ public class LoginPresenter implements ILoginProcessCallBack{
     }
 
     @Override
-    public void onLoginSuccess() {
-        mILoginView.onLoginSuccess();
+    public void onLoginSuccess(User user) {
+        mILoginView.onLoginSuccess(user);
     }
 
     @Override
-    public void onLoginFalse() {
-        mILoginView.onLoginFalse();
+    public void onLoginFalse(String message) {
+        mILoginView.onLoginFalse(message);
     }
 }

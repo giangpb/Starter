@@ -165,17 +165,18 @@
                         android:text="@string/dong_bo_data" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tvnumSynch"
+                        android:layout_width="21dp"
                         android:layout_alignParentEnd="true"
-                        android:text="190"
-                        android:padding="2dp"
-                        android:textSize="10dp"
+                        android:text="20"
+                        android:textSize="12dp"
+                        android:visibility="visible"
                         android:gravity="center"
                         android:textColor="@color/white"
                         android:background="@drawable/custom_text_bridge"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/margin_large"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="21dp"/>
                 </RelativeLayout>
 
                 <LinearLayout

@@ -174,7 +174,7 @@ public class OverviewReportFragment extends Fragment {
 
         barEntries = new ArrayList();
         for (OverviewHours item :data){
-            barEntries.add(new BarEntry((float)item.getHour(), (float)item.getMoney()));
+            barEntries.add(new BarEntry(Float.parseFloat(item.getHour()), (float)item.getMoney()));
         }
         barDataSet = new BarDataSet(barEntries,"Data set");
         //barDataSet.setBarBorderWidth(10f);
@@ -201,7 +201,7 @@ public class OverviewReportFragment extends Fragment {
 
         barEntriesNgay = new ArrayList();
         for (OverviewHours item :data){
-            barEntriesNgay.add(new BarEntry((float)item.getHour(), (float)item.getMoney()));
+            barEntriesNgay.add(new BarEntry( Float.parseFloat(item.getHour()), (float)item.getMoney()));
         }
         barDataSetNgay = new BarDataSet(barEntriesNgay,"Data set");
         //barDataSet.setBarBorderWidth(10f);
@@ -257,8 +257,6 @@ public class OverviewReportFragment extends Fragment {
                         daySelected = DATE_TIME_FORMATTER_SHOW.format(now);
                         doanhThu = overviewsPresenter.doanhThuTheoNgay(DATE_TIME_FORMATTER.format(now));
                         data = overviewsPresenter.getAllData(DATE_TIME_FORMATTER.format(now));
-                        //barChart.notifyDataSetChanged();
-
                     }
                     if(position ==1){// fill theo yesterday
                         rlBaoCaoTheoNgay.setVisibility(View.GONE);

@@ -110,4 +110,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
+    @Override
+    public synchronized void close() {
+
+        if (sqLiteDatabase != null)
+            sqLiteDatabase.close();
+
+        super.close();
+
+    }
+
 }

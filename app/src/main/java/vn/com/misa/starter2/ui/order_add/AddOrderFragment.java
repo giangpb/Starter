@@ -53,6 +53,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 import vn.com.misa.starter2.R;
 import vn.com.misa.starter2.adapter.AdditionAdapter;
@@ -879,9 +880,8 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                             for(Item item :lstItemSelected){
                                 if(item.getQuantity()>0){
                                     OrderDetail orderDetail = new OrderDetail();
-                                    long idOrder = System.currentTimeMillis();
-                                    orderDetail.setOrderDetailID("s"+idOrder);
-                                    orderDetail.setOrderID(timeMillis+"");
+                                    orderDetail.setOrderDetailID(UUID.randomUUID().toString());
+                                    orderDetail.setOrderID(mOrder.getOrderID());
                                     orderDetail.setItemID(item.getItemID());
                                     orderDetail.setItemName(item.getItemName());
                                     orderDetail.setUnitID(item.getUnitID());
@@ -979,9 +979,8 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                             for(Item item :lstItemSelected){
                                 if(item.getQuantity()>0){
                                     OrderDetail orderDetail = new OrderDetail();
-                                    long idOrder = System.currentTimeMillis();
-                                    orderDetail.setOrderDetailID("s"+idOrder);
-                                    orderDetail.setOrderID(timeMillis+"");
+                                    orderDetail.setOrderDetailID(UUID.randomUUID().toString());
+                                    orderDetail.setOrderID(mOrder.getOrderID());
                                     orderDetail.setItemID(item.getItemID());
                                     orderDetail.setItemName(item.getItemName());
                                     orderDetail.setUnitID(item.getUnitID());
@@ -1018,8 +1017,7 @@ public class AddOrderFragment extends Fragment implements ICategoryListener, IFo
                             for(Item item :lstItemSelected){
                                 if(item.getQuantity()>0){
                                     OrderDetail orderDetail = new OrderDetail();
-                                    long idOrder = System.currentTimeMillis();
-                                    orderDetail.setOrderDetailID("s"+idOrder);
+                                    orderDetail.setOrderDetailID(UUID.randomUUID().toString());
                                     orderDetail.setOrderID(mOrder.getOrderID());
                                     orderDetail.setItemID(item.getItemID());
                                     orderDetail.setItemName(item.getItemName());

@@ -2,23 +2,24 @@ package vn.com.misa.starter2.ui.login;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -26,9 +27,18 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 
+import java.util.List;
+import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import vn.com.misa.starter2.MainActivity;
 import vn.com.misa.starter2.R;
-import vn.com.misa.starter2.ui.login.dto.User;
+import vn.com.misa.starter2.model.dto.User;
+import vn.com.misa.starter2.service.APIService;
+import vn.com.misa.starter2.util.GIANGCache;
+import vn.com.misa.starter2.util.GIANGUtils;
 
 public class LoginActivity extends AppCompatActivity implements ILoginView {
     private static final String TAG = "LoginActivity";
@@ -48,6 +58,55 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     //
     private AlertDialog mDialog;
 
+    private BroadcastReceiver internetReceiver = new BroadcastReceiver() {
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            // lấy trạng thái điều khiển kết nối
+            // khác null tức là có kết nối internet
+            if (connectivityManager.getActiveNetwork() != null){
+                btnLogin.setVisibility(View.VISIBLE);
+            }
+            else{
+                btnLogin.setVisibility(View.GONE);
+            }
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerBroadcast();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterBroadcastReceiver();
+    }
+
+    /**
+     * Hàm lắng nghe sự kiện đóng mở wifi
+     * @author: giangpb
+     * @date: 20/01/2021
+     */
+    private void registerBroadcast(){
+        IntentFilter filter  =new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(internetReceiver,filter);
+    }
+
+    /**
+     * Hàm huỷ đăng ký lắng nghe sự kiện kết nối mạng
+     * @author: giangpb
+     * @date: 20/01/2021
+     */
+    private void unregisterBroadcastReceiver(){
+        if(internetReceiver!=null){
+            unregisterReceiver(internetReceiver);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +122,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     private void initDialog(){
         View alertLayout = getLayoutInflater().inflate(R.layout.view_custom_progress_dialog, null);
-
         AlertDialog.Builder alert = new AlertDialog.Builder(LoginActivity.this);
         alert.setView(alertLayout);
         alert.setCancelable(false);
@@ -78,22 +136,9 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         etPass = findViewById(R.id.etPassWord);
         btnLogin = findViewById(R.id.btnLogin);
 
-//        etPass.setOnTouchListener(new View.OnTouchListener(){
-//
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                int inType = etPass.getInputType(); // backup the input type
-//                etPass.setInputType(InputType.TYPE_NULL); // disable soft input
-//                etPass.onTouchEvent(event); // call native handler
-//                etPass.setInputType(inType); // restore input type
-//                return true; // consume touch even
-//            }
-//        });
-
-        SharedPreferences sharedPreferences = getSharedPreferences(KEY_LOGIN,MODE_PRIVATE);
-        String phone = sharedPreferences.getString("phone",null);
-        if (phone!=null)
-            etPhone.setText(phone);
+        User user = GIANGCache.getInstance().get(KEY_LOGIN, User.class);
+        if (user!=null)
+            etPhone.setText(user.getPhone());
     }
 
 
@@ -102,7 +147,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         @NonNull
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
             LayoutInflater layoutInflater = getLayoutInflater();
             View view = layoutInflater.inflate(R.layout.view_custom_progress_dialog, null);
             builder.setView(view);
@@ -119,35 +164,22 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             public void onClick(View v) {
                 try{
                     mDialog.show();
-                    new CountDownTimer(2000,100){
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-
-                        }
-
-                        @Override
-                        public void onFinish() {
-                            mDialog.dismiss();
-                        }
-                    };
-                    User user = new User(etPhone.getText().toString(), etPass.getText().toString());
+                    User user = new User();
+                    user.setPhone(Objects.requireNonNull(etPhone.getText()).toString());
+                    user.setPassword(Objects.requireNonNull(etPass.getText()).toString());
                     loginPresenter.receiverUserFromView(user);
-
-
                 }
                 catch (Exception ex){
-                    Log.d(TAG, "onClick: "+ex.getMessage());
+                    GIANGUtils.getInstance().handlerLog(ex.getMessage());
                 }
             }
         });
     }
 
     @Override
-    public void onLoginSuccess() {
-        SharedPreferences sharedPreferences = getSharedPreferences(KEY_LOGIN, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("phone", etPhone.getText().toString());
-        editor.commit();
+    public void onLoginSuccess(User user) {
+        mDialog.dismiss();
+        GIANGCache.getInstance().put(KEY_LOGIN, user);
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -155,8 +187,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     }
 
     @Override
-    public void onLoginFalse() {
+    public void onLoginFalse(String message) {
         mDialog.dismiss();
-        Toast.makeText(this, "Login false !", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

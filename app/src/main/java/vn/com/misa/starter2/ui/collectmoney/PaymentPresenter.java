@@ -5,6 +5,7 @@ import android.content.Context;
 import java.util.ArrayList;
 
 import vn.com.misa.starter2.model.entity.Payment;
+import vn.com.misa.starter2.ui.finishsetup.SAInvoice;
 
 /**
  * ‐ thao tác với payment model
@@ -60,9 +61,21 @@ public class PaymentPresenter {
     public int totalPrice(ArrayList<Payment> data){
         int amount =0;
         for(Payment payment :data){
-            amount += payment.getAmount();
+            amount += payment.getTotalAmount();
         }
         return amount;
+    }
+
+    /**
+     * Hàm thêm payment
+     *
+     * @param payment payment
+     * @return kết quả
+     * @author giangpb
+     * @date 10/02/2021
+     */
+    public boolean addSAInvoice(SAInvoice saInvoice) {
+        return paymentModel.addSAInvoice(saInvoice);
     }
 
     /**
@@ -75,6 +88,23 @@ public class PaymentPresenter {
      */
     public ArrayList<Payment> getAllPayment(String date1, String date2){
         return paymentModel.getAllPayment(date1, date2);
+    }
+
+    /**
+     * Hàm lấy danh sách để đồng bộ
+     * @return
+     */
+    public ArrayList<Payment> getAllPaymentForSynch() {
+        return paymentModel.getAllPaymentForSynch();
+    }
+
+    /**
+     * Hàm cập nhật trạng thái sau khi đồng bộ xong
+     * @param refID
+     * @return
+     */
+    public boolean updateStateSyn(String refID) {
+        return paymentModel.synSuccess(refID);
     }
 
 }
